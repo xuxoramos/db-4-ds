@@ -1,13 +1,46 @@
-## Welcome to GitHub Pages
+## Bases de Datos para Ciencia de Datos
 
-You can use the [editor on GitHub](https://github.com/xuxoramos/bd-4-ds/edit/gh-pages/index.md) to maintain and preview the content for your website in Markdown files.
+Este website contiene el material para la materia Bases de Datos para Ciencia de Datos.
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+### Temario + Fechas = Plan de Materia
 
-### Markdown
-
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
-
+1. 2021/01/11 - Intro a BDs. ¿A qué le estamos tirando? ¿De dónde vienen los datos? ¿A dónde van los datos? Formas de guardarlos. Formas de consultarlos. Esquema de red. Esquema de documentos. Esquema jerárquico. Esquema relacional.
+2. 2021/01/13 - Instalación de PostgreSQL. Descargar datos de prueba. Carga de datos de prueba. Creación de tablas.
+3. 2021/01/18 - Queries! Queries! Queries! Instrucciones `select`, `from` y `where`, salida a consola y export a CSV.
+4. 2021/01/20 - 
+5. 2021/01/25 - 
+6. 2021/01/27 - 
+7. 2021/02/01 - 
+8. 2021/02/03 - 
+9. 2021/02/08 - 
+10. 2021/02/10 - 
+11. 2021/02/15 - 
+12. 2021/02/17 - 
+13. 2021/02/22 - 
+14. 2021/02/24 - 
+15. 2021/03/01 - 
+16. 2021/03/03 - 
+17. 2021/03/08 - 
+18. 2021/03/10 - 
+19. 2021/03/15 - 
+20. 2021/03/17 - 
+21. 2021/03/22 - 
+22. 2021/03/24 - 
+23. 2021/03/29 - 
+24. 2021/03/31 - 
+25. 2021/04/05 - 
+26. 2021/04/07 - 
+27. 2021/04/12 - 
+28. 2021/04/14 - 
+29. 2021/04/19 - 
+30. 2021/04/21 - 
+31. 2021/04/26 - 
+32. 2021/04/28 - 
+33. 2021/05/03 - 
+34. 2021/05/05 - 
+35. 2021/05/11 - 
+36. 2021/05/12 - 
+37. TBD - Examen final
 ```markdown
 Syntax highlighted code block
 
