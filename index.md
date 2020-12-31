@@ -5,13 +5,13 @@ Este website contiene el material para la materia Bases de Datos para Ciencia de
 ### Temario + Fechas = Plan de Materia
 
 1. 2021/01/11 - Intro a BDs. ¿A qué le estamos tirando? ¿De dónde vienen los datos? ¿A dónde van los datos? Formas de guardarlos. Formas de consultarlos. Esquema de red. Esquema de documentos. Esquema jerárquico. Esquema relacional.
-2. 2021/01/13 - Instalación de PostgreSQL. Descargar datos de prueba. Carga de datos de prueba. Creación de tablas.
-3. 2021/01/18 - Queries! Queries! Queries! Instrucciones `select`, `from` y `where`, salida a consola y export a CSV.
-4. 2021/01/20 - 
-5. 2021/01/25 - 
-6. 2021/01/27 - 
-7. 2021/02/01 - 
-8. 2021/02/03 - 
+2. 2021/01/13 - Instalación de PostgreSQL. Descargar datos de prueba. Carga de bases de datos de prueba Northwind y Sakila. Creación de tablas (`create table`). Tipos de datos. Modificaciones a tablas (`alter table`). Borrado o "dropeo" de tablas (`drop` y `truncate`).
+3. 2021/01/18 - Relaciones 1 a 1. Relaciones 1 a N. Relaciones N a N. Integridad referencial. Inserción de datos (`insert`). Borrado de datos (`delete`). Actualización de datos (`update`). Bloopers y errores en statements.
+4. 2021/01/20 - Queries, queries, queries! Extrayendo datos con `select`. Asignando aliases a columnas. Quitando duplicados con `distinct`. Combinando tablas con `from`. Filtrando con `where`.
+5. 2021/01/25 - Agrupando con `group by` y `having`. Ordenando con `order by`. Más condiciones dentro de `where`. Tratamiento de `null`.
+6. 2021/01/27 - Lab 1: De la carga a la consulta.
+7. 2021/02/01 - Extrayendo datos de múltiples tablas con `inner join`. Usando subqueries. Haciendo auto-`join`. Operadores numéricos y de strings.
+8. 2021/02/03 - Teoría de conjuntos aplicada a BDs. Unión, intersección, exclusión en extracción de datos. Reglas y precedencia de operadores.
 9. 2021/02/08 - 
 10. 2021/02/10 - 
 11. 2021/02/15 - 
