@@ -55,3 +55,20 @@ La sesión 0 será por [Teams de Microsoft](https://www.microsoft.com/es-mx/micr
 ### Dónde estará el material?
 Aquí en Github. Github es una plataforma de colaboración y control de versiones para no andar como este meme:
 ![](https://i.redd.it/05b6u19pseoz.png)
+
+### Qué necesito para la clase?
+Las bases de datos son parte de un ecosistema de muchas piezas que nutre el flujo de datos de un problem domain. Quizá sean la más importante, pero no la única. Para ello vamos a utilizar diferentes herramientas para poder interactuar con cada una de estas piezas, incluyendo la base de datos, obvi.
+
+#### Capa de aplicación
+Para esto vamos a descargar e instalar [VSCode](https://code.visualstudio.com/), un I(ntegrated) D(evelopment) E(nvironment) poder construir una pequeña aplicación en [Django](https://www.djangoproject.com/), un poderoso framework web hecho en Python.
+
+> **IMPORTANTE:** Seguro tu OS ya tiene Python instalado, y seguro no es la última versión. **Ni la bajes, ni la instales!**. Usaremos mejor un administrador de ambientes virtuales para que podamos instalar paquetes de Python sin estropear tu instalación de sistema, de la cual depende mucha de la funcionalidad de tu OS.
+
+#### Capa de middleware, APIs y servicios
+Para esto descargaremos e instalaremos [Anaconda](https://www.anaconda.com/products/individual), un administrador de ambientes virtuales de Python para poder hacer nuestros desarrollos más tolerantes a fallos (fallos del tipo "no ma! instalé un paquete y se encimó sobre una dependencia y ahora mi MacOS ya no arranca!". Es una instalación larga y pesada (3GB), así que asegúrate de tener el espacio.
+
+### Cómo vamos a calificar?
+1. 1er Parcial: 10%
+2. 2o Parcial: 15%
+3. 3er Parcial: 20%
+4. 
