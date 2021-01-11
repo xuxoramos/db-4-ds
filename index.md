@@ -6,7 +6,7 @@ Este website contiene el material para la materia Bases de Datos para Ciencia de
 
 | Num de sesión | Fecha de sesión | Temas                                                                                                                                                                                                                                                 |
 |---------------|-----------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-|               |                 |                                                                 
+| ------------- | :-------------- | :------------------------------------------------------------
 | 0             | 2021/01/11      | Intro a BDs. ¿A qué le estamos tirando? ¿De dónde vienen los datos? ¿A dónde van los datos? Formas de guardarlos. Formas de consultarlos. Esquema de red. Esquema de documentos. Esquema jerárquico. Esquema relacional.                              |
 | 1             | 2021/01/13      | Instalación de PostgreSQL. Descargar datos de prueba. Carga de bases de datos de prueba Northwind y Sakila. Creación de tablas (create table). Tipos de datos. Modificaciones a tablas (alter table). Borrado o "dropeo" de tablas (drop y truncate). |
 | 2             | 2021/01/18      | Relaciones 1 a 1. Relaciones 1 a N. Relaciones N a N. Integridad referencial. Inserción de datos (insert). Borrado de datos (delete). Actualización de datos (update). Bloopers y errores en statements.                                              |
