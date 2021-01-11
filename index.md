@@ -71,4 +71,18 @@ Para esto descargaremos e instalaremos [Anaconda](https://www.anaconda.com/produ
 1. 1er Parcial: 10%
 2. 2o Parcial: 15%
 3. 3er Parcial: 20%
-4. 
+4. Proyecto final: 55%
+### Cómo serán los exámenes?
+Tendrán un componente teórico y/o un componente práctico.
+
+El componente práctico consistirá generalmente en uno de a) crear o alterar una BD, b) diseñar una BD, c) generar datos en una BD con una cierta forma, o d)  generar un reporte analítico.
+
+El componente teórico es un examen de opción múltiplemen la plataforma [Socrative](https://www.socrative.com/) en el cual podrás sacar apuntes o usar una o varias de las plataformas que configuraremos a lo largo del semestre (PostgreSQL, DBeaver, VSCode, Anaconda, etc).
+
+### Y cómo será el examen final?
+Será enteramente práctico y consistirá en el desarrollo de un proyecto integral con todo lo visto en el semestre. Daremos más detalles más adelante durante el curso.
+
+### Cómo me contacto con ud, prof?
+No checo casi el correo institucional, así que, fuera de Slack, van a tener que escribir a ramos.cardona@gmail.com.
+
+Pero preferentemente usen Slack.
