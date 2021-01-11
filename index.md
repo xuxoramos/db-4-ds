@@ -56,6 +56,8 @@ La sesión 0 será por [Teams de Microsoft](https://www.microsoft.com/es-mx/micr
 Aquí en Github. Github es una plataforma de colaboración y control de versiones para no andar como este meme:
 ![](https://i.redd.it/05b6u19pseoz.png)
 
+Es importante que si nunca has usado Github, o algún otro sistema de control de versiones, [leas esta guía](https://guides.github.com/activities/hello-world/) para que no te agarren en curva y tengas de menos los fundamentos de estas plataformas.
+
 ### Qué necesito para la clase?
 Las bases de datos son parte de un ecosistema de muchas piezas que nutre el flujo de datos de un problem domain. Quizá sean la más importante, pero no la única. Para ello vamos a utilizar diferentes herramientas para poder interactuar con cada una de estas piezas, incluyendo la base de datos, obvi.
 
@@ -67,11 +69,27 @@ Para esto vamos a descargar e instalar [VSCode](https://code.visualstudio.com/),
 #### Capa de middleware, APIs y servicios
 Para esto descargaremos e instalaremos [Anaconda](https://www.anaconda.com/products/individual), un administrador de ambientes virtuales de Python para poder hacer nuestros desarrollos más tolerantes a fallos (fallos del tipo "no ma! instalé un paquete y se encimó sobre una dependencia y ahora mi MacOS ya no arranca!". Es una instalación larga y pesada (3GB), así que asegúrate de tener el espacio.
 
+#### Capa de base de datos
+Lo mero, mero. La ráison d'etre de este curso. El motivo por el que estamos aquí. El corazón de todo sistema, toda plataforma, aplicación: twitter, albo, Monzo, FB, Valorant, Fortnite, Destiny, etc.
+
+Para poder crear, diseñar, levantar, consultar, administrar bases de datos, necesitamos 2 paquetes.
+
+Debido a que las bases de datos actúan como servidor (es decir, un programa con una conexión abierta, esperando conexiones y escuchando los comandos que caen por esa conexión después de que establecemos una), obviamente necesitamos un programa cliente que establezca esa conexión. Los 2 paquetes que necesitamos son un cliente, y un servidor.
+
+Como servidor [descargaremos e instalaremos PostgreSQL](https://www.enterprisedb.com/downloads/postgres-postgresql-downloads), la mejor base de datos del mundo :P. 
+
+Si tienes Linux, [descarga el PostgreSQL desde aquí](https://www.postgresql.org/download/linux/ubuntu/).
+
+Ahora, para el cliente, descargaremos e instalaremos la edición [Community de DBeaver](https://dbeaver.io/download/), uno de los 3 paquetes de software libre para conexión a bases de datos.
+
+Ya los tienes? Va.
+
 ### Cómo vamos a calificar?
 1. 1er Parcial: 10%
 2. 2o Parcial: 15%
 3. 3er Parcial: 20%
 4. Proyecto final: 55%
+
 ### Cómo serán los exámenes?
 Tendrán un componente teórico y/o un componente práctico.
 
