@@ -3,6 +3,7 @@
 Este website contiene el material para la materia Bases de Datos para Ciencia de Datos.
 
 ### Temario + Fechas = Plan de Materia
+A continuación el temario, fecha por fecha:
 
 | Num de sesión | Fecha de sesión | Temas |
 |---------------|-----------------|-------|
