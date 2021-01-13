@@ -55,6 +55,12 @@ YAY!
 
 ### Carga de las BDs de prueba que usaremos
 
+Como platicamos, usaremos 2 BDs de prueba durante todo el curso:
+
+1. Northwind: BD que Microsoft usa para sus demos. Describe un negocio de transporte de bienes.
+2. Sakila: video rental store
+
+Por el momento solo cargaremos la BD de Sakila. Para esto, en el repo 
 
 
 
