@@ -53,7 +53,7 @@ Entonces 1) el PostgreSQL está instalado y levantado, y escuchando conexiones c
 
 YAY!
 
-### Carga de las BDs de prueba que usaremos
+## Carga de las BDs de prueba que usaremos
 
 Como platicamos, usaremos 2 BDs de prueba durante todo el curso:
 
@@ -96,3 +96,13 @@ Luego da click derecho en `Schemas` y luego en `Create New Schema`.
 Y dale el nombre de `public` de nuevo, dado que el script de creación e inserción de Sakila **requiere** que el esquema se llame `public`. De lo contrario podríamos llamarlo como deseemos.
 
 ![](https://imgur.com/XZkvlIa)
+
+Y repite la carga de la estructura y de los datos como lo dijimos arriba.
+
+Podríamos también ejecutar, en orden, el script de borrado de datos y posteriormente el de borrado de la estructura, pero sería más tardado. Si prefieren hacerlo, adelante.
+
+## A qué le estamos tirando?
+
+Para este ejercicio visitaremos el [mapa de COVID de Johns Hopkins](https://coronavirus.jhu.edu/map.html), y haremos un ejercicio en [este pizarrón de Google Jamboard](https://jamboard.google.com/d/1og4fJ0Y3w42JetnOWP04SGoGn4IkzVCK4i_mtp3dPLc/viewer).
+
+Si tomamos el mapa como un "destino final" de los datos, entonces cuál es su origen? Vamos a hipotetizar el camino que siguen:
