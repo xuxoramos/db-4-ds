@@ -58,9 +58,15 @@ YAY!
 Como platicamos, usaremos 2 BDs de prueba durante todo el curso:
 
 1. Northwind: BD que Microsoft usa para sus demos. Describe un negocio de transporte de bienes.
-2. Sakila: video rental store
+2. Sakila: video rental store.
 
-Por el momento solo cargaremos la BD de Sakila. Para esto, en el repo 
+Por el momento solo cargaremos la BD de [Pagila](https://github.com/devrimgunduz/pagila), que es una versión particular para PostgreSQL de Sakila y que aprovecha sus funciones e idioma específico. Para esto, en el repo encontrarán un directorio `pagila` con 2 archivos:
+
+1. `pagila-schema.sql`: la estructura de la BD - tablas, relaciones, constraints, etc.
+2. `pagila-insert-data.sql`: los datos de cada tabla
+
+
+
 
 
 
