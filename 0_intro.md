@@ -106,3 +106,49 @@ Podríamos también ejecutar, en orden, el script de borrado de datos y posterio
 Para este ejercicio visitaremos el [mapa de COVID de Johns Hopkins](https://coronavirus.jhu.edu/map.html), y haremos un ejercicio en [este pizarrón de Google Jamboard](https://jamboard.google.com/d/1og4fJ0Y3w42JetnOWP04SGoGn4IkzVCK4i_mtp3dPLc/viewer).
 
 Si tomamos el mapa como un "destino final" de los datos, entonces cuál es su origen? Vamos a hipotetizar el camino que siguen:
+
+## Esquemas de diseño de BD
+
+En esta materia trabajaremos mayormente con esquemas relacionales de BD, pero existen otros.
+
+### Esquema relacional
+
+Este es el esquema de la BD de Sakila. Este tipo de diagramas se llaman **E**ntidad-**R**elación.
+
+![](https://docs.oracle.com/cd/E17952_01/workbench-en/images/wb-sakila-eer.png)
+
+Como podemos ver, se basa en tablas y relaciones. Las tablas son entidades, las entidades tienen atributos, y algunos atributos están copiados de otras entidades: esto es lo que define una relación.
+
+Ejemplos: Oracle, MySQL, SQL Server, H2, Derby, PostgreSQL
+
+### Esquema de red
+
+Este es un esquema de red, que se representa con un **grafo**, que describe **las interacciones** o co-ocurrencias de una entidad, descrita por un **nodo**, con otra, descrita por otro **nodo**, y donde el grueso del **edge**, es decir, la conexión, representa el **peso** de co-ocurrencias.
+
+Este ejemplo es de Game of Thrones.
+
+![](https://dist.neo4j.com/wp-content/uploads/20170716015001/graph-of-thrones.png?_gl=1*t0n6t3*_ga*MTQyNDUzMjk0Ni4xNjEwNTU4ODM1*_ga_DL38Q8KGQC*MTYxMDU1ODgzNS4xLjAuMTYxMDU1ODgzNS4w&_ga=2.96387615.248246225.1610558835-1424532946.1610558835)
+
+Otra métrica interesante que es fácilmente obtenible con este esquema de red es la **centralidad** de los nodos; osea, el num de **edges** que ingresan a un nodo en particular y su **peso** en el grafo.
+
+Ejemplos: Neo4j
+
+### Esquema de Documentos
+
+Este esquema es famoso para acelerar aplicaciones web debido a que están diseñadas específico para guardar JSON, que es un formato de data exchange muy usado por frameworks web actuales.
+
+Esta es una comparación con los esquemas relacionales:
+
+![](https://annegretsarchitecture.files.wordpress.com/2018/06/docorienteddatabase.gif?w=900)
+
+Y así es como luce un documento JSON proveniente de una webapp:
+
+![](https://static.goanywhere.com/images/tutorials/read-json/ExampleJSON2.png)
+
+Chequen que los corchetes **[]** denotan una **colección**, los dos puntos **:** denotan un **key** a la izq y un **value** a la derecha, y unas llaves **{}** denotan un documento. Un documento puede contener otro, y éste a su vez otro, y otro, y otro, y así ad nauseam. Igual, una colección de documentos puede extenderse ad infinitum.
+
+Ejemplos de motores de BD de documentos: MongoDB, DocumentDB, Firestore.
+
+## Bueno, y ya acabó de configurarse nuestra BD?
+
+No se, veamos...
