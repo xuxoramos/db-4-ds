@@ -109,6 +109,10 @@ Para este ejercicio visitaremos el [mapa de COVID de Johns Hopkins](https://coro
 
 Si tomamos el mapa como un "destino final" de los datos, entonces cuál es su origen? Vamos a hipotetizar el camino que siguen:
 
+![](https://imgur.com/LDDK5XK.png)
+
+> **AGREGADO EL 2021-01-13 16:55 GMT-6:** Como lo vimos durante el ejercicio, las bases de datos que cubriremos en el semestre son relacionales en cuanto a estructura, y éstas frecuentemente se denominan transaccionales en cuanto a su propósito. Estas bases de datos son muy buenas escribiendo, pero no tan buenas leyendo, sobre todo si hablamos de millones de registros. Aunque podemos usar índices y particiones para mejorar el performance de lectura en presencia de millones de registros, hay un punto de histéresis donde debemos de salir de las BD relacionales y movernos a otros tipos de storage, como BDs columnares o Big Data Stores. Una arquitectura común para un sistema de información global como el COVID Dashboard de JHU es poner una BD columnar o Big Data Store (buena para leer, no tan buena para escribir) detrás del tablero, y luego tener cientos de procesos que jalan información de cada una de los sistemas transaccionales y las bases de datos relacionales que soportan los miles de registros civiles, hospitales, y laboratorios, para luego consolidar toda esta información en un solo esquema unificado, que luego pueda ser alimentado al Big Data Store o base columnar que respalde el tablero.
+
 [Ir al Jamboard](https://jamboard.google.com/d/1og4fJ0Y3w42JetnOWP04SGoGn4IkzVCK4i_mtp3dPLc/viewer)
 
 ## Esquemas de diseño de BD
