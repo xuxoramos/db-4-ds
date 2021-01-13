@@ -60,8 +60,20 @@ Como platicamos, usaremos 2 BDs de prueba durante todo el curso:
 1. Northwind: BD que Microsoft usa para sus demos. Describe un negocio de transporte de bienes.
 2. Sakila: video rental store.
 
-Por el momento solo cargaremos la BD de [Pagila](https://github.com/devrimgunduz/pagila), que es una versión particular para PostgreSQL de Sakila y que aprovecha sus funciones e idioma específico. Para esto, en el repo encontrarán un directorio `pagila` con 2 archivos:
+Por el momento solo cargaremos la BD de Sakila, la cual encontrarán en este repo, con 4 archivos:
 
-1. `pagila-schema.sql`: la estructura de la BD - tablas, relaciones, constraints, etc.
-2. `pagila-insert-data.sql`: los datos de cada tabla
+1. `postgres-sakila-schema.sql`: la estructura de la BD - tablas, relaciones, constraints, etc.
+2. `postgres-sakila-insert-data.sql`: los datos de cada tabla.
+3. `postgres-sakila-delete-data.sql`: script para borrado de todos los datos de todas las tablas.
+4. `postgres-sakila-drop-objects.sql`: script para borrado de la estructura de la BD - tablas, relaciones, constraints, etc.
 
+Vamos a ejecutar, en este orden, el 1 y 2.
+
+Abriremos el archivo `postgres-sakila-schema.sql` en DBeaver:
+
+Y daremos click en **Execute SQL Script"** en el pequeño toolbar a la izquierda de la ventana de nuestro archivo, o bien dar click derecho y elegir la misma opción:
+
+![](https://imgur.com/kmIEs29.png)
+![](https://imgur.com/HbX6g8a.png)
+
+![](data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABcAAAB5CAYAAADS1LqKAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAASdEVYdFNvZnR3YXJlAEdyZWVuc2hvdF5VCAUAAAO+SURBVGhD7ZnbbtMwGMc3JuACrrjjeXgAHombdRMICbjkDXgOJMTdQENMY+JQytY2a5yD1F4H/906/eJ8dmynFULKxU9xfPjZseND2oOrq6uqLMu9oOT7QsmLotgLg5xlkLN4yZfHB2x8F97ymAq85avRYbUc3ZH3eSvdRlDL6ycQCZvPJEq+PL1flYtrNi8lTr6hTKdsfk0vOZeXEi3n8pl4y1fyTQkRg+CWc+k2guRcmgtvORffhZc8lkHOMshZBjnLv5ertSUXbJoLb3lMBUHy0AqC5SEVRMl9K4iWgyLP2PyaKLnerLuOdvHdwuQziRtQkvb03ZMqz/knCJabaTuT0zhITTJjgL3lZlyapVUi5kqKlgt5nxsD7CV3ATkq4tJ6yyE2W6zpLXcxyFkGOUu3HJsCJgmuanrjnZYgjHhxK6+LZpkNbnk6r9eVLlQlRnm7XLZseSy/92XBMhnXT1DK9UQhP3DpF56qwHttkd/320JMumR1chQnR+uoXF2z5qNrOY2jdHRLU67CpG9pOkewXN1vjhU0ncMhF43COryNy0mYKS+xy+W7SwvrMCjTWSOuUY5gl8u+pYXrMJkw0QOK1ply81WLf1uAGrimkBIsL28ndYs56h/P8pQc67blKW35zUVLaFKQCbY8udsoT2l3y2blozIrzx/U7zyHfUD/nFfl7zM7SBfrV9KGe0B7MshZBjlLh1yuK1gFsftg2m/AFljgJ251rMCxg/9kdMvJJt1FOb1slbfLcWY5vacKbldGeUUrMeXlcUOnK7AU4CmIwyovFzd1QS4douXIOFoY3WNvObOHYpnV6fhbgaZz2FvO7EQqbDy6C4d8ysoBuszMz2HvFvSpRb56+UjG2bc/TVCf1/eeXWOXk90I96Fi4Ja/eNiQmwdR9Wnu6B6HvBv93c+lgbacnLQoNA+kJjfMG9SS03O5TY7vfcggncn5kMg1iHuCdsvJ0dkm10COn0K4NMD2OU5d6yVVLrFYpCxnEzyB+QMOpdeAdjHIWQY5i1O+yLrXbBdWucg3GV598gJ5fyW+G7REF/o4TlsyjlZ5HznlRyIUmQwfvfncSqd4yWnLdPjrVOxGPr7Nqu9zUX2bbRew6zTfjVzzkwzYTOxIrruChnfWLRyYA3uTo4t23i2P335RXE7TfnI9S20EyycL+54IEvmW4JrKig9fB8ovpqLuBo5n78fVXFYw+jBR97SsSUs+F+uWm1IOWo6D7fN5VlTn12l1NllYQTomklmW4hzQvgxylv9VXlR/AdaUbIndZptuAAAAAElFTkSuQmCC)
