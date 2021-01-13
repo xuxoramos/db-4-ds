@@ -95,7 +95,7 @@ Luego da click derecho en `Schemas` y luego en `Create New Schema`.
 
 Y dale el nombre de `public` de nuevo, dado que el script de creación e inserción de Sakila **requiere** que el esquema se llame `public`. De lo contrario podríamos llamarlo como deseemos.
 
-![](https://imgur.com/XZkvlIa)
+![](https://imgur.com/XZkvlIa.png)
 
 Y repite la carga de la estructura y de los datos como lo dijimos arriba.
 
