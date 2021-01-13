@@ -115,6 +115,12 @@ Si tomamos el mapa como un "destino final" de los datos, entonces cuál es su or
 
 [Ir al Jamboard](https://jamboard.google.com/d/1og4fJ0Y3w42JetnOWP04SGoGn4IkzVCK4i_mtp3dPLc/viewer)
 
+Al finalizar la sesión aparecieron estas notas en el documento de notas compartidas:
+
+![](https://imgur.com/LUdJupp.png)
+
+Lo que me indica que si se ha entendido este punto. Vientos!
+
 ## Esquemas de diseño de BD
 
 En esta materia trabajaremos mayormente con esquemas relacionales de BD, pero existen otros.
