@@ -2,6 +2,16 @@
 
 Este website contiene el material para la materia Bases de Datos para Ciencia de Datos.
 
+### NEWS & UPDATES!
+
+#### 2021-01-18
+Por fin nuestra HHH institución se puso las pilitas y nos pusieron Zoom. Aquí la liga: https://itam.zoom.us/j/3406597105
+
+Todas nuestras clases a partir del 18 de Enero serán por ahí.
+
+También tenemos el video de la 1a clase arriba en mi GoogleDrive: https://drive.google.com/drive/folders/15VTGlkN0i3WGb_Bq5H51uCc-UOzwjxzr?usp=sharing
+
+
 ### Temario + Fechas = Plan de Materia
 A continuación el temario, fecha por fecha:
 
