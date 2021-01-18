@@ -85,11 +85,15 @@ Tomemos como ejemplo la BD de Sakila, y como representa la relación entre pelí
 
 ![](https://imgur.com/JchRxBA.png)
 
-Tomemos el período más productivo del mejor actor de las últimas décadas, según el internetz: Don Nicholas Cage.
+Tomemos el período más productivo del mejor actor de las últimas décadas: Don Nicholas Cage.
 
 De 1995 a 1999 Don Nicholas Cage participó en las siguientes películas:
 
 ![](https://upload.wikimedia.org/wikipedia/en/thumb/3/39/Leaving_las_vegas_ver1.jpg/220px-Leaving_las_vegas_ver1.jpg) ![](https://upload.wikimedia.org/wikipedia/en/thumb/8/82/The_Rock_%28movie%29.jpg/220px-The_Rock_%28movie%29.jpg) ![](https://upload.wikimedia.org/wikipedia/en/thumb/1/1d/Conairinternational.jpg/220px-Conairinternational.jpg) ![](https://upload.wikimedia.org/wikipedia/en/1/1c/FaceOff_poster.jpg) ![](https://upload.wikimedia.org/wikipedia/en/thumb/e/e1/City_Of_Angels.jpg/220px-City_Of_Angels.jpg) ![](https://upload.wikimedia.org/wikipedia/en/thumb/b/bc/8mm-film-poster.jpg/220px-8mm-film-poster.jpg)
+
+Tomemos ahora al Sr. Cage y a sus coprotagonistas a lo largo de estas obras:
+
+
 
 
 
