@@ -72,6 +72,9 @@ Recuerden que una _llave primaria_, para ser _primaria_, debe ser _única_ e irr
 
 Mientras que una llave foránea, puede repetirse (en caso de una relación N a 1), o puede restringirse su repetición, en caso de 1 a 1.
 
+#### Un caso particular de 1 a 1: las autorelaciones
+
+
 ### N a N
 
 Las bases de datos relacionales tienen una desventaja, que cada renglón de cada tabla representa una, y solo una observación. Esto complica representar relaciones de N a N, como por ejemplo:
@@ -91,17 +94,33 @@ De 1995 a 1999 Don Nicholas Cage participó en las siguientes películas:
 
 ![](https://upload.wikimedia.org/wikipedia/en/thumb/3/39/Leaving_las_vegas_ver1.jpg/220px-Leaving_las_vegas_ver1.jpg) ![](https://upload.wikimedia.org/wikipedia/en/thumb/8/82/The_Rock_%28movie%29.jpg/220px-The_Rock_%28movie%29.jpg) ![](https://upload.wikimedia.org/wikipedia/en/thumb/1/1d/Conairinternational.jpg/220px-Conairinternational.jpg) ![](https://upload.wikimedia.org/wikipedia/en/1/1c/FaceOff_poster.jpg) ![](https://upload.wikimedia.org/wikipedia/en/thumb/e/e1/City_Of_Angels.jpg/220px-City_Of_Angels.jpg) ![](https://upload.wikimedia.org/wikipedia/en/thumb/b/bc/8mm-film-poster.jpg/220px-8mm-film-poster.jpg)
 
-Pero si nos fijamos en la parte de arriba de cada poster, cada película tiene varios protagonistas. Del mismo modo, Sean Connery, por ejemplo, después de trabajar con Cage en _The Rock_, actuó en The Avengers, Playing it by Heart, y Entrapment.
+Pero si nos fijamos en la parte de arriba de cada poster, cada película tiene varios protagonistas. Del mismo modo, Sean Connery, por ejemplo, después de trabajar con Cage en _The Rock_, actuó en _The Avengers_ (no la del MCU), _Playing it by Heart_, y _Entrapment_.
 
-Si quisiéramos representar la relación entre películas y actores, podemos decir que **N** actores participan en **N** películas, pero la tabla `film` solo puede representar 1 de ellas por cada renglón, y si agregamos un atributo `actores` solo le cabría un dato. Igualmente a la entidad `actor` solo soporta un dato en el atributo `pelicula`. La solución es tener 2 relaciones **N a 1** hacia una entidad o tabla de soporte.
+Si quisiéramos representar la relación entre películas y actores, podemos decir que **N** actores participan en **N** películas, pero la tabla `film` solo puede representar 1 de ellas por cada renglón, y si agregamos un atributo `actores` solo le cabría un dato. Igualmente a la entidad `actor` solo soporta un dato en el atributo `pelicula`. La solución es tener 2 relaciones **N a 1** hacia una entidad o tabla intermedia de soporte.
 
 > Qué llaves primarias se _copiarían_ a esta tabla intermedia de soporte?
 
 ## Diseñando una BD
 
-A continuación haremos un ejercicio de diseño de BD a partir de la siguiente narrativa:
+A continuación haremos un ejercicio de diseño de BD a partir de la siguiente narrativa ficticia:
 
-> 
+### Médica Sur VS COVID19
+
+El protocolo global de reporteo de COVID19 sugerido por la OMS ha obligado a Médica Sur a modificar sus sistemas de ingreso hospitalario. El sistema actual permite capturar los datos generales de un paciente, como nombre, dirección, RFC, y síntomas. También permitía la captura de N visitantes, cada uno con sus atributos. Ahora, entre los cambios impuestos, están:
+
+1. Los pacientes deberán llegar por urgencias y se les realizará un triage respiratorio. Ya no se admitián pacientes "walk-in".
+2. El triage respiratorio resultará en canalización del paciente hacia el área de atención a COVID, o hacia el área de atención de enfermedades respiratorias no COVID, y hacia atención general.
+    - Se deberá registrar minuciosamente los síntomas, el estudio con el cual se detectaron, y el médico que los ordenó, y el médico que definió el triage.
+3. Solo se podrá registrar un visitante para cualquier paciente.
+4. Para los pacientes que han sido canalizados al área de COVID, su visitante se le asignará pase de estacionamiento mostrando tarjeta de circulación vigente.
+5. Se mantendrá registro de todo medicamento que se le administre al paciente. Dicho medicamento sale de un inventario específico para COVID que mantiene el hospital.
+6. Cada paciente con COVID se tratará con algunas de las siguientes 3 etapas:
+    - Etapa de tratamiento: desde los primeros síntomas hasta fiebre difícil de controlar.
+    - Etapa crítica: desde detección de neumonía hasta entubamiento.
+    - Etapa de recuperación: los pacientes pueden declararse en esta etapa sin necesariamente haber transcurrido la etapa 2.
+7. A los pacientes que se recuperen el hospital les realizará una llamada de screening cada 2 semanas para registrar secuelas y estado general de salud.
+
+Para dibujar esta relación, entra a https://www.diagrameditor.com/
 
 
 
