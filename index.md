@@ -11,6 +11,8 @@ Todas nuestras clases a partir del 18 de Enero serán por ahí.
 
 También tenemos el video de la 1a clase arriba en mi GoogleDrive: https://drive.google.com/drive/folders/15VTGlkN0i3WGb_Bq5H51uCc-UOzwjxzr?usp=sharing
 
+Y listo el video de la 2a clase: https://itam.zoom.us/rec/share/nqjzFBbGQeX52t07hPU5YyKoDMUYWR7-JbijNcegPwxJyyb7eJu-EgjSt_EVNgjo.vaxyhAF9A8aKQIQt
+
 
 ### Temario + Fechas = Plan de Materia
 A continuación el temario, fecha por fecha:
