@@ -91,8 +91,17 @@ De 1995 a 1999 Don Nicholas Cage participó en las siguientes películas:
 
 ![](https://upload.wikimedia.org/wikipedia/en/thumb/3/39/Leaving_las_vegas_ver1.jpg/220px-Leaving_las_vegas_ver1.jpg) ![](https://upload.wikimedia.org/wikipedia/en/thumb/8/82/The_Rock_%28movie%29.jpg/220px-The_Rock_%28movie%29.jpg) ![](https://upload.wikimedia.org/wikipedia/en/thumb/1/1d/Conairinternational.jpg/220px-Conairinternational.jpg) ![](https://upload.wikimedia.org/wikipedia/en/1/1c/FaceOff_poster.jpg) ![](https://upload.wikimedia.org/wikipedia/en/thumb/e/e1/City_Of_Angels.jpg/220px-City_Of_Angels.jpg) ![](https://upload.wikimedia.org/wikipedia/en/thumb/b/bc/8mm-film-poster.jpg/220px-8mm-film-poster.jpg)
 
-Tomemos ahora al Sr. Cage y a sus coprotagonistas a lo largo de estas obras:
+Pero si nos fijamos en la parte de arriba de cada poster, cada película tiene varios protagonistas. Del mismo modo, Sean Connery, por ejemplo, después de trabajar con Cage en _The Rock_, actuó en The Avengers, Playing it by Heart, y Entrapment.
 
+Si quisiéramos representar la relación entre películas y actores, podemos decir que **N** actores participan en **N** películas, pero la tabla `film` solo puede representar 1 de ellas por cada renglón, y si agregamos un atributo `actores` solo le cabría un dato. Igualmente a la entidad `actor` solo soporta un dato en el atributo `pelicula`. La solución es tener 2 relaciones **N a 1** hacia una entidad o tabla de soporte.
+
+> Qué llaves primarias se _copiarían_ a esta tabla intermedia de soporte?
+
+## Diseñando una BD
+
+A continuación haremos un ejercicio de diseño de BD a partir de la siguiente narrativa:
+
+> 
 
 
 
