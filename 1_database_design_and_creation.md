@@ -30,6 +30,8 @@ Vamos a recorrerlo hasta llegar al esquema `public`. Los esquemas no son más qu
  
 También vamos a bautizar nuestro diagrama E-R como `sakila-er` y darle `Finish`.
 
+![](https://imgur.com/ZflCCJJ.png)
+
 Lo que vemos es esto:
 
 ![](https://imgur.com/nDXLA2D.png)
