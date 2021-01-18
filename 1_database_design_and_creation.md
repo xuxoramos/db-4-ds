@@ -68,8 +68,28 @@ Es imposible expresar esta relación _al revés_ en BDs relacionales, debido a q
 ### 1 a 1
 Esta es una "especialización" de las relaciones N a 1, con la particularidad de que cuando copiamos la llave primaria de la entidad primaria como llave foránea a la entidad secundaria, _además_ agregamos un _constraint_ de tipo _unique_. Esto significa que le asignamos una regla a la llave foránea de que no puede tener valores repetidos a lo largo de todas las observaciones o registros.
 
+Recuerden que una _llave primaria_, para ser _primaria_, debe ser _única_ e irrepetible, como dictan los libros de autoayuda del tec de mty xD.
+
+Mientras que una llave foránea, puede repetirse (en caso de una relación N a 1), o puede restringirse su repetición, en caso de 1 a 1.
+
 ### N a N
 
+Las bases de datos relacionales tienen una desventaja, que cada renglón de cada tabla representa una, y solo una observación. Esto complica representar relaciones de N a N, como por ejemplo:
+- **N** actores apareciendo en **N** películas
+- **N** cirugías realizadas por **N** médicos cirujanos
+- **N** marcas de vacunas suministradas a **N** estados de la república
+
+La forma de definir esto en un diagrama E-R es **_poniendo una tabla/entidad intermedia_** entre ambas entidades. Esta entidad intermedia tiene una relación **1 a N** con una de las entidades, y **N a 1** con la otra entidad.
+
+Tomemos como ejemplo la BD de Sakila, y como representa la relación entre películas y actores:
+
+![](https://imgur.com/JchRxBA.png)
+
+Tomemos el período más productivo del mejor actor de las últimas décadas, según el internetz: Don Nicholas Cage.
+
+De 1995 a 1999 Don Nicholas Cage participó en las siguientes películas:
+
+![](https://upload.wikimedia.org/wikipedia/en/thumb/3/39/Leaving_las_vegas_ver1.jpg/220px-Leaving_las_vegas_ver1.jpg) ![](https://upload.wikimedia.org/wikipedia/en/thumb/8/82/The_Rock_%28movie%29.jpg/220px-The_Rock_%28movie%29.jpg) ![](https://upload.wikimedia.org/wikipedia/en/thumb/1/1d/Conairinternational.jpg/220px-Conairinternational.jpg) ![](https://upload.wikimedia.org/wikipedia/en/1/1c/FaceOff_poster.jpg) ![](https://upload.wikimedia.org/wikipedia/en/thumb/e/e1/City_Of_Angels.jpg/220px-City_Of_Angels.jpg) ![](https://upload.wikimedia.org/wikipedia/en/thumb/b/bc/8mm-film-poster.jpg/220px-8mm-film-poster.jpg)
 
 
 
