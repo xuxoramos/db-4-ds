@@ -65,7 +65,7 @@ Qué es eso de las llaves primarias y foráneas? Sigan leyendo...
 #### Llave primaria
  Le da _**unicidad**_ a un registro en una tabla y es la forma de identificar _**inequívocamente**_ a uno, y solo un registro. Es buena práctica que una tabla no tenga _duplicados_, y la llave primaria permite identificar a **UNO, Y SOLAMENTE UNO** de los registros de la tabla, u observaciones de la entidad.
  
-##### Buenas prácticas para llaves primarias
+#### Buenas prácticas para llaves primarias
 1. No tener que ver con nada del problem domain (i.e. no ser un folio que se use en un proceso del problem domain, no ser el RFC, ni CURP, etc).
 2. No tener el potencial de repetirse (i.e. nombres completos, apellidos, marcas, razones sociales, etc)
 3. Sugerimos que sea _numérica, entera y consecutiva_.
@@ -80,7 +80,7 @@ Y en esta captura ejecutamos 2 consultas: una para obtener todas las llaves prim
 
 ![](https://imgur.com/khpB92C.png)
 
-##### Lave primaria compuesta
+#### Lave primaria compuesta
 
 Las llaves compuestas las usamos **como llaves primarias** en 2 casos:
 
