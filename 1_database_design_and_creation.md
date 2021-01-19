@@ -126,7 +126,24 @@ Mientras que una llave foránea, puede repetirse (en caso de una relación **N a
 
 ![](https://imgur.com/R631tpv.png)
 
-#### Un caso particular de 1 a 1: las autorelaciones
+En este ejemplo podemos ver como un miembro del staff en la BD de Sakila tiene asociado solo 1 `address`, que a su vez tiene asociada 1 `city`, que a su vez tiene asociado un `country`.
+
+Veremos más tipos de constraints más delante.
+
+#### Un caso particular de 1 a N / 1 a 1: Relaciones Recursivas
+
+Las relaciones recursivas las usamos cuando tenemos una entidad que debe hacer referencia a sí misma para poder representar bien el problem domain. Las tenemos cuando, por ejemplo, deseamos representar un reporte directo de la entidad empleado con otro del mismo tipo:
+
+![](https://web.csulb.edu/colleges/coe/cecs/dbdesign/img/recursive-uml.gif)
+
+Como podemos ver, **N** `Employee`s pueden tener **1** `Employee` como reporte directo, definido como llave foránea en el campo `manager`.
+
+Otro ejemplo puede ser en el contexto de mercado de valores. Antes de cerrar una operación, se debe hacer match entre una postura de compra y una postura de venta. La relación es de 1 a 1, pero son 2 instancias de una misma entidad, con los mismos atributos y mismo comportamiento dentro del contexto del problem domain. Su única diferencia es el tipo de postura: de **C**ompra o de **V**enta.
+
+Esto podemos modelarlo con una relación recursiva, de este modo:
+
+![](https://imgur.com/T0rQZdT.png)
+
 
 
 ### N a N
@@ -153,15 +170,6 @@ Pero si nos fijamos en la parte de arriba de cada poster, cada película tiene v
 Si quisiéramos representar la relación entre películas y actores, podemos decir que **N** actores participan en **N** películas, pero la tabla `film` solo puede representar 1 de ellas por cada renglón, y si agregamos un atributo `actores` solo le cabría un dato. Igualmente a la entidad `actor` solo soporta un dato en el atributo `pelicula`. La solución es tener 2 relaciones **N a 1** hacia una entidad o tabla intermedia de soporte.
 
 > Qué llaves primarias se _copiarían_ a esta tabla intermedia de soporte?
-
-### Tipos de llaves en en diagramas E-R
-
-Las llaves identifican los registros de una tabla dentro del contexo de su relación. Pueden ser de varios tipos:
-
-
-
-
-
 
 
 ## Diseñando una BD
