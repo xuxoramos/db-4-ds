@@ -65,6 +65,13 @@ Qué es eso de las llaves primarias y foráneas? Sigan leyendo...
 #### Llave primaria
  Le da _**unicidad**_ a un registro en una tabla y es la forma de identificar _**inequívocamente**_ a uno, y solo un registro. Es buena práctica que una tabla no tenga _duplicados_, y la llave primaria permite identificar a **UNO, Y SOLAMENTE UNO** de los registros de la tabla, u observaciones de la entidad.
  
+ #### Llaves foráneas
+
+Establece relaciones entre entidades. Cómo saber que un `VISITANTE` viene a visitar a un `PACIENTE`? Cómo saber que mi `WISHLIST` me pertenece _a mi_ y no a alguno de uds? Sigan leyendo...
+
+    - La entidad `WISHLIST` tiene una relación **N** a **1** con la entidad `CLIENTE` en el sistema de Amazon.com y por tanto la llave primaria de `CLIENTE` se copia como llave foránea a la tabla `WISHLIST`. La entidad `PACIENTE` tiene una relación **1** a **N** con la entidad `VISITANTE`, por tanto, la tabla `PACIENTE` copia su llave primaria a la entidad `VISITANTE` como llave foránea.
+    - Como regla, en una relación **N a 1**, la llave primaria de la tabla del lado del **1** se copia **como llave foránea** a la tabla del lado de la **N**.
+ 
 #### Buenas prácticas para llaves primarias
 1. No tener que ver con nada del problem domain (i.e. no ser un folio que se use en un proceso del problem domain, no ser el RFC, ni CURP, etc).
 2. No tener el potencial de repetirse (i.e. nombres completos, apellidos, marcas, razones sociales, etc)
@@ -109,12 +116,6 @@ Y ninguna de las 3 formas cumple con el paradigma relacional (el 1o es más un e
 ![](https://imgur.com/BNdzuAD.png)
 
 Podemos ver que no es posible definir el `id_contrato` como llave primaria de esta tabla histórica porque se repite por cada evento. Igual no podemos definir el `id_cliente` porque también se repite. Nuestra única forma de definir que cada evento le pertenece a un contrato y a un cliente es definiendo una llave compuesta con el `id_cliente`, `id_contrato` y el `timestamp`. Solamente de este modo podemos responder a la pregunta "por qué nuestro cliente dejó de contratar nuestros servicios?" (hint: vean las fechas).
-
-#### Llaves foráneas
-
-Establece relaciones entre entidades. Cómo saber que un `VISITANTE` viene a visitar a un `PACIENTE`? Cómo saber que mi `WISHLIST` me pertenece _a mi_ y no a alguno de uds? Sigan leyendo...
-    - La entidad `WISHLIST` tiene una relación **N** a **1** con la entidad `CLIENTE` en el sistema de Amazon.com y por tanto la llave primaria de `CLIENTE` se copia como llave foránea a la tabla `WISHLIST`. La entidad `PACIENTE` tiene una relación **1** a **N** con la entidad `VISITANTE`, por tanto, la tabla `PACIENTE` copia su llave primaria a la entidad `VISITANTE` como llave foránea.
-    - Como regla, en una relación **N a 1**, la llave primaria de la tabla del lado del **1** se copia **como llave foránea** a la tabla del lado de la **N**.
     
 ### Relaciones 1 a 1
 Esta es una "especialización" de las relaciones N a 1, con la particularidad de que cuando copiamos la llave primaria de la entidad primaria como llave foránea a la entidad secundaria, _además_ agregamos un _constraint_ de tipo _unique_. Esto significa que le asignamos una regla **estructural** a la llave foránea de que no puede tener valores repetidos a lo largo de todas las observaciones o registros.
