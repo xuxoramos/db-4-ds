@@ -50,9 +50,17 @@ Explicaremos cada elemento de un diagrama E-R a continuación.
     
 Existen otros elementos, que quedarán más claros más delante.
 
-### Tipos de llaves en en diagramas E-R
+## Relaciones y llaves en un diagrama E-R
 
-Las llaves identifican los registros de una tabla dentro del contexo de su relación. Pueden ser de varios tipos:
+Los diagramas **E**ntidad-**R**elación son perfectos para expresar el contenido de _bases de datos relacionales_. Existen varios tipos:
+
+### Relaciones 1 a N / N a 1
+
+La usamos cuando una _entidad 1_ puede tener 1 o más objetos del tipo _entidad 2_ asociados. En nuestros ejemplos: **1** `PACIENTE` con **N** `VISITANTE`s. Es importante aquí dejar claro que en este tipo de relaciones, la entidad en el extremo **1** de la relación _copia_ su llave primaria (ver abajo) a la entidad en el extremo del lado **N** de la relación, donde su tipo cambia a llave foránea.
+
+Es imposible expresar esta relación _al revés_ en BDs relacionales, debido a que el contenido de las entidades o tablas es de **1 Y SOLO 1** registro u observación, y de **1 Y SOLO 1** tipo, y por tanto no puede tener registros anidados de otro tipo.
+
+Qué es eso de las llaves primarias y foráneas? Sigan leyendo...
 
 #### Llave primaria
  Le da _**unicidad**_ a un registro en una tabla y es la forma de identificar _**inequívocamente**_ a uno, y solo un registro. Es buena práctica que una tabla no tenga _duplicados_, y la llave primaria permite identificar a **UNO, Y SOLAMENTE UNO** de los registros de la tabla, u observaciones de la entidad.
@@ -70,17 +78,19 @@ Aquí la llave primaria de la tabla `customer` de la BD de Sakila:
 
 Y en esta captura ejecutamos 2 consultas: una para obtener todas las llaves primarias de la tabla `customer` y otra para obtener la misma lista, pero sin duplicados. Podemos ver que ambas son las mismas, por lo que podemos deducir que la llave `customer_id` cumple con que no haya duplicados.
 
-![](https://imgur.com/khpB92C)
+![](https://imgur.com/khpB92C.png)
 
-#### Lave compuesta
+##### Lave primaria compuesta
 
 Las llaves compuestas las usamos **como llaves primarias** en 2 casos:
 
-1. **En tablas intermedias de relaciones N a M:** juntamos las llaves foráneas (ver abajo) de las tablas que queremos conectar con este tipo de relación, logrando el N a M en esta tabla intermedia con 2 relaciones N a 1 y 1 a M. Aquí un ejemplo entre las tablas `film` y `actor`:
+**1. En tablas intermedias de relaciones N a M:** juntamos las llaves foráneas (ver abajo) de las tablas que queremos conectar con este tipo de relación, logrando el N a M en esta tabla intermedia con 2 relaciones N a 1 y 1 a M. Aquí un ejemplo entre las tablas `film` y `actor`:
 
 ![](https://imgur.com/s3hsDN8.png)
 
-Si quisiéramos evitar el uso de llaves compuestas, o de tablas intermedias del todo, tendríamos que hacer esto:
+Como podemos ver, para representar que _"N actores aparecen en M películas"_, debemos de copiar la llave primaria de `actor` y la llave primaria de `film` a una tabla de soporte, cuya llave primaria, entonces, se forma por la composición de ambas llaves foráneas. Si no tuviéramos esto, entonces no sabríamos qué actor aparece en qué película.
+
+Por otro lado, si quisiéramos evitar el uso de llaves compuestas, o de tablas intermedias del todo, tendríamos que hacer esto:
 
 ![](https://imgur.com/G7jVGeY.png)
 
@@ -94,30 +104,19 @@ O esto:
 
 Y ninguna de las 3 formas cumple con el paradigma relacional (el 1o es más un esquema de documentos, y el 2o y 3o son totalmente antipatrones)
 
-2. **En tablas con información histórica:** guardamos la llave de la entidad a la que queremos construirle el histórico, y además el **timestamp** o marca de tiempo, en la granularidad necesaria (hora, min, seg, milis, micros, nanos) de modo que sepamos el instante en el que sucedieron los tipos de eventos que queremos registrar. Aquí un ejemplo de tabla histórica hipotética que registra cambios en su contrato de internet de Infinitum:
+**2. En tablas con información histórica:** guardamos la llave de la entidad a la que queremos construirle el histórico, y además el **timestamp** o marca de tiempo, en la granularidad necesaria (hora, min, seg, milis, micros, nanos) de modo que sepamos el instante en el que sucedieron los tipos de eventos que queremos registrar. Aquí un ejemplo de tabla histórica hipotética que registra cambios en su contrato de internet de Infinitum:
 
-![])https://imgur.com/BNdzuAD.png)
+![](https://imgur.com/BNdzuAD.png)
 
 Podemos ver que no es posible definir el `id_contrato` como llave primaria de esta tabla histórica porque se repite por cada evento. Igual no podemos definir el `id_cliente` porque también se repite. Nuestra única forma de definir que cada evento le pertenece a un contrato y a un cliente es definiendo una llave compuesta con el `id_cliente`, `id_contrato` y el `timestamp`. Solamente de este modo podemos responder a la pregunta "por qué nuestro cliente dejó de contratar nuestros servicios?" (hint: vean las fechas).
 
-### Llaves foráneas
+#### Llaves foráneas
 
 Establece relaciones entre entidades. Cómo saber que un `VISITANTE` viene a visitar a un `PACIENTE`? Cómo saber que mi `WISHLIST` me pertenece _a mi_ y no a alguno de uds? Sigan leyendo...
     - La entidad `WISHLIST` tiene una relación **N** a **1** con la entidad `CLIENTE` en el sistema de Amazon.com y por tanto la llave primaria de `CLIENTE` se copia como llave foránea a la tabla `WISHLIST`. La entidad `PACIENTE` tiene una relación **1** a **N** con la entidad `VISITANTE`, por tanto, la tabla `PACIENTE` copia su llave primaria a la entidad `VISITANTE` como llave foránea.
     - Como regla, en una relación **N a 1**, la llave primaria de la tabla del lado del **1** se copia **como llave foránea** a la tabla del lado de la **N**.
-
-## Relaciones en un diagrama E-R
-
-Los diagramas **E**ntidad-**R**elación son perfectos para expresar el contenido de _bases de datos relacionales_. Existen varios tipos:
-
-### 1 a N / N a 1
-
-La usamos cuando una _entidad 1_ puede tener 1 o más objetos del tipo _entidad 2_ asociados. En nuestros ejemplos: **1** `PACIENTE` con **N** `VISITANTE`s. Es importante aquí dejar claro que en este tipo de relaciones, la llave primaria de la entidad en el extremo **1** de la relación _copia_ su llave primaria a la entidad en el extremo del lado **N** de la relación como llave foránea.
-
-Es imposible expresar esta relación _al revés_ en BDs relacionales, debido a que el contenido de las entidades o tablas es de **1 Y SOLO 1** registro u observación, y de **1 Y SOLO 1** tipo, y por tanto no puede tener registros anidados de otro tipo.
-
-
-### 1 a 1
+    
+### Relaciones 1 a 1
 Esta es una "especialización" de las relaciones N a 1, con la particularidad de que cuando copiamos la llave primaria de la entidad primaria como llave foránea a la entidad secundaria, _además_ agregamos un _constraint_ de tipo _unique_. Esto significa que le asignamos una regla **estructural** a la llave foránea de que no puede tener valores repetidos a lo largo de todas las observaciones o registros.
 
 Recuerden que una _llave primaria_, para ser _primaria_, debe ser _única_ e irrepetible, como dictan los libros de autoayuda del tec de mty xD.
@@ -153,6 +152,16 @@ Pero si nos fijamos en la parte de arriba de cada poster, cada película tiene v
 Si quisiéramos representar la relación entre películas y actores, podemos decir que **N** actores participan en **N** películas, pero la tabla `film` solo puede representar 1 de ellas por cada renglón, y si agregamos un atributo `actores` solo le cabría un dato. Igualmente a la entidad `actor` solo soporta un dato en el atributo `pelicula`. La solución es tener 2 relaciones **N a 1** hacia una entidad o tabla intermedia de soporte.
 
 > Qué llaves primarias se _copiarían_ a esta tabla intermedia de soporte?
+
+### Tipos de llaves en en diagramas E-R
+
+Las llaves identifican los registros de una tabla dentro del contexo de su relación. Pueden ser de varios tipos:
+
+
+
+
+
+
 
 ## Diseñando una BD
 
