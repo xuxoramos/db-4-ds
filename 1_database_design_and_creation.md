@@ -68,9 +68,8 @@ Qué es eso de las llaves primarias y foráneas? Sigan leyendo...
  #### Llaves foráneas
 
 Establece relaciones entre entidades. Cómo saber que un `VISITANTE` viene a visitar a un `PACIENTE`? Cómo saber que mi `WISHLIST` me pertenece _a mi_ y no a alguno de uds? Sigan leyendo...
-
-    - La entidad `WISHLIST` tiene una relación **N** a **1** con la entidad `CLIENTE` en el sistema de Amazon.com y por tanto la llave primaria de `CLIENTE` se copia como llave foránea a la tabla `WISHLIST`. La entidad `PACIENTE` tiene una relación **1** a **N** con la entidad `VISITANTE`, por tanto, la tabla `PACIENTE` copia su llave primaria a la entidad `VISITANTE` como llave foránea.
-    - Como regla, en una relación **N a 1**, la llave primaria de la tabla del lado del **1** se copia **como llave foránea** a la tabla del lado de la **N**.
+  - La entidad `WISHLIST` tiene una relación **N** a **1** con la entidad `CLIENTE` en el sistema de Amazon.com y por tanto la llave primaria de `CLIENTE` se copia como llave foránea a la tabla `WISHLIST`. La entidad `PACIENTE` tiene una relación **1** a **N** con la entidad `VISITANTE`, por tanto, la tabla `PACIENTE` copia su llave primaria a la entidad `VISITANTE` como llave foránea.  
+  - Como regla, en una relación **N a 1**, la llave primaria de la tabla del lado del **1** se copia **como llave foránea** a la tabla del lado de la **N**.
  
 #### Buenas prácticas para llaves primarias
 1. No tener que ver con nada del problem domain (i.e. no ser un folio que se use en un proceso del problem domain, no ser el RFC, ni CURP, etc).
