@@ -87,35 +87,7 @@ Y en esta captura ejecutamos 2 consultas: una para obtener todas las llaves prim
 
 ![](https://imgur.com/khpB92C.png)
 
-#### Lave primaria compuesta
 
-Las llaves compuestas las usamos **como llaves primarias** en 2 casos:
-
-**1. En tablas intermedias de relaciones N a M:** juntamos las llaves foráneas (ver abajo) de las tablas que queremos conectar con este tipo de relación, logrando el N a M en esta tabla intermedia con 2 relaciones N a 1 y 1 a M. Aquí un ejemplo entre las tablas `film` y `actor`:
-
-![](https://imgur.com/s3hsDN8.png)
-
-Como podemos ver, para representar que _"N actores aparecen en M películas"_, debemos de copiar la llave primaria de `actor` y la llave primaria de `film` a una tabla de soporte, cuya llave primaria, entonces, se forma por la composición de ambas llaves foráneas. Si no tuviéramos esto, entonces no sabríamos qué actor aparece en qué película.
-
-Por otro lado, si quisiéramos evitar el uso de llaves compuestas, o de tablas intermedias del todo, tendríamos que hacer esto:
-
-![](https://imgur.com/G7jVGeY.png)
-
-O esto:
-
-![](https://imgur.com/BQEymAp.png)
-
-O esto:
-
-![](https://imgur.com/NZ39XQY.png)
-
-Y ninguna de las 3 formas cumple con el paradigma relacional (el 1o es más un esquema de documentos, y el 2o y 3o son totalmente antipatrones)
-
-**2. En tablas con información histórica:** guardamos la llave de la entidad a la que queremos construirle el histórico, y además el **timestamp** o marca de tiempo, en la granularidad necesaria (hora, min, seg, milis, micros, nanos) de modo que sepamos el instante en el que sucedieron los tipos de eventos que queremos registrar. Aquí un ejemplo de tabla histórica hipotética que registra cambios en su contrato de internet de Infinitum:
-
-![](https://imgur.com/BNdzuAD.png)
-
-Podemos ver que no es posible definir el `id_contrato` como llave primaria de esta tabla histórica porque se repite por cada evento. Igual no podemos definir el `id_cliente` porque también se repite. Nuestra única forma de definir que cada evento le pertenece a un contrato y a un cliente es definiendo una llave compuesta con el `id_cliente`, `id_contrato` y el `timestamp`. Solamente de este modo podemos responder a la pregunta "por qué nuestro cliente dejó de contratar nuestros servicios?" (hint: vean las fechas).
     
 ### Relaciones 1 a 1
 Esta es una "especialización" de las relaciones N a 1, con la particularidad de que cuando copiamos la llave primaria de la entidad primaria como llave foránea a la entidad secundaria, _además_ agregamos un _constraint_ de tipo _unique_. Esto significa que le asignamos una regla **estructural** a la llave foránea de que no puede tener valores repetidos a lo largo de todas las observaciones o registros.
@@ -145,7 +117,6 @@ Esto podemos modelarlo con una relación recursiva, de este modo:
 ![](https://imgur.com/T0rQZdT.png)
 
 
-
 ### N a N
 
 Las bases de datos relacionales tienen una desventaja, que cada renglón de cada tabla representa una, y solo una observación. Esto complica representar relaciones de N a N, como por ejemplo:
@@ -170,6 +141,36 @@ Pero si nos fijamos en la parte de arriba de cada poster, cada película tiene v
 Si quisiéramos representar la relación entre películas y actores, podemos decir que **N** actores participan en **N** películas, pero la tabla `film` solo puede representar 1 de ellas por cada renglón, y si agregamos un atributo `actores` solo le cabría un dato. Igualmente a la entidad `actor` solo soporta un dato en el atributo `pelicula`. La solución es tener 2 relaciones **N a 1** hacia una entidad o tabla intermedia de soporte.
 
 > Qué llaves primarias se _copiarían_ a esta tabla intermedia de soporte?
+
+#### Lave primaria compuesta
+
+Las llaves compuestas las usamos **como llaves primarias** en 2 casos:
+
+**1. En tablas intermedias de relaciones N a M:** juntamos las llaves foráneas de las tablas que queremos conectar con este tipo de relación, logrando el N a M en esta tabla intermedia con 2 relaciones N a 1 y 1 a M. Aquí un ejemplo entre las tablas `film` y `actor`:
+
+![](https://imgur.com/s3hsDN8.png)
+
+Como podemos ver, para representar que _"N actores aparecen en M películas"_, debemos de copiar la llave primaria de `actor` y la llave primaria de `film` a una tabla de soporte, cuya llave primaria, entonces, se forma por la composición de ambas llaves foráneas. Si no tuviéramos esto, entonces no sabríamos qué actor aparece en qué película.
+
+Por otro lado, si quisiéramos evitar el uso de llaves compuestas, o de tablas intermedias del todo, tendríamos que hacer esto:
+
+![](https://imgur.com/G7jVGeY.png)
+
+O esto:
+
+![](https://imgur.com/BQEymAp.png)
+
+O esto:
+
+![](https://imgur.com/NZ39XQY.png)
+
+Y ninguna de las 3 formas cumple con el paradigma relacional (el 1o es más un esquema de documentos, y el 2o y 3o son totalmente antipatrones)
+
+**2. En tablas con información histórica:** guardamos la llave de la entidad a la que queremos construirle el histórico, y además el **timestamp** o marca de tiempo, en la granularidad necesaria (hora, min, seg, milis, micros, nanos) de modo que sepamos el instante en el que sucedieron los tipos de eventos que queremos registrar. Aquí un ejemplo de tabla histórica hipotética que registra cambios en su contrato de internet de Infinitum:
+
+![](https://imgur.com/BNdzuAD.png)
+
+Podemos ver que no es posible definir el `id_contrato` como llave primaria de esta tabla histórica porque se repite por cada evento. Igual no podemos definir el `id_cliente` porque también se repite. Nuestra única forma de definir que cada evento le pertenece a un contrato y a un cliente es definiendo una llave compuesta con el `id_cliente`, `id_contrato` y el `timestamp`. Solamente de este modo podemos responder a la pregunta "por qué nuestro cliente dejó de contratar nuestros servicios?" (hint: vean las fechas).
 
 
 ## Diseñando una BD
