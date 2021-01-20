@@ -143,4 +143,4 @@ Las diferencias que encontramos con lo visto hasta ahorita son:
 1. `ON UPDATE CASCADE ON DELETE CASCADE`: esto se agrega al declarar una _llave foránea_ para indicar qué hacer con el registro de `paciente_doctor` cuando sucede un `update` o `delete` en la tabla `paciente`. Es decir, si actualizamos algún atributo del paciente, se debe actualizar también la relación, y si **borramos (DELETE)** el registro en `paciente`, automáticamente la BD borrará el registro en `paciente_doctor`.
 2. `constraint pk_paciente_doctor primary key (id_paciente, id_doctor)`: con esto estamos definiendo que la _llave primaria_ se compone de ambos campos que fueron definidos como _llaves foráneas_  en los comandos anteriores. Esta línea la pudimos haber ejecutado, en lugar de _in_line_, con un `ALTER TABLE ADD CONSTRAINT`.
 
-
+Pueden encontrar el archivo completo para este ejercicio aquí: https://github.com/xuxoramos/db-4-ds/blob/gh-pages/doctor.sql
