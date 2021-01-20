@@ -58,7 +58,7 @@ Los diagramas **E**ntidad-**R**elación son perfectos para expresar el contenido
 
 La usamos cuando una _entidad 1_ puede tener 1 o más objetos del tipo _entidad 2_ asociados. En nuestros ejemplos: **1** `PACIENTE` con **N** `VISITANTE`s. Es importante aquí dejar claro que en este tipo de relaciones, la entidad en el extremo **1** de la relación _copia_ su llave primaria (ver abajo) a la entidad en el extremo del lado **N** de la relación, donde su tipo cambia a llave foránea.
 
-Es imposible expresar esta relación _al revés_ en BDs relacionales, debido a que el contenido de las entidades o tablas es de **1 Y SOLO 1** registro u observación, y de **1 Y SOLO 1** tipo, y por tanto no puede tener registros anidados de otro tipo.
+En bases de datos relacionales, es imposible representar que esta _entidad 1_ tiene dentro **una colección** de objetos de tipo _entidad 2_, debido a que el contenido de las entidades o tablas es de **1 Y SOLO 1** registro u observación, y de **1 Y SOLO 1** tipo, y por tanto no puede tener registros anidados de otro tipo, como sí lo podemos representar en Programación Orientada a Objetos, o en BDs con esquema de documentos. Es por ello que es la _entidad 2_ la que **sabe**, mediante la llave foránea, a qué _entidad 1_ le pertenece. Para hacer el viaje de la entidad en el extremo de la **N** a la entidad en el extremo de **1**, solo podemos hacerlo mediante queries.
 
 Qué es eso de las llaves primarias y foráneas? Sigan leyendo...
 
