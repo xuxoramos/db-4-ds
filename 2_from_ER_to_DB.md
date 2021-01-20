@@ -53,6 +53,45 @@ Intentemos correr estos comandos en DBeaver.
 
 Dado que estamos creando una tabla que tiene un _constraint de llave foránea_  con la tabla `especializacion`, y dado que ésta aún no se encuentra creada, PostgreSQL arrojará un error. La forma de tratarlo es creando primero las tablas que no tengan relaciones (que usualmente están en la periferia del problem domain), y poco a poco ir creando más hasta dejar al final la tabla con mayor número de relaciones.
 
-## Tablas transaccionales y catálogos
+## Tablas transaccionales y tablas de catálogos
+Antes de crear **en orden** las tablas para que no nos salgan estos errores, debemos de explicar la diferencia entre algunos tipos de tablas para tener claro nuestro diseño de BD.
 
+Ya hemos cubierto las tablas históricas cuando explicamos las [llaves compuestas](https://github.com/xuxoramos/db-4-ds/blob/gh-pages/1_database_design_and_creation.md#lave-primaria-compuesta). Ahora vamos a explicar la diferencia entre las tablas transaccionales y las tablas de catálogo. 
 
+### Tablas transaccionales
+Son tablas donde guardamos eventos y transacciones del problem domain: un ingreso hospitalario, una verificación de coche, una venta, una compra, un check-in en un hotel, un login a un sistema, un ticket de soporte, etc.
+
+Como tal, estas tablas transaccionales tienen 2 atributos importantes, su _llave primaria_, y una _fecha transacción_.
+
+Adicionalmente, la **frecuencia** con la que escribimos en esas tablas nos da un indicio de la velocidad de nuestro negocio. Pensemos en una tabla hipotética `VENTA` en diferentes escenarios:
+1. En una tiendita de la esquina:
+2. En un Oxxo (en su única caja abierta):
+3. En Liverpool:
+4. En un concesionario Tesla:
+5. En Amazon.com: 
+6. En Netflix:
+
+Esto también nos debe introducir concerns de volumetría (espacio en disco), en desempeño de lectura (índices, que veremos más tarde) y, más basicote (como Kim Kardashian), si la longitud de nuestra _llave primaria_ y su respectiva _secuencia_ dan lo suficiente como para sostener el ritmo de inserción en esta tabla. Si nuestra llave primaria está definida como `integer(5)`, es decir, _entera de 5 posiciones_, esperaríamos que el máximo número que insertaremos es el `99999`. Esto no es así, debido a que el máximo número representable por el tipo `integer` es `32767`, y entonces vamos a tener errores de inserción y por tanto pérdida de datos mucho antes que lleguemos a la capacidad máxima de la longitud de nuestra llave primaria.
+
+En la BD de Sakila, podemos identificar 2 tablas de este tipo:
+
+![](https://imgur.com/KevyBa2.png)
+
+Las tablas de `rental` y `payment` registran transacciones, y es sensato suponer que tenemos 1 inserción cada 2 horas. Por tanto, son tablas que debemos monitorear de cerca para que tanto espacio, como longitud de campos, como tipo de datos, no nos vayan a sabotear.
+
+Ahora, qué tal, la tabla `customer`? Podemos considerarla transaccional? En qué escenarios si? En qué escenarios no?
+
+![](https://imgur.com/0uBNW9w.png)
+
+Y la de `film`?
+
+Pero qué hay de los demás atributos? Como podemos ver, en el caso de `rental` y `payment` la mayoría son _llaves foráneas_, y aunque en el caso de `film` y `customer` hay otros atributos que le dan contexto, si las consideramos transaccionales, vale la pena ver qué _llaves foráneas_ tenemos copiadas ahí, y por tanto, de qué relaciones **1 a N** son parte.
+
+Es muy probable que las otras tablas con las que estas _tablas transaccionales_ tienen relación sean _catálogos_.
+
+### Tablas de catálogos
+Estas tablas se caracterizan por tener una frecuencia de actualización leeeeeeenta o casi nula, y casi siempre describen _tipos_ de algo relevante al problem domain. Por ejemplo:
+1. elementos geográficos: `estado`, `municipio`, `codigo_postal`, `colonia`, `pais`. **OJO:** no se vayan con la finta de que no cambian. Si cambian. Cuando el DF se convirtió en CDMX muchos grupos y áreas de ingeniería de software sufrieron la gota gorda por no tener catálogos que pudieran cambiar fácilmente.
+2. status de algún objeto del problem domain: `status_cliente`, `status_envio`, `status_transaccion`.
+3. tipos o clases de algún objeto del problem domain: `tipo_estudio`, `tipo_especialidad`, `tipo_medicamento`.
+4. 
