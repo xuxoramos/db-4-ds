@@ -9,7 +9,7 @@ Supongamos el siguiente modelo ER:
 
 Vamos a crearlo con comandos DDL de SQL:
 
-## `create table`
+## `create table` y `alter table`
 El comando [`create table`](https://www.postgresql.org/docs/current/sql-createtable.html), como su nombre lo dice, nos ayuda a crear una tabla.
 
 A continuación, el comando para crear la tabla `doctor`:
@@ -90,8 +90,57 @@ Pero qué hay de los demás atributos? Como podemos ver, en el caso de `rental` 
 Es muy probable que las otras tablas con las que estas _tablas transaccionales_ tienen relación sean _catálogos_.
 
 ### Tablas de catálogos
-Estas tablas se caracterizan por tener una frecuencia de actualización leeeeeeenta o casi nula, y casi siempre describen _tipos_ de algo relevante al problem domain. Por ejemplo:
+Estas tablas se caracterizan por tener una frecuencia de actualización lenta o nula, y casi siempre describen _tipos_ de algo relevante al problem domain. Por ejemplo:
+
 1. elementos geográficos: `estado`, `municipio`, `codigo_postal`, `colonia`, `pais`. **OJO:** no se vayan con la finta de que no cambian. Si cambian. Cuando el DF se convirtió en CDMX muchos grupos y áreas de ingeniería de software sufrieron la gota gorda por no tener catálogos que pudieran cambiar fácilmente.
 2. status de algún objeto del problem domain: `status_cliente`, `status_envio`, `status_transaccion`.
 3. tipos o clases de algún objeto del problem domain: `tipo_estudio`, `tipo_especialidad`, `tipo_medicamento`.
-4. 
+
+**Pueden existir relaciones entre catálogos**, no es necesario que sean _self-contained_, si esto agrega contexto al problem domain. Por ejemplo:
+
+![](https://imgur.com/R631tpv.png)
+
+Sin considerar las tablas de `staff` y `address`, que podemos considerarlas como transaccionales, `city` y `country` son 2 catálogos **que tienen relación entre sí**. 
+
+En la BD de Sakila podemos encontrar los siguientes catálogos:
+
+![](https://imgur.com/byTAuIr.png)
+
+Pero qué tal estos? Son catálogos?
+
+![](https://imgur.com/nKBJvdl.png)
+
+Como buena práctica, si se actualizan o se agregan registros 2 veces al año o menos, serán catálogos.
+
+## Ejercicio
+
+Entonces, con los conocimientos adquiridos, podemos decir que en el pequeño modelo E-R de ingreso hospitalario que imaginamos, el orden de creación puede ser:
+
+1. `tipo_especializacion`
+2. `tipo_estudio`
+3. `paciente`
+4. `estudio`
+5. `doctor`
+6. `paciente_doctor`
+
+## Creación de tablas intermedias para relaciones N a M
+
+En particular para la tabla `paciente_doctor`, que describe la relación N a M entre `paciente` y `doctor`, el comando SQL para su creación es un poco diferente porque las _2 llaves foráneas_ **COMPONEN** _una sola llave primaria_. El comando es:
+
+```
+--
+-- TABLE: paciente_doctor
+--  
+CREATE TABLE paciente_doctor (
+  id_paciente numeric(4) references paciente (id_paciente) ON UPDATE CASCADE ON DELETE CASCADE,
+  id_doctor numeric(4) references doctor (id_doctor) ON UPDATE cascade,
+  constraint pk_paciente_doctor primary key (id_paciente, id_doctor)
+);
+-- 
+```
+
+Las diferencias que encontramos con lo visto hasta ahorita son:
+1. `ON UPDATE CASCADE ON DELETE CASCADE`: esto se agrega al declarar una _llave foránea_ para indicar qué hacer con el registro de `paciente_doctor` cuando sucede un `update` o `delete` en la tabla `paciente`. Es decir, si actualizamos algún atributo del paciente, se debe actualizar también la relación, y si **borramos (DELETE)** el registro en `paciente`, automáticamente la BD borrará el registro en `paciente_doctor`.
+2. `constraint pk_paciente_doctor primary key (id_paciente, id_doctor)`: con esto estamos definiendo que la _llave primaria_ se compone de ambos campos que fueron definidos como _llaves foráneas_  en los comandos anteriores. Esta línea la pudimos haber ejecutado, en lugar de _in_line_, con un `ALTER TABLE ADD CONSTRAINT`.
+
+
