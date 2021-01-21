@@ -49,15 +49,15 @@ Si se fijan bien, no estamos declarando en el insert la PK `id_doctor`. Esto es 
 
 Finalmente, como seguramente recordarán, la tabla `doctor` tiene un **constraint de integridad referencial** con la tabla `especialidad`, significa que no podremos insertar ninguno de estos doctores sin antes crear la tabla de especializaciones. Aquí se las dejo:
 
-| id_especialidad | nombre                  |
-|-----------------|-------------------------|
-| 1               | Pediatría               |
-| 2               | Cardiología             |
-| 3               | Cirugía                 |
-| 4               | Diagnóstico Diferencial |
-| 5               | Genética                |
-| 6               | Ocultismo               |
-| 7               | Santería                |
+| nombre                  |
+|-------------------------|
+| Pediatría               |
+| Cardiología             |
+| Cirugía                 |
+| Diagnóstico Diferencial |
+| Genética                |
+| Ocultismo               |
+| Santería                |
 
 Listo, a darle al DBeaver...
 
@@ -88,7 +88,7 @@ Vamos ahora a insertar varios pacientes para probar las relaciones N a N:
 | Sebastián  | Dulong    | B           | 0         | 68   | 172      |
 | Ulises     | Quevedo   | A           | 1         | 78   | 188      |
 
-No puse a las mujeres de nuestro grupo porque no quiero suponer nada sobre el peso
+No puse a las mujeres de nuestro grupo porque no quiero suponer nada sobre su peso porque creo que es considerado una grosería, no?
 
 Un apunte sobre el campo `paciente.factor_rh`: lo hemos declarado como `bool`, que significa que solo puede tomar valores **`1`** o **`0`**, o **`true`** o **`false`**, o **`t`** o **`f`**, o **`y`** o **`n`**, o **`yes`** o **`no`**. Todos estos tipos son aceptables para este campo, y en el diseño del sistema que alimente esta BD, debe haber esta _traducción_ entre 1 y 0, y **positivo** y **negativo** para el factor RH.
 
@@ -109,8 +109,98 @@ Ahora vamos a rellenar la tabla intermedia `paciente_doctor` para completar el e
 | 5           | 2         |
 | 5           | 5         |
 
-## `delete`
+## El comando [`delete`](https://www.postgresql.org/docs/current/sql-delete.html)
 
-Vamos ahora a 
+Vamos ahora a simular la baja de algún paciente, borrando su registro, con el siguiente comando:
 
+```
+DELETE FROM hospital.paciente
+WHERE nombres = 'Ulises' and apellidos = 'Quevedo';
+```
+
+Y como ya es costumbre, lo explicaremos línea por línea:
+
+1. `DELETE FROM hospital.paciente`: `DELETE` borra registros, pero debemos especificar de dónde. `hospital.paciente` nos dice de qué tabla vamos a borrar.
+2. `WHERE nombres = 'Ulises' and apellidos = 'Quevedo';`: con `WHERE` indicamos qué registro vamos a borrar. Lo que sigue después de esta keyword son **condiciones**, y tienen la misma forma en otros comandos como `insert` o `select`. Son condiciones booleanas similares a los usados en otros lenguajes de programación. En este ejemplo, vamos a borrar l registro donde `nombres = 'Ulises'` **Y ADEMÁS** que `apellidos = 'Quevedo'`.
+
+>**PREGUNTA VIOLENTA:** Qué creen que suceda si no ponemos la cláusula `WHERE` en un comando `DELETE`?
+
+Entremos el comando en DBever.
+
+Acabamos de dar de baja (o quizá 'dar de alta') a Ulises. Ojalá no haya estado en el hospital con síntomas respiratorios. Comprobémoslo con un comando `select`:
+
+`select * from paciente where nombres = 'Ulises' and apellidos = 'Quevedo';`
+
+El comando `select` es vasto, **vaaaaasto**, y lo cubriremos en 2 clases, pero por el momento, solamente validamos si efectivamente dimos de alta/baja a Ulises. 
+
+### `delete` y las operaciones en cascada
+
+Recuerdan que la tabla `paciente_doctor` tiene una _llave compuesta_ por las 2 _llaves foráneas_ de las 2 tablas, `paciente` y `doctor` cuya relación **N a M** soporta?
+
+Qué habrá pasado, entonces? Si son _llaves foráneas_ y el registro de Ulises ya no está, qué le pasó a sus registros en esta tabla? Veamos...
+
+`select * from paciente_doctor pd, paciente p where p.nombres = 'Ulises' and p.apellidos = 'Quevedo' and p.id_paciente = pd.id_paciente;`
+
+Como podemos ver, no solo eliminamos a Ulises de la tabla de pacientes, sino también todos los registros de los doctores que lo trataron en la tabla **N a M**. No borramos a los doctores, sino solo al registro de que alguna vez lo trataron.
+
+Cómo se logra esto? Recuerdan cómo creamos la tabla `paciente_doctor`?
+
+```
+--
+-- TABLE: paciente_doctor
+--  
+CREATE TABLE paciente_doctor (
+  id_paciente numeric(4) references paciente (id_paciente) ON UPDATE CASCADE ON DELETE CASCADE,
+  id_doctor numeric(4) references doctor (id_doctor) ON UPDATE cascade,
+  constraint pk_paciente_doctor primary key (id_paciente, id_doctor)
+);
+-- 
+```
+
+Lo que nos permite esta funcionalidad son las cláusulas `ON DELETE CASCADE` de la cláusula `references`. Lo que está diciendo esta cláusula es _"en caso de que se borre una llave `id_paciente` de la tabla `paciente`, bórrate también, en cascada, lo que tengamos en esta tabla con ese mismo `id_paciente`"
+
+Esto es un arma de doble filo:
+- PRO: mantenemos consistencia si borramos un registro en la tabla padre.
+- CON: si borramos algo por error, los constrains de integridad referencial no estarán ahí para advertirnos
+
+Alteremos ahora la tabla para que no haga borrado en cascada:
+
+`ALTER TABLE hospital.paciente_doctor DROP CONSTRAINT paciente_doctor_id_paciente_fkey;`
+
+Con esto estamos modificando la tabla `paciente_doctor` y eliminando del todo el _constraint de llave foránea_ llamado `paciente_doctor_id_paciente_fkey`, que fue creado _inline_  con el comando `CREATE TABLE`.
+
+Luego vamos a volver a crear el constraint pero sin las cláusulas `ON DELETE CASCADE`:
+
+`ALTER TABLE hospital.paciente_doctor ADD CONSTRAINT paciente_doctor_id_paciente_fkey FOREIGN KEY (id_paciente) REFERENCES hospital.paciente(id_paciente);`
+
+E intentemos ahora borrar a Sebastián:
+
+```
+DELETE FROM hospital.paciente
+WHERE nombres = 'Sebastián' and apellidos = 'Dulong';
+```
+El resultado:
+
+![](https://imgur.com/q07QJBP.png)
+
+Sin el borrado en cascada, eliminar un registro de la tabla padre (del lado del **1** en una relación **1 a N**, es decir, del lado de la llave primaria), no borra los mismos registros en la tabla hija (hacia donde se copia la llave y cae como llave foránea), y entonces ahí si los constraints de integridad referencial nos protegen de hacer estupideces.
+
+### El `delete` IRL
+
+#### Se usa IRL el comando `delete`?
+
+Sí, generalmente en usos estructurales:
+
+1. Migraciones de bases de datos: "Oracle ya nos sale muy caro, vamos a mandarlos a la jodida y cambiar por MySQL o PostgreSQL". Usualmente borramos las tablas viejas.
+2. Cambios estructurales: "Debido a la pandemia, y al alto número de ingresos hospitalarios de mútliples miembros de la misma familia, Médica sur ha permitido que un `visitante` pase a ver a más de 1 `paciente`, y nuestra base de datos actual no lo soporta". Debemos borrar la tabla vieja de visitantes, crear una tabla intermedia N a M, volver a crearla en una versión reducida, pasar algunos campos a la tabla intermedia, y volver a vaciar los datos.
+3. Destrucción de datos debido a GDPR o LFPDP: "Nos llamó un cliente solicitando que eliminemos todos los datos que tenemos de él. Deberemos borrarlo de la tabla `cliente` y afortunadamente la operación en cascada se encargará del resto".
+4. Construcción de BDs históricas: "Nuestra tabla de 'pagos' ya tiene millones de registros, y aún con índices las consultas se alentan mucho. Es tiempo de mover el histórico profundo de más de 2 años a un Datawarehouse". Aquí tendríamos que construir un proceso para que periódicamente se moviera el histórico profundo **de todas nuestras tablas transaccionales** a una base de datos analítica, buena para leer, maletona para escribir, y que borre los registros de la BD origen, y además recalcule los índices. Estos programas se llaman **ETL (Extraction, Transformation & Loading)**, y los veremos más tarde.
+
+#### Cuándo **no se usa** delete?
+1. Cuando un cliente abandona nuestro negocio: es preferible agregar un atributo/campo/columna de `id_status`, un catálogo de `status_cliente`, un renglón de status inactivo o suspendido, y cambiar las reglas de negocio en código de nuestro sistema para no operar clientes con este tipo de status.
+2. Cuando queremos desactivar o dejar de usar una entidad: "la película de 'Mirreyes VS Godínez' ha sido prohibida por la 4T, y debemos sacarla del catálogo". En este caso, agregar un catálogo de status, agregar el campo status en `inventory` (no en `film`, porque es un atributo de la película en mi inventario, no de la película en sí) en la BD de Sakila, y modificar nuestro sistema para ahora no permitir rentar películas cuyo registro en el inventario tenga un status `no disponible`.
+
+## El comando `update`
+
+Si borrar es muy extremo para uds, entonces podemos solamente "actualizar".
 
