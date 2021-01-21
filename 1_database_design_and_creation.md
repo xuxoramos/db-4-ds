@@ -194,7 +194,10 @@ El protocolo global de reporteo de COVID19 sugerido por la OMS ha obligado a Mé
 
 Para dibujar esta relación, entra a https://www.diagrameditor.com/
 
+#### Resultado del ejercicio
+Aquí un jamboard de como quedó nuestro ejercicio en clase. Buen trabajo, todos!
 
+![](https://imgur.com/bHeR89z.png)
 
 
 
