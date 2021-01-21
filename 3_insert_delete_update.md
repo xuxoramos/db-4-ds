@@ -11,7 +11,7 @@ VALUES('Gregorio', 'Casas', '2006-07-23', 823371.24, 2);
 ```
 Antes de explicar este comando línea por línea, debemos hacer un apunte sobre esquemas, bases de datos y visibilidad.
 
-### `Database Server -> Database -> Schema`**
+### Jerarquía `Database Server -> Database -> Schema`
 
 La jerarquía de _contenedores_ o _folders_ de PostgreSQL es `Database Server -> Database -> Schema`
 
@@ -61,7 +61,7 @@ Finalmente, como seguramente recordarán, la tabla `doctor` tiene un **constrain
 
 Listo, a darle al DBeaver...
 
-### Multiple insert
+#### Multiple insert
 
 Lo que no sabían es que podían hacer esto...
 
@@ -75,6 +75,8 @@ VALUES
 ```
 
 E insertar varios registros con un solo comando. Disculpen el no haberles dicho esto antes xD
+
+### Completando el ejercicio
 
 Vamos ahora a insertar varios pacientes para probar las relaciones N a N:
 
@@ -92,7 +94,7 @@ Un apunte sobre el campo `paciente.factor_rh`: lo hemos declarado como `bool`, q
 
 [Aquí](https://www.postgresqltutorial.com/postgresql-data-types/) un resumen muy concreto de los data types que podemos asignarle a columnas en PostgreSQL.
 
-Ahora vamos a rellenar la tabla intermedia `paciente_doctor`:
+Ahora vamos a rellenar la tabla intermedia `paciente_doctor` para completar el ejercicio y pasar a cosas más interesantes con estos datos:
 
 | id_paciente | id_doctor |
 |-------------|-----------|
@@ -107,6 +109,8 @@ Ahora vamos a rellenar la tabla intermedia `paciente_doctor`:
 | 5           | 2         |
 | 5           | 5         |
 
+## `delete`
 
+Vamos ahora a 
 
 
