@@ -16,6 +16,9 @@ Y listo el video de la 2a clase: https://itam.zoom.us/rec/share/nqjzFBbGQeX52t07
 #### 2021-01-19
 Dado el feedback que he recibido de ustedes, he modificado el apunte de la clase pasada para que sea mucho más claro. [Chéquenlo](https://xuxoramos.github.io/db-4-ds/1_database_design_and_creation).
 
+Adicionalmente, aquí el video de la clase de hoy: https://itam.zoom.us/rec/share/oHIuCloPHXKRfTmKGZDzSxDP_yKhwrTbDrlmZkKVZT-BGVRKyZDe1FaOSW2_7gfo.LyFlWZuNkDmjEcCb
+
+
 ### Temario + Fechas = Plan de Materia
 A continuación el temario, fecha por fecha:
 
