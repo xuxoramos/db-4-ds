@@ -105,9 +105,9 @@ Ahora vamos a rellenar la tabla intermedia `paciente_doctor` para completar el e
 | 3           | 4         |
 | 4           | 2         |
 | 4           | 3         |
-| 4           | 5         |
+| 4           | 4         |
 | 5           | 2         |
-| 5           | 5         |
+| 5           | 4         |
 
 ## El comando [`delete`](https://www.postgresql.org/docs/current/sql-delete.html)
 
@@ -203,4 +203,16 @@ Sí, generalmente en usos estructurales:
 ## El comando `update`
 
 Si borrar es muy extremo para uds, entonces podemos solamente "actualizar".
+
+Supongamos que durante su tratamiento, Ulises es diagnosticado por Dr. House con una rara afección que solo la Dra. Grey puede atender. Ulises, puestísimo, acepta el tratamiento. Lo que nuestro sistema de control hospitalario es insertar un registro en `paciente_doctor` indicando esta nueva relación.
+
+`insert into paciente_doctor (id_paciente, id_doctor) values ((select id_paciente from paciente where nombres = 'Ulises' and apellidos = 'Quevedo'), (select id_doctor from doctor where nombres = 'Meredith' and apellidos = 'Gray'));`
+
+Pero eventualmente, el tratamiento de Ulises le provoca desorden de personalidad múltiple, lo cual lo hace, sin razón alguna, creer que ahora es Djin Darin a.k.a. The Mandalorian, y ahora todas sus frases las termina con "this is the way". Para reflejar este nuevo comportamiento, legalmente debemos cambiar su nombre en nuestro registro de pacientes:
+
+`update paciente set nombres = 'Djinn', apellidos = 'Darin' where nombres = 'Ulises' and apellidos = 'Quevedo';`
+
+Dado eso, el hospital cambia sus reglas de negocio para que, en lugar de que **1** paciente sea atendido por **N** doctores, ahora habrá 1 doctor en este grupo que será el responsable del paciente. Para ello, debemos crear la columna `principal` de tipo `bool` en la tabla `paciente_doctor`.
+
+`ALTER TABLE paciente_doctor ADD COLUMN principal bool DEFAULT false;`
 
