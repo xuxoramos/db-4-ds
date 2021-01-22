@@ -200,19 +200,51 @@ Sí, generalmente en usos estructurales:
 1. Cuando un cliente abandona nuestro negocio: es preferible agregar un atributo/campo/columna de `id_status`, un catálogo de `status_cliente`, un renglón de status inactivo o suspendido, y cambiar las reglas de negocio en código de nuestro sistema para no operar clientes con este tipo de status.
 2. Cuando queremos desactivar o dejar de usar una entidad: "la película de 'Mirreyes VS Godínez' ha sido prohibida por la 4T, y debemos sacarla del catálogo". En este caso, agregar un catálogo de status, agregar el campo status en `inventory` (no en `film`, porque es un atributo de la película en mi inventario, no de la película en sí) en la BD de Sakila, y modificar nuestro sistema para ahora no permitir rentar películas cuyo registro en el inventario tenga un status `no disponible`.
 
-## El comando `update`
+## El comando [`update`](https://www.postgresql.org/docs/current/sql-update.html)
 
 Si borrar es muy extremo para uds, entonces podemos solamente "actualizar".
 
 Supongamos que durante su tratamiento, Ulises es diagnosticado por Dr. House con una rara afección que solo la Dra. Grey puede atender. Ulises, puestísimo, acepta el tratamiento. Lo que nuestro sistema de control hospitalario es insertar un registro en `paciente_doctor` indicando esta nueva relación.
 
-`insert into paciente_doctor (id_paciente, id_doctor) values ((select id_paciente from paciente where nombres = 'Ulises' and apellidos = 'Quevedo'), (select id_doctor from doctor where nombres = 'Meredith' and apellidos = 'Gray'));`
+```
+insert into paciente_doctor 
+(id_paciente, id_doctor) 
+values 
+((select id_paciente from paciente where nombres = 'Ulises' and apellidos = 'Quevedo'), 
+(select id_doctor from doctor where nombres = 'Meredith' and apellidos = 'Gray'));
+```
 
 Pero eventualmente, el tratamiento de Ulises le provoca desorden de personalidad múltiple, lo cual lo hace, sin razón alguna, creer que ahora es Djin Darin a.k.a. The Mandalorian, y ahora todas sus frases las termina con "this is the way". Para reflejar este nuevo comportamiento, legalmente debemos cambiar su nombre en nuestro registro de pacientes:
 
 `update paciente set nombres = 'Djinn', apellidos = 'Darin' where nombres = 'Ulises' and apellidos = 'Quevedo';`
 
-Dado eso, el hospital cambia sus reglas de negocio para que, en lugar de que **1** paciente sea atendido por **N** doctores, ahora habrá 1 doctor en este grupo que será el responsable del paciente. Para ello, debemos crear la columna `principal` de tipo `bool` en la tabla `paciente_doctor`.
+Dado eso, el hospital cambia sus reglas de negocio para que, en lugar de que **1** paciente sea atendido por **N** doctores, ahora habrá 1 doctor en este grupo que será el responsable del paciente. Para ello, debemos crear la columna `principal` de tipo `bool` en la tabla `paciente_doctor`, y como la tabla ya está creada, esta nueva columna tendrá el valor de default de `false`.
 
 `ALTER TABLE paciente_doctor ADD COLUMN principal bool DEFAULT false;`
+
+Y ahora designaremos a la Dra. Gray como la principal que está atendiendo a Ulises...perdón, a Djinn Darin.
+
+```
+update paciente_doctor pd 
+set principal = true 
+from paciente p, doctor d 
+where p.nombres = 'Djinn' and p.apellidos = 'Darin' 
+and d.nombres = 'Meredith' and d.apellidos = 'Gray' 
+and pd.id_paciente = p.id_paciente and pd.id_doctor = d.id_doctor;
+```
+Explicaremos este `update` complejo línea por línea para compararlo con el `update` anterior donde solo actualizamos el nombre de Ulises:
+1. `update paciente_doctor pd`: el comando update va a apunta a la tabla `paciente_doctor` y le asignará el alias `pd`.
+2. `set principal = true`: se le asignará a la columna `principal` de la tabla `paciente_doctor` el valor de `true`. A qué renglón? Eso lo resolvemos en el `where`.
+3. `from paciente p, doctor d`: apuntar este comando `update` a las tablas `paciente` y `doctor`, con los alias `p` y `d`, respectivamente, **aparte** de la tabla `paciente_doctor` del inicio del comando. Esto lo hacemos cuando para llegar al renglón que vamos a actualizar (con la cláusula `where`), debemos 'viajar' por varias tablas aparte de la principal.
+4. `where p.nombres = 'Djinn' and p.apellidos = 'Darin'`: esta línea y la siguiente apuntan a los renglones en `paciente` y `doctor` que cumplen con la condición de nombres y apellidos que nos interesan.
+5. `and pd.id_paciente = p.id_paciente and pd.id_doctor = d.id_doctor;`: **aquí es donde sucede la magia**. En esta línea hacemos una operación **`JOIN`** (unir 2 tablas A y B por la llave primaria de A y la foránea de A a B), esto es, tomar la _llave primaria_ de una tabla, y poner como condición que sea **igual** a la _llave foránea_ de otra. En este caso, una vez seleccionados los registros de `paciente` y `doctor` po separado, mediante los nombres en el inciso anterior, ahora vamos a agregar la condición de que las _llaves primarias_ de esos registro sean iguales a ambas _llaves foraneas_ de la tabla intermedia.
+
+### Operaciones `update` en cascada
+
+La tabla `pacinte_doctor` la creamos con esta cláusula en su llave foránea `id_paciente`:
+
+`  id_paciente numeric(4) references paciente (id_paciente) ON UPDATE CASCADE ON DELETE CASCADE,`
+
+Ya hemos visto como las operaciones `delete` en cascada tienen sus pros y cons. En el caso de las operaciones de `update`, el _cascadeo_ tiene sentido **si y solo si** la _llave primaria_ de la tabla padre **incumple** con la buena práctica de **no tener nada que ver** con el problem domain. Esto es, si `id_paciente` fuera el RFC, y si en algún momento se paciente debe corregir su homoclave, entonces esa actualización de llave en `paciente` se propagará a `paciente_doctor`.
+
 
