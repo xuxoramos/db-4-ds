@@ -125,6 +125,9 @@ Y como ya es costumbre, lo explicaremos línea por línea:
 
 >**PREGUNTA VIOLENTA:** Qué creen que suceda si no ponemos la cláusula `WHERE` en un comando `DELETE`?
 
+### El comando [`truncate`](https://www.postgresql.org/docs/current/sql-truncate.html)
+Este comando, literal, **vacía totalmente** una tabla de registros. Obedece también a constraints, así que arrojará errores si antes no eliminamos los constraints con un comando `drop` (ver abajo). Solo debes dar `truncate doctor;` y con ello es suficiente. Es más rápido que un `delete` sin cláusula `where`, y además recupera espacio inmediatamente, sin tener que esperar a que los sistemas internos a la BD identifiquen el espacio liberado y lo marquen como _disponible_. No haremos ejercicio de él.
+
 Entremos el comando en DBever.
 
 Acabamos de dar de baja (o quizá 'dar de alta') a Ulises. Ojalá no haya estado en el hospital con síntomas respiratorios. Comprobémoslo con un comando `select`:
@@ -200,6 +203,10 @@ Sí, generalmente en usos estructurales:
 1. Cuando un cliente abandona nuestro negocio: es preferible agregar un atributo/campo/columna de `id_status`, un catálogo de `status_cliente`, un renglón de status inactivo o suspendido, y cambiar las reglas de negocio en código de nuestro sistema para no operar clientes con este tipo de status.
 2. Cuando queremos desactivar o dejar de usar una entidad: "la película de 'Mirreyes VS Godínez' ha sido prohibida por la 4T, y debemos sacarla del catálogo". En este caso, agregar un catálogo de status, agregar el campo status en `inventory` (no en `film`, porque es un atributo de la película en mi inventario, no de la película en sí) en la BD de Sakila, y modificar nuestro sistema para ahora no permitir rentar películas cuyo registro en el inventario tenga un status `no disponible`.
 
+Fuera de eso, una máxima de bases de datos para ciencia de datos es:
+
+#### Solamente los orcos, goblins y trolls borran datos. La gente civilizada no borra datos.
+
 ## El comando [`update`](https://www.postgresql.org/docs/current/sql-update.html)
 
 Si borrar es muy extremo para uds, entonces podemos solamente "actualizar".
@@ -246,5 +253,66 @@ La tabla `pacinte_doctor` la creamos con esta cláusula en su llave foránea `id
 `  id_paciente numeric(4) references paciente (id_paciente) ON UPDATE CASCADE ON DELETE CASCADE,`
 
 Ya hemos visto como las operaciones `delete` en cascada tienen sus pros y cons. En el caso de las operaciones de `update`, el _cascadeo_ tiene sentido **si y solo si** la _llave primaria_ de la tabla padre **incumple** con la buena práctica de **no tener nada que ver** con el problem domain. Esto es, si `id_paciente` fuera el RFC, y si en algún momento se paciente debe corregir su homoclave, entonces esa actualización de llave en `paciente` se propagará a `paciente_doctor`.
+
+### El `update` IRL
+
+Como analistas de datos, las tablas transaccionales que registran el **status quo** del problem domain, del negocio o del contexto, son relevantes, pero lo son aún más las **tablas históricas**. Entonces podemos tener todas las actualizaciones a las bases de datos que deseemos, o que nos requiera el negocio, PERO es de buena práctica analítica, guardar una bitácora de los cambios que se han realizado en todas las entidades transaccionales.
+
+#### Ejemplo
+
+Supongamos que nuestro hospital tiene un número finito de especialidades que puede atender. Todas ellas están en el _catálogo_ de especialidades.
+
+En todo momento, nuestro sistema consulta y lee de nuestro catálogo de especialidades a través de las relaciones en nuestra BD.
+
+Pero si observamos cómo ha cambiado a lo largo de los años nuestro catálogo:
+
+![](https://imgur.com/ZCNY312.png)
+
+Qué podemos concluir de la historia? De cada año? Qué pasó de 2009 a 2010? y de 2012 a 2013?
+
+Guardar históricos nos permite **_contar historias_**, y poder contar historias con los datos es de las **_primeras_** habilidades que debemos tener como analistas de datos, y para armar estas historias, necesitamos datos históricos, para luego devorarlos con mente de detective. No como ingeniero, no como actuario, **MENOS** como economista.
+
+## Comando `drop`
+
+`drop` es prefijo para varios comandos: [`drop table`](https://www.postgresql.org/docs/current/sql-droptable.html), [`drop index`](https://www.postgresql.org/docs/13/sql-dropindex.html), [`drop constraint`](https://www.postgresql.org/docs/13/sql-altertable.html) y [`drop column`](https://www.postgresql.org/docs/13/sql-altertable.html) - forzosamente parte del comando `alter table`, [`drop database`](https://www.postgresql.org/docs/13/sql-dropdatabase.html), etc. 
+
+Son comandos _estructurales_, lo que significa que podemos dejar batida la BD y no poder recuperarla. Son comandos que deben tratarse con cuidado.
+
+### `drop table`
+Con eso eliminamos una tabla. No sus registros, la tabla completa. Su estructura y contenidos. `drop` sigue observando y obedeciendo constraints, lo que significa que si intentamos eliminar una tabla que tiene relaciones con otra, postgresql arrojará un error.
+
+Intentemos eliminar la tabla `doctor`:
+
+`drop table doctor;`
+
+Obtendremos este error:
+
+![](https://imgur.com/iAh4rvh.png)
+
+Lo que nos dice es que tenemos una relación **1 a N** con `paciente_doctor`. Tenemos de 2 sopas:
+
+O eliminamos el constraint:
+
+`alter table paciente_doctor drop constraint paciente_doctor_id_doctor_fkey;`
+
+O agregar la cláusula `cascade`:
+
+`drop table doctor cascade;`
+
+**OJO:** Esto eliminará en su totalidad la tabla `doctor` PERO no borrará la tabla `paciente_doctor`, sino solo el constraint de llave foránea, es decir, la relación hacia la tabla intermedia que comparte con `paciente`. No borrará la columna `id_doctor`, ni la tabla.
+
+### `drop column`
+Supongamos ahora que queremos eliminar la columna `paciente_doctor.principal`, debido a que la figura de _doctor principal_ será derogada en el reglamento operativo de nuestro hospital:
+
+`alter table paciente_doctor drop column principal`;
+
+En caso de que la columna tenga un _foreign key constraint_ asociado, entonces aplican las mismas reglas que cuando intentamos ejecutar `drop table` (ver arriba).
+
+### `drop` IRL
+
+El comando `drop` se usa frecuentemente cuando estamos rediseñando o modificando estructura de bases de datos, lo cual frecuentemente obedece a cambios en reglas de negocio, migraciones, etc.
+
+
+
 
 
