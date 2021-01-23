@@ -9,16 +9,12 @@ Indicaciones:
 1. Es una agencia de viajes digital.
 2. Tiene un web front store y una mobile app.
 3. No tiene instalaciones brick-and-mortar.
-4. Tiene convenios con hoteles, car rentals, líneas aéreas, compañías de tours, restaurantes, parques de diversiones, y otros.
-    - Antes de que una empresa se le otorgue convenio, debe ser anunciante en el web front store o en la app mobile de Booking.
-5. Estos convenios se facilitan más si la empresa con la que se arma el convenio, tiene forma de hacerlo de manera digital, paperless, y soportado con sistemas.
-6. Estos convenios los busca Booking.com y consisten en 1 de 2:
-    - Comisión de un % de venta del producto o servicio del firmante a Booking.com.
-    - Cobro de Booking.com al firmante de convenio un monto fijo mensual.
-7. Estos tipos de transferencias no son privativos de ningún tipo de convenio.
-8. Todas las transferencias o pagos a Booking.com se deben hacer máximo 30 días posteriores a la transacción del firmante.
-9. Booking.com debe emitir un ranking de firmantes de convenio con mejor servicio, el cual se refleja es su web front store y su app mobile mediante recomendaciones de productos y servicios de los firmantes. Este ranking es diferente al ranking que introducen los 
-10. El firmante del convenio necesita
+4. Tiene convenio de front-store con varios hoteles.
+5. Tanto hotel como Booking siguen proceso de reservación de todos los hoteles con los que tiene convenio hasta que el huésped hace check-in.
+6. La reservación puede hacerse a un precio diferente a aquel en el rate normal del hotel.
+7. Los precios que Booking asigna a un hotel tienen 2 orígenes:
+    - O son suministrados por el hotel mediante un sistema de "hotel en convenio"
+    - O Booking los obtiene mediante técnicas de "scrapping", crawleando la web, identificando ofertas de ese hotel, y jalando el precio a su sistema
+8. Al final del proceso de reserva, se envían códigos de descuento de restaurantes en la misma ciudad del hotel que recibió la reserva.
 
-
-
+Go! Go! Go!
