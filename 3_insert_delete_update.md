@@ -32,7 +32,9 @@ Ahora si, expliquemos este comando línea por línea:
 
 1. `INSERT INTO hospital.doctor`: insertar en la tabla `hospital.doctor`. Si estamos usando el esquema `hospital`, entonces dejamos fuera el prefijo.
 2. `(nombres, apellidos, fecha_contratacion, sueldo, id_especializacion)`: nombramos las columnas a las que vamos a insertarles datos. No tienen que estar en orden, ni tienen que ser todas, pero si dejamos fuera alguna que tenga un `NOT NULL`, entonces el comando insert arrojará un error. Igual debemos recordar que el campo `id_especializacion` es una _llave foránea_ y debe cumplir con constraints de _integridad referencial_.
-3. `VALUES('Gregorio', 'Casas', '2006-07-23', 823371.24, 2);`: `VALUES` declara una lista de datos que serán insertados en este comando. **Es obligatorio** que los valores coincidan sintácticamente con los tipos de datos declarados para las columnas declaradas en el punto anterior. Esto es: podemos insertar `'12345678'` en el campo `nombres varchar(50)` por ser una cadena de caracteres (ver las comillas), pero no `12345678` porque es un entero, sin comillas. Ya si nos equivocamos e insertamos un número en el nombre, o el nombre en el apellido, ya es tema nuestro. Ni PostgreSQL ni ningún RDBMS va corregirnos y arrojar un error _"hey! 99999 no es un código postal válido en MX! Y además Pérez no es un nombre!"
+3. `VALUES('Gregorio', 'Casas', '2006-07-23', 823371.24, 2);`: `VALUES` declara una lista de datos que serán insertados en este comando. **Es obligatorio** que los valores coincidan sintácticamente con los tipos de datos declarados para las columnas declaradas en el punto anterior. Esto es: podemos insertar `'12345678'` en el campo `nombres varchar(50)` por ser una cadena de caracteres (ver las comillas), pero no `12345678` porque es un entero, sin comillas. Ya si nos equivocamos e insertamos un número en el nombre, o el nombre en el apellido, ya es tema nuestro.
+
+> **IMPORTANTE! La consistencia semántica de tus datos es tu responsabilidad!** Ni PostgreSQL ni ningún RDBMS va corregirnos y arrojar un error _"hey! 99999 no es un código postal válido en MX! Y además Pérez no es un nombre!"_, o bien _"oye, estás insertando en la columna `sueldo` el mensual neto, y siempre lo hacemos con el anual bruto!"_.
 
 ### Ejercicio
 
@@ -170,7 +172,7 @@ Alteremos ahora la tabla para que no haga borrado en cascada:
 
 `ALTER TABLE hospital.paciente_doctor DROP CONSTRAINT paciente_doctor_id_paciente_fkey;`
 
-Con esto estamos modificando la tabla `paciente_doctor` y eliminando del todo el _constraint de llave foránea_ llamado `paciente_doctor_id_paciente_fkey`, que fue creado _inline_  con el comando `CREATE TABLE`.
+Con esto estamos modificando la tabla `paciente_doctor` y eliminando del todo el _constraint de llave foránea_ llamado `paciente_doctor_id_paciente_fkey`, que fue creado _inline_  con el comando `CREATE TABLE`. Esto **borra la relación**, pero no el atributo, efectivamente **degradando** la relación a un mero campo cuyos valores son idénticos a la llave primaria original, pero no se referencian entre sí.
 
 Luego vamos a volver a crear el constraint pero sin las cláusulas `ON DELETE CASCADE`:
 
@@ -205,7 +207,7 @@ Sí, generalmente en usos estructurales:
 
 Fuera de eso, una máxima de bases de datos para ciencia de datos es:
 
-#### Solamente los orcos, goblins y trolls borran datos. La gente civilizada no borra datos.
+#### Solamente los orcos, goblins y trolls borran o sobreescriben datos. La gente civilizada no borra ni sobreescribe datos.
 
 ## El comando [`update`](https://www.postgresql.org/docs/current/sql-update.html)
 
@@ -239,12 +241,14 @@ where p.nombres = 'Djinn' and p.apellidos = 'Darin'
 and d.nombres = 'Meredith' and d.apellidos = 'Gray' 
 and pd.id_paciente = p.id_paciente and pd.id_doctor = d.id_doctor;
 ```
+
 Explicaremos este `update` complejo línea por línea para compararlo con el `update` anterior donde solo actualizamos el nombre de Ulises:
-1. `update paciente_doctor pd`: el comando update va a apunta a la tabla `paciente_doctor` y le asignará el alias `pd`.
+
+1. `update paciente_doctor pd`: el comando update va a apuntar a la tabla `paciente_doctor` y le asignará el alias `pd`.
 2. `set principal = true`: se le asignará a la columna `principal` de la tabla `paciente_doctor` el valor de `true`. A qué renglón? Eso lo resolvemos en el `where`.
 3. `from paciente p, doctor d`: apuntar este comando `update` a las tablas `paciente` y `doctor`, con los alias `p` y `d`, respectivamente, **aparte** de la tabla `paciente_doctor` del inicio del comando. Esto lo hacemos cuando para llegar al renglón que vamos a actualizar (con la cláusula `where`), debemos 'viajar' por varias tablas aparte de la principal.
 4. `where p.nombres = 'Djinn' and p.apellidos = 'Darin'`: esta línea y la siguiente apuntan a los renglones en `paciente` y `doctor` que cumplen con la condición de nombres y apellidos que nos interesan.
-5. `and pd.id_paciente = p.id_paciente and pd.id_doctor = d.id_doctor;`: **aquí es donde sucede la magia**. En esta línea hacemos una operación **`JOIN`** (unir 2 tablas A y B por la llave primaria de A y la foránea de A a B), esto es, tomar la _llave primaria_ de una tabla, y poner como condición que sea **igual** a la _llave foránea_ de otra. En este caso, una vez seleccionados los registros de `paciente` y `doctor` po separado, mediante los nombres en el inciso anterior, ahora vamos a agregar la condición de que las _llaves primarias_ de esos registro sean iguales a ambas _llaves foraneas_ de la tabla intermedia.
+5. `and pd.id_paciente = p.id_paciente and pd.id_doctor = d.id_doctor;`: **aquí es donde sucede la magia**. En esta línea hacemos una operación **`JOIN`** (unir 2 tablas A y B por la llave primaria de A y la foránea de A a B), esto es, tomar la _llave primaria_ de una tabla, y poner como condición que sea **igual** a la _llave foránea_ de otra. En este caso, una vez seleccionados los registros de `paciente` y `doctor` por separado, mediante los nombres en el inciso anterior, ahora vamos a agregar la condición de que las _llaves primarias_ de esos registro sean iguales a ambas _llaves foraneas_ de la tabla intermedia.
 
 ### Operaciones `update` en cascada
 
