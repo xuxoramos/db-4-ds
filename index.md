@@ -18,6 +18,9 @@ Dado el feedback que he recibido de ustedes, he modificado el apunte de la clase
 
 Adicionalmente, aquí el video de la clase de hoy: https://itam.zoom.us/rec/share/oHIuCloPHXKRfTmKGZDzSxDP_yKhwrTbDrlmZkKVZT-BGVRKyZDe1FaOSW2_7gfo.LyFlWZuNkDmjEcCb
 
+#### 2021-01-26
+Aquí la grabación de la sesión del Lunes 25: https://itam.zoom.us/rec/share/n70zTscj7cdzeR8jQgQBo_-Rw9royVV-VgE1VkZ8aaRpgJdakRdMkIPeKe2kD980.jD2JdCWG4EKsz6FD
+
 
 ### Temario + Fechas = Plan de Materia
 A continuación el temario, fecha por fecha:
