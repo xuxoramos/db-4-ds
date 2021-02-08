@@ -83,9 +83,41 @@ Entonces nos quedarían de esta forma:
 ![](https://imgur.com/TohYkux.png)
 
 
+## 3era Forma Normal (3NF)
 
+1. Cumplir con las reglas de la 2NF
+2. No hay dependencias transitivas (no hay atributo A que para llegar a él se requiera del atributo B al que a su vez se llega por la PK)
 
+Después de tener la tabla `servicio` en 2NF, nos quedamos con el `id`, el `nombre` y el `costo` del servicio.
 
+Pero realmente el `costo` depende del `id`?
 
+Si suponemos que el costo del servicio está dado por un `tabulador`, nuestra tabla de servicio queda del siguiente modo:
 
+![](https://imgur.com/FtHpsas.png)
 
+Con esto tenemos una _dependencia transitiva_: el `costo` está dado por el `tabulador`, y el `tabulador` del servicio lo da el `id` servicio.
+
+Para cumplir con la 3NF, debemos sacar a otra tabla el atributo que inicia la cadenita de dependencias transitivas: el `costo`.
+
+![](https://imgur.com/VpelFc9.png)
+
+Y ya si nos ponemos exquisitos y aplicamos las _best practices_:
+
+![](https://imgur.com/ejoBTyY.png)
+
+## Summary en forma de juramento gringo
+
+1. Requerir la existencia de una llave primaria automáticamente nos pone en 1NF (la llave)
+2. Requerir que todos los atributos dependan de toda la llave primaria nos pone en 2NF (toda la llave)
+3. Requerir que todos los atributos dependan solamente de la llave primaria nos pone en automático en 3NF (nada más que la llave)
+
+## Una nota sobre criterio
+
+Como dijimos anteriormente, al estar diseñando BDs, es importante tomar en cuenta que muchas de las decisiones son subjetivas y sujetas a su criterio. En general, una BD que evite anomaías en operaciones de borrado, actualización e inserción, y que siga las prácticas que hemos visto en clase, quedará en automático en 3NF.
+
+## 4NF y posteriores
+
+La mayoría de las aplicaciones de la vida real serán suficientes con que tengamos nuestra BD en 3NF. Las NF posteriores garantizan aún mayor cobertura VS anomaías, mayor consistencia en algunos casos frontera, etc. 
+
+Del mismo modo, "normalización" se dió cuando el storage era caro, pero ahora en 2021 la razón más importante es estructura, y optimización de escritura.
