@@ -41,13 +41,13 @@ Separamos los valores cada uno en su propio renglón, pero con eso repetimos el 
 
 2. Cada registro debe ser único
 
-![](https://imgur.com/r4yZJeu.png)
+![](https://imgur.com/zYv9uKe.png)
 
 Pudimos definir una llave primaria compuesta para identificar cada renglón como único.
 
 3. Eliminar nombres de atributos, o grupos de atributos repetidos
 
-![](https://imgur.com/FfB7uaj.png)
+![](https://imgur.com/a2E6uyx.png)
 
 En lugar de tener varias columnas de costo para un renglón de servicio con múltiples datos, separamos esas columnas para que a cada servicio le toque su precio.
 
