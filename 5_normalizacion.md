@@ -21,14 +21,13 @@ Hay diferentes formas de expresar las reglas, pero en favor de ser concretos y n
 
 1. Cada celda de la tabla debe contener 1 y solo 1 valor
 2. Cada registro debe ser único
-3. Eliminar grupos de atributos repetidos
-4. Crear tablas separadas para entidades separadas
+3. Eliminar nombres de atributos, o grupos de atributos repetidos
 
 Supongamos que queremos agregar la tabla `servicio` al esquema `hospital`. La tabla servicio es mediante la cual se construirá la factura de nuestro paciente al momento de saldar su cuenta.
 
 Si, ya se que la salud y la seguridad deben ser responsabilidad del estado, pero síganme solo para efectos de ejemplo.
 
-![](https://imgur.com/0TNs8GT.png)
+![](https://imgur.com/PJ1mwEW.png)
 
 Esta tabla es un asco. No sigue ninguna de las mejores prácticas que hemos acordado. Llevemosla a la 1NF.
 
@@ -36,7 +35,7 @@ Aplicando regla por regla:
 
 1. Cada celda de la tabla debe contener 1 y solo 1 valor:
 
-![](https://imgur.com/RTltr0U.png)
+![](https://imgur.com/fkfi3C5.png)
 
 Separamos los valores cada uno en su propio renglón, pero con eso repetimos el nombre del paciente.
 
@@ -46,24 +45,29 @@ Separamos los valores cada uno en su propio renglón, pero con eso repetimos el 
 
 Pudimos definir una llave primaria compuesta para identificar cada renglón como único.
 
-3. Eliminar grupos de atributos repetidos
+3. Eliminar nombres de atributos, o grupos de atributos repetidos
 
 ![](https://imgur.com/FfB7uaj.png)
 
 En lugar de tener varias columnas de costo para un renglón de servicio con múltiples datos, separamos esas columnas para que a cada servicio le toque su precio.
 
-4. Crear tablas separadas para entidades separadas
+## 2a Forma Normal (2NF)
+
+1. Cumplir con las reglas de la 1NF
+2. Todos los atributos o columnas deben tener información de una sola entidad. Tablas separadas para entidades separadas.
+3. Excepto relaciones N a M, la PK no debe ser compuesta y debe ser de 1 solo atributo
+
+Veamos como se transforma la tabla `servicio` aplicando todas las reglas de la 2NF. Ya cumplimos 
+
+2. Todos los atributos o columnas deben tener información de una sola entidad. Tablas separadas para entidades separadas.
 
 ![](https://imgur.com/f1tnljQ.png)
 
 Como `servicio` es una entidad separada de `paciente`, hacemos tablas independientes para cada una.
 
-Pero perdimos la relación! :O
 
-## 2a Forma Normal (2NF)
 
-1. Cumplir con 1NF
-2. 
+
 
 
 
