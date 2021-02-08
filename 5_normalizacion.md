@@ -114,10 +114,10 @@ Y ya si nos ponemos exquisitos y aplicamos las _best practices_:
 
 ## Una nota sobre criterio
 
-Como dijimos anteriormente, al estar diseñando BDs, es importante tomar en cuenta que muchas de las decisiones son subjetivas y sujetas a su criterio. En general, una BD que evite anomaías en operaciones de borrado, actualización e inserción, y que siga las prácticas que hemos visto en clase, quedará en automático en 3NF.
+Como dijimos anteriormente, al estar diseñando BDs, es importante tomar en cuenta que muchas de las decisiones son subjetivas y sujetas a su criterio. En general, una BD que evite anomalías en operaciones de borrado, actualización e inserción, y que siga las prácticas que hemos visto en clase, quedará en automático en 3NF.
 
 ## 4NF y posteriores
 
-La mayoría de las aplicaciones de la vida real serán suficientes con que tengamos nuestra BD en 3NF. Las NF posteriores garantizan aún mayor cobertura VS anomaías, mayor consistencia en algunos casos frontera, etc. 
+La mayoría de las aplicaciones de la vida real serán suficientes con que tengamos nuestra BD en 3NF. Las NF posteriores garantizan aún mayor cobertura VS anomalías, mayor consistencia en algunos casos frontera, etc. 
 
 Del mismo modo, "normalización" se dió cuando el storage era caro, pero ahora en 2021 la razón más importante es estructura, y optimización de escritura.
