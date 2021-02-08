@@ -54,18 +54,18 @@ En lugar de tener varias columnas de costo para un renglón de servicio con múl
 ## 2a Forma Normal (2NF)
 
 1. Cumplir con las reglas de la 1NF
-2. Todos los atributos o columnas de una tabla deben ser _atributo primario_ de la entidad que representa.
+2. Todos los atributos o columnas de una tabla deben pertenecer a la entidad que representa.
 3. Excepto relaciones N a M, la PK no debe ser compuesta y debe ser de 1 solo atributo.
 
 Veamos como se transforma la tabla `servicio` aplicando todas las reglas de la 2NF. Ya cumplimos la 1NF, así que vamos desde la regla 2.
 
-2. Todos los atributos o columnas de una tabla deben ser _atributo primario_ de la entidad que representa.
+2. Todos los atributos o columnas de una tabla deben pertenecer a la entidad que representa.
 
-Atributo primario es un atributo que está relacionado _**directamente**_ con la entidad que la tabla está modelando. Todo lo que no sea atributo primario, debe quedar fuera de la tabla. De este modo se descubren otras entidades, sus relaciones, y algunos catálogos.
+Un atributo X pertenece a una entidad Y si para saber X podemos depender de la PK de Y. Todo atributo que no pertenezca a la entidad, debe quedar fuera de la tabla. De este modo se descubren otras entidades, sus relaciones, y algunos catálogos.
 
 ![](https://imgur.com/f1tnljQ.png)
 
-Como `servicio` es una entidad separada de `paciente`, hacemos tablas independientes para cada una. Adicionalmente, como el departamento responsable de proveer el servicio no es un _atributo primario_ de servicio, entonces igual lo extraemos a la tabla `departamento_hospital`.
+Como `servicio` es una entidad separada de `paciente`, hacemos tablas independientes para cada una. Adicionalmente, como el departamento responsable de proveer el servicio no pertenece al servicio, entonces igual lo extraemos a la tabla `departamento_hospital`.
 
 Al hacer esto, hemos eliminado la necesidad de tener nombres de pacientes, de servicios y de departamentos repetidos, lo cual nos permite cumplir con la siguiente regla de la 2NF.
 
