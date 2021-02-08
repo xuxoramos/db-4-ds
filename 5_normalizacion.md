@@ -80,7 +80,7 @@ Pero las _**best practices**_ para llaves primarias que hemos visto anteriorment
 
 Entonces nos quedarían de esta forma:
 
-![](https://imgur.com/TRFsHGX.png)
+![](https://imgur.com/TohYkux.png)
 
 
 
