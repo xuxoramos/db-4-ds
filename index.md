@@ -24,6 +24,10 @@ Aquí la grabación de la sesión del Lunes 25: https://itam.zoom.us/rec/share/n
 #### 2021-01-27
 Aquí la grabación del miércoles 27. Recuerden que dejamos 30 mins al final para el ejercicio, así que el contenido real acaba alrededor del minuto 90: https://itam.zoom.us/rec/share/MgPRp8YbBDqw45WEr936dzkLCTPxMUVP1TZTQQUpPRyVITiHTcpe6w6jXeRHSD_Z.31wHFS3ue8_i8Icl
 
+#### 2021-02-08
+Aquí la grabación de la sesión de hoy: https://itam.zoom.us/rec/share/PkyoX5vUkCUF1KP1EhgKwYyMxPyBDqV6ZQ2g7SbYcqjNhLye-0IkqOKL8Z0D7Azo.btYVQOMKAAuOZbBY
+
+
 ### Temario + Fechas = Plan de Materia
 A continuación el temario, fecha por fecha:
 
