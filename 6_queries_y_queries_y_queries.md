@@ -44,17 +44,16 @@ La cláusula `order by ProductID desc` es, literal, _ordena por el campo Product
 
 Primero vamos a ejecutar algunos ejemplos para que se familiaricen con las variantes de `select`.
 
-### Obtener nombre de producto y cantidad de producto por unidad
-
-### Obtener nombre de producto y su id
-### Obtener nombre de producto y su id de productos descontinuados
-### Obtener el nombre y precio unitario del producto más caro y del más barato
-### Obtener el id, el nombre y el precio unitario para productos de menos de $20 en precio unitario
-### Obtener el id, el nombre y el precio unitario para productos que cuesten entre $15 y $25
-### Obtener nombre y precio unitario de productos por arriba del precio promedio de todo nuestro catálogo
-### Nombres y precios unitarios de 10 productos más caros
-### Conteo de los productos descontinuados y los que aún se tiene en inventario
-### Obtener el nombre, la cantidad de unidades en órdenes y la cantidad en stock de productos cuya cantidad en órdenes sea mayor a la cantidad en stock
+1. Obtener nombre de producto y cantidad de producto por unidad
+2. Obtener nombre de producto y su id
+3. Obtener nombre de producto y su id de productos descontinuados
+4. Obtener el nombre y precio unitario del producto más caro y del más barato
+5. Obtener el id, el nombre y el precio unitario para productos de menos de $20 en precio unitario
+6. Obtener el id, el nombre y el precio unitario para productos que cuesten entre $15 y $25
+7. Obtener nombre y precio unitario de productos por arriba del precio promedio de todo nuestro catálogo
+8. Nombres y precios unitarios de 10 productos más caros
+9. Conteo de los productos descontinuados y los que aún se tiene en inventario
+10. Obtener el nombre, la cantidad de unidades en órdenes y la cantidad en stock de productos cuya cantidad en órdenes sea mayor a la cantidad en stock
 
 ## Elementos de un `select`
 
@@ -62,13 +61,20 @@ Un select tiene los siguientes elementos:
 
 | nombre de la cláusula | Propósito |  
 |-|-|
-| `select` | Determina las columnas que incluiremos en este espacio de ejecución |  
-| `from` | Determina las tablas a las que pertenecen las columnas que _seleccionamos_ arriba |  
-| `where` | Filtra renglones no deseados para efectos de la consulta y nos permite hacer `join`s para hacer que nuestra consulta trascienda más de 1 tabla |  
-| `group by` | Agrupa y agrega valores utilizando columnas que tengan la misma data |
-| `having` |  Filtra grupos no deseados para el objetivo de nuestra consulta |
-| `order by` |  Ordena de forma `asc` y `desc` los resultados de la consulta |
+| `select` _columna1, columna2,...,columna_n_ | Determina las columnas que incluiremos en este espacio de ejecución |  
+| `from` _tabla1 [join tabla2 on (llave copiada)_| Determina las tablas a las que pertenecen las columnas que _seleccionamos_ arriba |  
+| `where` _condición booleana_ | Filtra renglones no deseados para efectos de la consulta |  
+| `group by` _campo a agrupar_| Agrupa y agrega valores utilizando columnas que tengan la misma data |
+| `having` _condición booleana_ |  Filtra grupos no deseados para el objetivo de nuestra consulta |
+| `order by` _campo de ordenamiento [asc|desc]_|  Ordena de forma `asc` y `desc` los resultados de la consulta |
 
+No todos son obligatorios, pero esta es la base para un query útil que puede responder preguntas.
+
+## Ejercicios
+
+1. Qué contactos de proveedores tienen la posición de sales representative?
+2. Qué contactos de proveedores no son marketing managers?
+3. Cuales órdenes no vienen de clientes en Estados Unidos?
 
 
 
