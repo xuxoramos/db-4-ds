@@ -98,7 +98,7 @@ Un select tiene los siguientes elementos:
 | `where` _condición booleana_ | Filtra renglones no deseados para efectos de la consulta |  
 | `group by` _campo a agrupar_| Agrupa y agrega valores utilizando columnas que tengan la misma data |
 | `having` _condición booleana_ |  Filtra grupos no deseados para el objetivo de nuestra consulta |
-| `order by` _campo de ordenamiento [asc|desc]_ |  Ordena de forma `asc` y `desc` los resultados de la consulta |
+| `order by` _campo de ordenamiento [asc/desc]_ |  Ordena de forma `asc` y `desc` los resultados de la consulta |
 
 No todos son obligatorios, pero esta es la base para un query útil que puede responder preguntas.
 
