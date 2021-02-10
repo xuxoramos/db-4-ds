@@ -34,7 +34,7 @@ El `*` en el comando `select` nos indica que vamos a seleccionar _todos_ los atr
 
 La cláusula `limit 10` nos permite seleccionar los primeros 10 registros de la tabla. Si queremos seleccionar los _últimos 10_, entonces debemos de usar el truco de voltear la tabla y seleccionar los primeros 10:
 
-`select * from products p order by ProductID desc limit 10;`
+`select * from products p order by product_id desc limit 10;`
 
 La cláusula `order by ProductID desc` es, literal, _ordena por el campo ProductID de forma descendente_. El campo por el cual vamos a ordenar debe estar incluído en los atributos que vamos a seleccionar con el comando `select`. La cláusula `desc` significa _descending_.
 
@@ -75,6 +75,12 @@ No todos son obligatorios, pero esta es la base para un query útil que puede re
 1. Qué contactos de proveedores tienen la posición de sales representative?
 2. Qué contactos de proveedores no son marketing managers?
 3. Cuales órdenes no vienen de clientes en Estados Unidos?
-
+4. Qué productos de los que transportamos son quesos?
+5. Qué ordenes van a Bélgica o Francia?
+6. Qué órdenes van a LATAM?
+7. Qué órdenes no van a LATAM?
+9. Necesitamos los nombres completos de los empleados, nombres y apellidos unidos en un mismo registro
+9. Cuánta lana tenemos en inventario?
+10. Cuantos clientes tenemos de cada país?
 
 
