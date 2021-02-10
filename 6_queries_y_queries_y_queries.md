@@ -45,34 +45,44 @@ La cláusula `order by ProductID desc` es, literal, _ordena por el campo Product
 Primero vamos a ejecutar algunos ejemplos para que se familiaricen con las variantes de `select`.
 
 1. Obtener nombre de producto y cantidad de producto por unidad
+
 `select p.product_name , p.quantity_per_unit from products p;`
 
 2. Obtener nombre de producto y su id
+
 _"Se deja como ejercicio al lector" xD_
 
 3. Obtener nombre de producto y su id de productos descontinuados
+
 `select p.product_id , p.product_name , p.discontinued from products p where p.discontinued = 1;`
 
 4. Obtener el nombre y precio unitario del producto más caro y del más barato
-`select p.product_name , p.unit_price from products p order by p.unit_price desc limit 1;` 
+
+`select p.product_name , p.unit_price from products p order by p.unit_price desc limit 1;` y
 `select p.product_name , p.unit_price from products p order by p.unit_price limit 1;`
 
 5. Obtener el id, el nombre y el precio unitario para productos de menos de $20 en precio unitario
+
 `select p.product_id , p.product_name , p.unit_price from products p where p.unit_price < 20;`
 
 6. Obtener el id, el nombre y el precio unitario para productos que cuesten entre $15 y $25
+
 `select p.product_id , p.product_name , p.unit_price from products p where p.unit_price >= 15 and p.unit_price <= 25;`
 
 7. Obtener nombre y precio unitario de productos por arriba del precio promedio de todo nuestro catálogo
+
 `select p.product_name , p.unit_price from products p where p.unit_price > (select avg(p2.unit_price) from products p2);`
 
 8. Nombres y precios unitarios de 10 productos más caros
+
 `select p.product_name , p.unit_price from products p order by p.unit_price desc limit 10;`
 
 9. Conteo de los productos descontinuados y los que aún se tiene en inventario
+
 `select count(p.product_id) from products p where p.discontinued = 1 and p.units_in_stock != 0;`
 
 10. Obtener el nombre, la cantidad de unidades en órdenes y la cantidad en stock de productos cuya cantidad en órdenes sea mayor a la cantidad en stock
+
 `select p.product_name , p.units_in_stock ,p.units_on_order from products p where p.units_on_order > p.units_in_stock;`
 
 Si agregamos el campo `p.discontinued` a ésta última consulta, podríamos contar la historia de _"tenemos una órden de 40 de un producto que tenemos en inventario solo 17 y este producto ha sido descontinuado, por lo que tendremos problemas para hacerle fulfillment a esa orden y tendremos que poner nuestra cara de idiotas y ofrecer reemplazo de producto"_.
