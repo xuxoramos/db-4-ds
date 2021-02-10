@@ -67,7 +67,7 @@ Un select tiene los siguientes elementos:
 | `where` | Filtra renglones no deseados para efectos de la consulta y nos permite hacer `join`s para hacer que nuestra consulta trascienda más de 1 tabla |  
 | `group by` | Agrupa y agrega valores utilizando columnas que tengan la misma data |
 | `having` |  Filtra grupos no deseados para el objetivo de nuestra consulta |
-| order by |  Ordena de forma `asc` y `desc` los resultados de la consulta |
+| `order by` |  Ordena de forma `asc` y `desc` los resultados de la consulta |
 
 
 
