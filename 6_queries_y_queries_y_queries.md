@@ -117,6 +117,9 @@ No todos son obligatorios, pero esta es la base para un query útil que puede re
 `select o.customer_id from orders o join customers c on (o.customer_id = c.customer_id) where c.country != 'USA';` ó bien
 `select o.customer_id from orders o where o.ship_country != 'USA';`
 
+Podemos comprobar que ambos enfoques son los mismos con este query:
+`select o.order_id, o.ship_country, c.customer_id, c.country from orders o join customers c on o.customer_id = c.customer_id where c.country != 'USA'`
+
 4. Qué productos de los que transportamos son quesos?
 
 `select distinct od.product_id, p.product_name from order_details od join products p on (od.product_id = p.product_id) where p.category_id = 4;` ó bien, un enfoque más _pedestrian_:
