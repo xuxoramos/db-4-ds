@@ -27,6 +27,9 @@ Aquí la grabación del miércoles 27. Recuerden que dejamos 30 mins al final pa
 #### 2021-02-08
 Aquí la grabación de la sesión de hoy: https://itam.zoom.us/rec/share/PkyoX5vUkCUF1KP1EhgKwYyMxPyBDqV6ZQ2g7SbYcqjNhLye-0IkqOKL8Z0D7Azo.btYVQOMKAAuOZbBY
 
+#### 2021-02-10
+Aquí la grabación de la sesión de hoy: https://itam.zoom.us/rec/share/Xtjg4gYf0Ua6yEYEWPh1y1J_r_Gya-ms7NF6wXJnBMha7pQP29xzYjoMWOvX9v0.mEipNMPueGBxQojj
+
 
 ### Temario + Fechas = Plan de Materia
 A continuación el temario, fecha por fecha:
