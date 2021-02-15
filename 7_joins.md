@@ -7,7 +7,7 @@ Veremos varios tipos de cláusulas `join`:
 1. `A inner join B`: registros que hagan match en ambas tablas `A` y `B`
 2. `A full outer join B`: todos los registros de ambas tablas `A` y `B`, hagan match o no
 3. `A left outer join B`: todos los registros de la tabla `A` junto con su match (o `null` si no hay) de la tabla `B`
-4. `A left outer join B on A.id = B.id **and B.id is null**`: todos los registros de la tabla `A` junto con su match de la tabla `B`
+4. `A left outer join B on A.id = B.id` **`and B.id is null`**: todos los registros de la tabla `A` junto con su match de la tabla `B`
 
 Los incisos 3 y 4 tienen su recíproco también con el caso de `right join`.
 
