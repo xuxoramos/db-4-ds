@@ -109,6 +109,8 @@ También podemos escribirlo como `full join`, y obtiene todos los registros de `
 
 Siguiendo nuestro ejemplo sobre la relación entre `customers` y `orders`, recordemos que con un `join` natural (o `inner join`) sobre la PK/FK de `customer` nos regresa 830 registros:
 
+`select c.customer_id , o.order_id from customers c inner join orders o on (o.customer_id = c.customer_id);`
+
 ![](https://i.imgur.com/hQDIhRc.png)
 
 Sin embargo, si cambiamos a un `full join`, podemos ver que tenemos 832:
