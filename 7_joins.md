@@ -72,6 +72,22 @@ La respuesta es: _depende_. Las bases de datos relacionales que soportan sistema
 
 Estas limitantes funcionales que nos imponen las diferentes representaciones de la realidad la llamamos _impedance mismatch_, y en computación estamos llenas de ellas (ya hemos hablado de la impedance mismatch entre modelos ER y diagramas de clase al representar cosas como herencia y composición). En nuestro caso, representar la realidad como tablas desnormalizadas nos aumenta la utilidad de datos, pero nos expone a pronto introducir entropía en nuestro modelo al insertar nuevas observaciones o modificarla para reflejar cambios en la realidad.
 
+### Otra forma de `inner join`: el comando `intersect`
+
+El comando `intersect` da como resultado algo similar a lo expresado por nuestro diagrama de Venn, sin hacer un join estructural. Chequen el siguiente query:
+
+`select c.city from customers c intersect select s.city from suppliers s;`
+
+![](https://i.imgur.com/3f5jxtd.png)
+
+Este query retorna las ciudades en donde tenemos tanto clientes como proveedores, y es similar a lo que regresaría el comando:
+
+`select c.city, s.city from customers c join suppliers s on c.city = s.city;`
+
+![](https://i.imgur.com/doZQ0bB.png)
+
+Pero dado que el comando de arriba **si hace un join estructural**, no solo tiene 2 columnas (1 para `customers` y otra para `suppliers`), sino que tiene renglones repetidos porque está haciendo un _cross product_ de los campos `city` de ambas tablas.
+
 ## `A full outer join B`
 
 ![](https://blog.codinghorror.com/content/images/uploads/2007/10/6a0120a85dcdae970b012877702725970c-pi.png)
@@ -98,7 +114,7 @@ La utilidad de un `full join` o `full outer join` está en identificar _las rela
 
 Finalmente, estas son las **acciones** que deben ser generadas con datos, y es nuestra responsabilidad como analistas de datos, administradores de BD o desarrolladores de software, empujar esta cultura en nuestras organizaciones.
 
-### Otra forma de lograr el `full join` sin cláusula `join`
+### Otra forma de lograr el `full join` sin cláusula `join`: el comando `union`
 
 Hay otros comandos más oscuros en SQL que nos permiten lograr el mismo resultado que `full join` sin necesariamente utilizar la lógica de `join`.
 
@@ -181,10 +197,11 @@ Esto se logra con un `A full outer join B`, pero solamente incluyendo aquellos r
 
 `select * from A full outer join B on A.id = B.id`**`where A.id is null or B.id is null`
 
-Esto tiene algunas complicaciones con lo que hemos aprendido hasta ahora de diseño de BDs:
+Esto nos obliga a la pregunta: cómo puede ser que hagamos `join` entre IDs de las tablas y luego chequemos que sean null ambas?
 
-1. Cómo puede ser que hagamos `join` entre IDs de las tablas y luego chequemos que sean null ambas?
-R - Esto solamente puede ser
+Como vimos arriba, podemos hacer joins entre tablas que estructuralmente no tengan relación, por lo que es perfectamente válido hacer join con nombres y checar que los IDs sean nulos, o viceversa.
+
+
 
 
 
