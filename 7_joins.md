@@ -22,7 +22,7 @@ En la BD de Northwind, tenemos la relación entre las tablas `customers` y `orde
 
 ![](https://i.imgur.com/jsv4dK3.png)
 
-Si hacemos un `inner join` entre ambas, obtendremos solamente los registros de ambas tablas **que hagan match en la relación**.
+Si hacemos un `inner join` sobre `customers.id_customer` y `orders.customer_id` entre ambas, obtendremos solamente los registros de ambas tablas **que hagan match en la relación**.
 
 `select c.customer_id , o.order_id from customers c inner join orders o on (o.customer_id = c.customer_id);`
 
@@ -62,7 +62,44 @@ join teacher t on (c.teacher_id = t.id);
 
 Pregunta: _"qué nombres tienen los clientes que ordenaron productos tipo 'queso' y qué nombres de productos fueron?"_
 
-## Full outer join
+### Normalización y utilidad de datos
+
+Como podemos ver con estos ejercicios, para que los datos sean útiles para consumo humano, **parece** que debemos entregarlos _desnormalizados_ hasta la 1NF. Es decir, nombres repetibles, renglones repetidos, etc.
+
+Entonces, para qué invertimos tanto tiempo en el buen diseño de BDs y en normalización? No es más útil poder guardar todo justo en formato para consumo humano? Desnormalizado y sin llaves que estén aisladas del problem domain?
+
+La respuesta es: _depende_. Las bases de datos relacionales que soportan sistemas transaccionales deben ser rápidas para escribir, y deben garantizar que mientras escribimos en ellas, no sucedan anomalías de insert, delete y update. Una tabla desnormalizada nos expone a tiempos de escritura más altos que unas normalizadas, y a anomalías de escritura, aunque sea más _human-readable_.
+
+Estas limitantes funcionales que nos imponen las diferentes representaciones de la realidad la llamamos _impedance mismatch_, y en computación estamos llenas de ellas (ya hemos hablado de la impedance mismatch entre modelos ER y diagramas de clase al representar cosas como herencia y composición). En nuestro caso, representar la realidad como tablas desnormalizadas nos aumenta la utilidad de datos, pero nos expone a pronto introducir entropía en nuestro modelo al insertar nuevas observaciones o modificarla para reflejar cambios en la realidad.
+
+## `A full outer join B`
+
+![](https://blog.codinghorror.com/content/images/uploads/2007/10/6a0120a85dcdae970b012877702725970c-pi.png)
+
+También podemos escribirlo como `full join`, y obtiene todos los registros de `A` y `B`, incluso los que no cumplen la relación entre ambos, dejándolos en `null` en ese caso, como en la sig. figura:
+
+![](https://i.imgur.com/EjuGWo3.png)
+
+Siguiendo nuestro ejemplo sobre la relación entre `customers` y `orders`, recordemos que con un `join` natural (o `inner join`) sobre la PK/FK de `customer` nos regresa 830 registros:
+
+![](https://i.imgur.com/hQDIhRc.png)
+
+Sin embargo, si cambiamos a un `full join`, podemos ver que tenemos 832:
+
+`select c.customer_id , o.order_id from customers c full join orders o on (o.customer_id = c.customer_id);` 
+
+![](https://i.imgur.com/dJvKdQP.png)
+
+Los 2 registros que aparecen ahora y que antes no teníamos son clientes que tenemos registrados, **pero que no han puesto una orden nunca en su vida**.
+
+### Para qué quieres saber eso jaja saludos
+
+La utilidad de un `full join` o `full outer join` está en identificar _las relaciones que no están ahí_. A veces la falta de información es más útil que su presencia. En el ejemplo de arriba, podemos ver que los clientes PARIS y FISSA nunca nos han comprado nada. Qué podemos hacer? Descuentos exclusivos para ellos? Seguimiento? Marketing dirigido?
+
+Finalmente, estas **acciones** son las que deben ser generadas con datos.
+
+
+
 
 
 
