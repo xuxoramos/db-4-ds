@@ -40,8 +40,8 @@ Imaginemos el siguiente modelo de datos:
 
 Si queremos responder la pregunta _"qué profesores imparten clase a qué estudiantes?"_, podemos partir este requerimiento en otras 2 preguntas:
 
-1. _"qué cursos toma cada estudiante?"
-2. _"qué cursos imparte cada profesor?"
+1. _"qué cursos toma cada estudiante?"_
+2. _"qué cursos imparte cada profesor?"_
 
 Y podemos responder cada una por separado:
 1. `select s.first_name, s.last_name, c.name from student s join student_course sc on (s.id = sc.student_id) join course c on (sc.course_id = c.id);`
@@ -60,7 +60,18 @@ join teacher t on (c.teacher_id = t.id);
 
 ### Ejercicio
 
-Pregunta: _"qué nombres tienen los clientes que ordenaron productos tipo 'queso' y qué nombres de productos fueron?"_
+Pregunta: _"qué nombres tienen los clientes que ordenaron productos tipo 'queso' y qué nombres de productos fueron?"_\
+
+Respuesta:
+```
+-- clientes que ordenaron productos con category = Queso
+select c2.contact_name , p.product_name 
+from categories c join products p on c.category_id = p.category_id 
+join order_details od on od.product_id = p.product_id 
+join orders o2 on o2.order_id = od.order_id 
+join customers c2 on c2.customer_id = o2.customer_id 
+where c.description = 'Cheeses'
+```
 
 ### Normalización y utilidad de datos
 
