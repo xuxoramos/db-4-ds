@@ -76,7 +76,7 @@ Estas limitantes funcionales que nos imponen las diferentes representaciones de 
 
 ![](https://blog.codinghorror.com/content/images/uploads/2007/10/6a0120a85dcdae970b012877702725970c-pi.png)
 
-También podemos escribirlo como `full join`, y obtiene todos los registros de `A` y `B`, incluso los que no cumplen la relación entre ambos, dejándolos en `null` en ese caso, como en la sig. figura:
+También podemos escribirlo como `full join`, y obtiene todos los registros de `A` y `B`, incluso los que no cumplen la relación entre ambos, dejándolos en `null` demambos lados en ese caso, como en la sig. figura:
 
 ![](https://i.imgur.com/EjuGWo3.png)
 
@@ -92,12 +92,19 @@ Sin embargo, si cambiamos a un `full join`, podemos ver que tenemos 832:
 
 Los 2 registros que aparecen ahora y que antes no teníamos son clientes que tenemos registrados, **pero que no han puesto una orden nunca en su vida**.
 
-### Para qué quieres saber eso jaja saludos
+### "Pa k kieres saber eso jaja saludos"
 
 La utilidad de un `full join` o `full outer join` está en identificar _las relaciones que no están ahí_. A veces la falta de información es más útil que su presencia. En el ejemplo de arriba, podemos ver que los clientes PARIS y FISSA nunca nos han comprado nada. Qué podemos hacer? Descuentos exclusivos para ellos? Seguimiento? Marketing dirigido?
 
-Finalmente, estas **acciones** son las que deben ser generadas con datos.
+Finalmente, estas son las **acciones** que deben ser generadas con datos, y es nuestra responsabilidad como analistas de datos, administradores de BD o desarrolladores de software, empujar esta cultura en nuestras organizaciones.
 
+
+## `A left outer join B`
+![](https://blog.codinghorror.com/content/images/uploads/2007/10/6a0120a85dcdae970b01287770273e970c-pi.png)
+
+Similar al `full outer join` o al `full join`, esta cláusula regresa todos los registros de `A`, cumplan o no su relación con `B`, dejando en `null` aquellos en `A` que no tengan match, como en la siguiente figura:
+
+![](https://i.imgur.com/aFkWV6T.png)
 
 
 
