@@ -210,7 +210,7 @@ Si el `join` nos da registros que cumplen una relación entre A y B, el "antijoi
 
 Esto se logra con un `A full outer join B`, pero solamente incluyendo aquellos registros donde A o B son nulos. El comando `select` queda así:
 
-`select * from A full outer join B on A.id = B.id `**`where A.id is null or B.id is null`**
+`select * from A full outer join B on A.id = B.id `**`where A.b_id is null or B.a_id is null`**
 
 Esto nos obliga a la pregunta: cómo puede ser que hagamos `join` entre IDs de las tablas y luego chequemos que sean null ambas?
 
