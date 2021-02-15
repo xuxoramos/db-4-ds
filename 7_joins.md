@@ -60,9 +60,9 @@ join teacher t on (c.teacher_id = t.id);
 
 ### Ejercicio
 
-Pregunta: _"qué nombres tienen los clientes que ordenaron productos tipo 'queso' y qué nombres de productos fueron?"
+Pregunta: _"qué nombres tienen los clientes que ordenaron productos tipo 'queso' y qué nombres de productos fueron?"_
 
-## 
+## Full outer join
 
 
 
