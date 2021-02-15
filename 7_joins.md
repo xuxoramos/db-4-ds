@@ -7,7 +7,7 @@ Veremos varios tipos de cláusulas `join`:
 1. `A inner join B`: registros que hagan match en ambas tablas `A` y `B`
 2. `A full outer join B`: todos los registros de ambas tablas `A` y `B`, hagan match o no
 3. `A left outer join B`: todos los registros de la tabla `A` junto con su match (o `null` si no hay) de la tabla `B`
-4. `A left outer join B on A.id = B.id` **`and B.id is null`**: todos los registros de la tabla `A` junto con su match de la tabla `B`
+4. `A left outer join B on A.id = B.id `**`and B.id is null`**: todos los registros de la tabla `A` junto con su match de la tabla `B`
 
 Los incisos 3 y 4 tienen su recíproco también con el caso de `right join`.
 
@@ -195,11 +195,29 @@ Si el `join` nos da registros que cumplen una relación entre A y B, el "antijoi
 
 Esto se logra con un `A full outer join B`, pero solamente incluyendo aquellos registros donde A o B son nulos. El comando `select` queda así:
 
-`select * from A full outer join B on A.id = B.id`**`where A.id is null or B.id is null`
+`select * from A full outer join B on A.id = B.id `**`where A.id is null or B.id is null`
 
 Esto nos obliga a la pregunta: cómo puede ser que hagamos `join` entre IDs de las tablas y luego chequemos que sean null ambas?
 
-Como vimos arriba, podemos hacer joins entre tablas que estructuralmente no tengan relación, por lo que es perfectamente válido hacer join con nombres y checar que los IDs sean nulos, o viceversa.
+Como vimos arriba, podemos hacer joins entre tablas que estructuralmente no tengan relación, por lo que es perfectamente válido hacer join con, por ejemplo, nombres y checar que los IDs sean nulos, o viceversa.
+
+No he encontrado tablas o relaciones que me permitan ilustrar el anti-join en la BD de Northwind, así que de momento esta parte tendrá que quedarse en lo teórico.
+
+## Ejercicios de la clase pasada
+
+5. Qué ordenes van a Bélgica o Francia?
+
+6. Qué órdenes van a LATAM?
+
+7. Qué órdenes no van a LATAM?
+
+8. Necesitamos los nombres completos de los empleados, nombres y apellidos unidos en un mismo registro
+
+9. Cuánta lana tenemos en inventario?
+
+10. Cuantos clientes tenemos de cada país?
+
+
 
 
 
