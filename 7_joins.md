@@ -98,6 +98,25 @@ La utilidad de un `full join` o `full outer join` está en identificar _las rela
 
 Finalmente, estas son las **acciones** que deben ser generadas con datos, y es nuestra responsabilidad como analistas de datos, administradores de BD o desarrolladores de software, empujar esta cultura en nuestras organizaciones.
 
+### Otra forma de lograr el `full join` sin cláusula `join`
+
+Hay otros comandos más oscuros en SQL que nos permiten lograr el mismo resultado que `full join` sin necesariamente utilizar la lógica de `join`.
+
+Chequen el siguiente comando:
+
+`select c.contact_name, c.city from customers c UNION select s.contact_name, s.city from suppliers s;`
+
+![](https://i.imgur.com/XHn2YTD.png)
+
+Este comando no hace un join como tal, pero genera un resultado parecido a:
+
+`select c.contact_name, c.city, s.contact_name, s.city from customers c full outer join suppliers s on (c.contact_name = s.contact_name);`
+
+Que si hace un join estructural, como podemos verlo con los registros en null del lado de `customers` y del lado de `suppliers`.
+
+![](https://i.imgur.com/jgw4Xyw.png)
+
+> IMPORTANTE: otro truco que acabamos de ver aquí es que **podemos realizar operaciones `join` en otros campos que no sean PKs ni FKs!** Esto nos ayuda bastante en cuanto a funciones analíticas porque podemos definir equivalencias sobre campos que estructuralmente no tienen nada que ver.
 
 ## `A left outer join B`
 ![](https://blog.codinghorror.com/content/images/uploads/2007/10/6a0120a85dcdae970b01287770273e970c-pi.png)
@@ -105,6 +124,67 @@ Finalmente, estas son las **acciones** que deben ser generadas con datos, y es n
 Similar al `full outer join` o al `full join`, esta cláusula regresa todos los registros de `A`, cumplan o no su relación con `B`, dejando en `null` aquellos en `A` que no tengan match, como en la siguiente figura:
 
 ![](https://i.imgur.com/aFkWV6T.png)
+
+En nuestra BD de Northwind tenemos un ejemplo muy claro de este uso. La tabla `shippers`, que contiene todas las empresas con las que podemos transportar productos, y la tabla `orders`, que contiene todas nuestras órdenes, tienen una relación **1 a 1**, pero no todos los shippers han sido utilizados, como lo muestra esta consulta:
+
+`select s.company_name , o.order_id from shippers s left join orders o on (s.shipper_id = o.ship_via);`
+
+Cuando ejecutamos el query, vemos que:
+
+![](https://i.imgur.com/k0Kn4aH.png)
+
+Resulta que hemos hecho negocio consistentemente con Speedy Express, United Package y Federal Shipping, pero nunca con UPS, DHL ni Alliance Shippers.
+
+Pensando como verdadero analista de datos (i.e. como detective), podemos generar las siguientes líneas de averiguación con esta _falta_ de información, dependiendo de qué área lo haga:
+
+- Tenemos convenio con estas empresas? Nos está costando? Vale la pena seguir pagando si no los hemos utilizado? (Finance)
+- Hay alguien en el depto de logística que pueda estar en contubernio con estas empresas para canalizarles todo nuestro negocio? (Auditoría/Jurídico)
+- Qué tipo de pricing nos ofrecen estas empresas que no hemos hecho negocio con ellas? (Logística)
+- Han cambiado nuestras rutas comerciales tal que ya no hemos necesitado los servicios de estos couriers? (Operaciones)
+
+### Qué diferencia hay entre `full outer`/`full` y `left outer`/`left`?
+En nuestra BD los resultados parecen ser los mismos, pero si además de tener `shippers` que nunca hemos usado, tuviéramos `orders` a las que nunca se les ha asignado el campo `ship_via`, entonces un `full join`nos daría estos registros nulos tanto de `shippers` como de `orders`.
+
+El que tengamos pocos de estos casos para ejemplificar habla de que la BD northwind está bien diseñada y, en la medida de lo posible, cumple con al menos la 4NF.
+
+### Y si queremos **solamente** los nulos?
+
+Si modificamos nuestro ejemplo de arriba de la siguiente forma:
+
+`select s.company_name , o.order_id from shippers s left join orders o on (s.shipper_id = o.ship_via) where o.ship_via is null;`
+
+Obtenemos, **solamente los `shippers` cuya relación con `orders` es nula**.
+
+Representado en diagrama de Venn, tenemos esto:
+
+![](https://blog.codinghorror.com/content/images/uploads/2007/10/6a0120a85dcdae970b012877702754970c-pi.png)
+
+Para propósitos de las preguntas que les propongo arriba, realizar un `A left outer join B` con una cláusula `where B.id is null` nos ayuda a ser más cortos y concisos, pero igual de efectivos.
+
+### Y el `right join`?
+
+Estas operaciones con `left join` tienen su recíproco del lado de `right join`, y SQL solo nos la proporciona por conveniencia y utilidad. La realidad es que utilizaremos el `left join` con mayor frecuencia.
+
+Las operaciones con `right join` podemos representarlas con la siguiente img:
+
+![](https://i.imgur.com/sj3vQ8G.png)
+
+Y obviamente su recíproco en forma de diagrama de Venn:
+
+![](https://sp.postgresqltutorial.com/wp-content/uploads/2018/12/PostgreSQL-Join-Right-Join-with-Where.png)
+
+## El "anti-join"
+
+Si el `join` nos da registros que cumplen una relación entre A y B, el "antijoin" nos regresa registros justamente que **no cumplen la relación**.
+
+Esto se logra con un `A full outer join B`, pero solamente incluyendo aquellos registros donde A o B son nulos. El comando `select` queda así:
+
+`select * from A full outer join B on A.id = B.id`**`where A.id is null or B.id is null`
+
+Esto tiene algunas complicaciones con lo que hemos aprendido hasta ahora de diseño de BDs:
+
+1. Cómo puede ser que hagamos `join` entre IDs de las tablas y luego chequemos que sean null ambas?
+R - Esto solamente puede ser
 
 
 
