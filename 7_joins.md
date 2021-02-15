@@ -206,6 +206,8 @@ Y obviamente su recíproco en forma de diagrama de Venn:
 
 Si el `join` nos da registros que cumplen una relación entre A y B, el "antijoin" nos regresa registros justamente que **no cumplen la relación**.
 
+![](https://blog.codinghorror.com/content/images/uploads/2007/10/6a0120a85dcdae970b012877702769970c-pi.png)
+
 Esto se logra con un `A full outer join B`, pero solamente incluyendo aquellos registros donde A o B son nulos. El comando `select` queda así:
 
 `select * from A full outer join B on A.id = B.id `**`where A.id is null or B.id is null`**
