@@ -58,6 +58,11 @@ join course c on (sc.course_id = c.id)
 join teacher t on (c.teacher_id = t.id);
 ```
 
+### Ejercicio
+
+Pregunta: _"qué nombres tienen los clientes que ordenaron productos tipo 'queso' y qué nombres de productos fueron?"
+
+## 
 
 
 
