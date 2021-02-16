@@ -30,6 +30,9 @@ Aquí la grabación de la sesión de hoy: https://itam.zoom.us/rec/share/PkyoX5v
 #### 2021-02-10
 Aquí la grabación de la sesión de hoy: https://itam.zoom.us/rec/share/Xtjg4gYf0Ua6yEYEWPh1y1J_r_Gya-ms7NF6wXJnBMha7pQP29xzYjoMWOvX9v0.mEipNMPueGBxQojj
 
+#### 2021-02-15
+La grabación de la sesión del 15 de Feb: https://itam.zoom.us/rec/share/Y4rtNP7EuROWPVEm-QBnCckXuKbtJWlwtVhJI3iCKCqXZ15RzgvXzYvjVvHV4J4j.Z6aRh51NIfa3boC_?startTime=1613421405000
+
 
 ### Temario + Fechas = Plan de Materia
 A continuación el temario, fecha por fecha:
