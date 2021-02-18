@@ -1,6 +1,6 @@
 # Ejercicios en preparación para el examen
 
-1. Obtener un reporte de edades de los empleados para checar su elegibilidad para seguro de gastos médicos menores.
+### Obtener un reporte de edades de los empleados para checar su elegibilidad para seguro de gastos médicos menores.
 
 `select e.employee_id , ((now() - e.birth_date)/365) as "age" from employees e;`
 
@@ -17,7 +17,7 @@ select to_date('1-9-2011', 'DD-MM-YYYY'); -- 1 de Sep de 2011
 select to_date('1-9-2011', 'MM-DD-YYYY'); -- 9 de Enero de 2011
 ```
 
-3. Cuál es la orden más reciente por cliente?
+### Cuál es la orden más reciente por cliente?
 
 ```
 select c3.company_name as "Company Name", 
@@ -27,6 +27,7 @@ group by c3.company_name;
 ```
 
 O si queremos también el ID de la orden:
+
 
 
 
