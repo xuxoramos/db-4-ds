@@ -28,152 +28,134 @@ group by c3.company_name;
 
 O si queremos también el ID de la orden:
 
+```
+select o.order_id , o.order_date, c.company_name
+from orders o join customers c on o.customer_id = c.customer_id 
+join (
+	select c.company_name, max(o.order_date) as max_order_date
+	from orders o join customers c on o.customer_id = c.customer_id
+	group by c.company_name 
+) t on o.order_date = t.max_date and c.company_name = t.company_name
+```
 
+En este ejercicio, hacemos join entre una tabla existente y una _tabla dinámica_ creada al vuelo con un _subselect_ que llamaremos `t`. Lo que estamos haciendo es lo siguiente:
 
+Primero seleccionamos los `company_name` de la tabla `customers` mediante un join con `orders`, y seleccionamos también el `max(o.order_date) as max_order_date`. Y todo ello lo asignamos a un alias que llamaremos `t`:
 
-5. De nuestros clientes, qué función desempeñan y cuántos son?
-6. Cuántos productos tenemos de cada categoría?
-7. Cómo podemos generar el reporte de reorder?
-8. A donde va nuestro envío más voluminoso?
-9. Cómo creamos una columna en `customers` que nos diga si un cliente es bueno, regular, o malo?
-10. Qué colaboradores chambearon durante las fiestas de navidad?
-11. Qué productos mandamos en navidad?
-12. Qué país recibe el mayor volumen de producto?
+![](https://i.imgur.com/tcTALu9.png)
 
+Y luego hacemos un `select` de las columnas `order_id`, `order_date` y `company_name` del `join` de la tabla `orders` con `customers`. Este select es natural, **sin `group by`**.
 
+![](https://i.imgur.com/aiX5jiL.png)
 
+Luego hacemos un join de los dos selects de arriba tal que el `orders.order_date = t.max_order_date` Y ADEMÁS que `customers.company_name = t.company_name`.
 
+Y LISTO!
 
---------------------------------------------------------
+### De nuestros clientes, qué función desempeñan y cuántos son?
+```
+select c.contact_title, count(c.customer_id)
+from customers c 
+group by c.contact_title
+```
 
-
-select c.customer_id , o.order_id from customers c inner join orders o on (o.customer_id = c.customer_id);
-
-
-
-select s.company_name , o.order_id from shippers s left join orders o on s.shipper_id = o.ship_via;
-
-select	* from orders o where ship_via is null
-
-select s.company_name , o.order_id from shippers s left join orders o on (s.shipper_id = o.ship_via) where o.ship_via is null or s.shipper_id is null;
-
-select c.contact_name, c.city, s.contact_name, s.city from customers c full outer join suppliers s on (c.contact_name = s.contact_name) where c.contact_name is null or s.contact_name is null
-
-select c.contact_name, c.city, s.contact_name, s.city from customers c full outer join suppliers s on (c.contact_name = s.contact_name)
-
-
-select c.city from customers c intersect select s.city from suppliers s;
-
-select c.city, s.city from customers c join suppliers s on c.city = s.city;
-
-select c.contact_name, c.city from customers c UNION select s.contact_name, s.city from suppliers s;
-
-select c.contact_name as customer_name, c.city as customer_city, s.contact_name as supplier_name, s.city as  supplier_city from customers c full outer join suppliers s on (c.contact_name = s.contact_name);
-
-select s.company_name , o.order_id from shippers s left join orders o on (s.shipper_id = o.ship_via);
-
-select s.company_name , o.order_id from shippers s full outer join orders o on (s.shipper_id = o.ship_via);
-
-select s.company_name , o.order_id from shippers s left join orders o on (s.shipper_id = o.ship_via) where o.ship_via is nul	l;
-
-select contact_title from customers c 
-
-
-
--- Ejercicios 2021-02-17
--- Qué ordenes van a Bélgica o Francia?
-
-select * from orders o where ship_country in ('Belgium', 'France')
-
--- Qué órdenes van a LATAM?
-select order_id , ship_country from orders o 
-where ship_country in ('Mexico', 'Venezuela', 'Brazil', 'Argentina')
-
--- Qué órdenes no van a LATAM?
-select order_id , ship_country from orders o 
-where ship_country not in ('Mexico', 'Venezuela', 'Brazil', 'Argentina')
-
-
--- Necesitamos los nombres completos de los empleados, nombres y apellidos unidos en un mismo registro
-select concat(e.first_name , ' ' , e.last_name) as "Full Name" from employees e
---alter table employees add column nombre_completo varchar(100);
---update employees set nombre_completo = (select concat(e.first_name , ' ' , e.last_name) from employees e)
-
--- Cuánta lana tenemos en inventario?
-select sum((p.unit_price * p.units_in_stock)) from products p
-
--- Cuantos clientes tenemos de cada país?
-select c.country , count(c.customer_id) from customers c group by c.country
-
--- Obtener un reporte de edades de los empleados para checar su elegibilidad para seguro de gastos médicos menores.
-select e.employee_id , ((now() - e.birth_date)/365) as "age" from employees e
-
--- Cuál es la orden más reciente por cliente?
--- ** Pregunta: si queremos tener TAMBIÉN el order ID de la orden más reciente, cómo le hacemos? **
-select c3.company_name as "Company Name", 
-max(o.order_date) as "Most Recent Order" 
-from orders o join customers c3 on o.customer_id = c3.customer_id 
-group by c3.company_name;
-
-select t.order_id, o.order_date, o.customer_id 
-from (
-	select o.order_id, max(o.order_date) as ordenreciente, o.customer_id
-	from orders o
-	group by o.customer_id 
-) t join orders o2 on t.order_id = o2.order_id and o.order_date = t.ordenreciente;
-
-select distinct on (o.customer_id) o.order_id , max(o.order_date) 
-from orders o 
-group by o.customer_id 
-
-
--- De nuestros clientes, qué función desempeñan y cuántos son?
-select c.contact_title, count(c.customer_id) from customers c group by c.contact_title
-
--- Cuántos productos tenemos de cada categoría?
+### Cuántos productos tenemos de cada categoría?
+```
 select c2.category_name , count(c2.category_id) 
 from products p 
 join categories c2 
 on p.category_id = c2.category_id 
 group by c2.category_name;
+```
 
--- Cómo podemos generar el reporte de reorder?
-select p.product_name, p.reorder_level , p.units_in_stock, p.discontinued from products p where p.units_in_stock < p.reorder_level 
+### Cómo podemos generar el reporte de reorder?
+El reporte de reorder es la lista de todos los productos cuyo nivel de inventario es igual o mayor al nivel que tenemos definido para disparar una orden de ese producto del cual tenemos poquito.
 
--- A donde va nuestro envío más voluminoso?
+```
+select p.product_name, p.reorder_level , p.units_in_stock, p.discontinued 
+from products p
+where p.units_in_stock <= p.reorder_level
+```
+
+### A donde va nuestro envío más voluminoso?
+Tenemos de 3 sopas:
+
+```
 select o.freight, o.ship_country 
 from orders o 
 where o.freight = (select max(o.freight) from orders o);
+```
 
+O bien:
+
+```
 select max(o.freight) as "MaxFreight", o.ship_country 
 from orders o 
 group by o.ship_country order by "MaxFreight" desc limit 1;
+```
 
-select o.freight , o.ship_country from orders o order by  o.freight desc limit 1;
+Y finalmente:
 
--- Cómo creamos una columna en customers que nos diga si un cliente es bueno, regular, o malo?
-select c.company_name ,  sum(od.quantity * od.unit_price) as "Customer Value" , case if "Customer Value" > 100 then "buenérrimo" end tipo_cliente,
-from order_details od 
-join orders o on od.order_id = o.order_id 
-join customers c on o.customer_id = c.customer_id 
-group by c.company_name 
-order by "Customer Value" desc;
+```
+select o.freight , o.ship_country
+from orders o
+order by o.freight desc limit 1;
+```
 
--- Qué colaboradores chambearon durante las fiestas de navidad?
+### Cómo creamos una columna en `customers` que nos diga si un cliente es bueno, regular, o malo?
+```
+select t.company_name , 
+t.customer_value , 
+case 
+	when t.customer_value > 100000 then 'buenérrimo' 
+	when t.customer_value <= 100000 and t.customer_value > 70000 then 'bueno' 
+	when t.customer_value <= 70000 and t.customer_value > 30000 then 'regular' 
+	when t.customer_value <= 30000 then 'malo' 
+end tipo_cliente
+from (
+	select c.company_name , sum(od.quantity * od.unit_price) as customer_value
+	from order_details od
+	join orders o on od.order_id = o.order_id 
+	join customers c on o.customer_id = c.customer_id 
+	group by c.company_name
+) t
+order by customer_value desc;
+```
+
+Aquí estamos usando de nuevo una _tabla dinámica_, una tabla creada al vuelo con base en un `select`. En el `select` interior, tenemos lo siguiente:
+
+![](https://i.imgur.com/EpBLUOt.png)
+
+Con esto tenemos el valor total de las órdenes procesadas por cada cliente. **No olviden asignar el alias a este subselect para poder referirnos a esta tabla dinámica.** En este caso la bautizamos como `t`.
+
+Ahora ponemos un select exterior para etiquetar los rangos de estos clientes de acuerdo al monto total de orden que tienen con nosotros.
+
+![](https://i.imgur.com/svf8ufK.png)
+
+Esta maroma la necesitamos hacer porque el select exterior solo puede tener conocimiento del alias **`customer_value`** que asignamos a `sum(order_details.quantity * order_details.unit_price)` si ha sido definido en un subselect, y por tanto ya se tiene en memoria.
+
+Si hubieramos agregado la cláusula `case` como parte del select externo, no hubiera sido posible tener esta lógica sobre `customer_value` porque aún no se hubiera tenido en memoria.
+
+### Qué colaboradores chambearon durante las fiestas de navidad?
+```
 select distinct e.first_name, e.last_name , o.order_date
 from orders o join employees e on o.employee_id  = e.employee_id 
-where o.order_date in (date('1996-12-24'),date('1997-12-24'),date('1998-12-24'),date('1996-12-25'),date('1997-12-25'),date('1998-12-25'));  
+where extract('month' from o.order_date) = 12 and extract('day' from o.order_date) in (24,25); 
+```
 
--- Qué productos mandamos en navidad?
+Aquí usamos la cláusula `extract(['month'|'day'|'year'] from o.order_date)` para obtener solamente el cacho del mes y el día de un campo de fecha, y una vez extraído, ya podemos hacer comparaciones.
+
+### Qué productos mandamos en navidad?
+Misma técnica que el query anterior:
+```
 select o.order_id , o.shipped_date 
-from orders o 
-where o.shipped_date in (date('1996-12-24'),date('1997-12-24'),date('1998-12-24'),date('1996-12-25'),date('1997-12-25'),date('1998-12-25'));
+from orders o
+where extract('month' from o.shipped_date) = 12 and extract('day' from o.shipped_date) in (24,25); 
+```
 
--- Qué país recibe el mayor volumen de producto?
-select sum(o.freight) as sumfreight, c.country from orders o join customers c on o.customer_id = c.customer_id group by c.country order by sumfreight desc limit 1;
-
-
-select c.category_name, count (c.category_id) from products p
-	join categories c on (c.category_id = p.category_id)
-	group by c.category_id ;
-
+### Qué país recibe el mayor volumen de producto?
+```
+select sum(o.freight) as sumfreight, c.country 
+from orders o join customers c on o.customer_id = c.customer_id 
+group by c.country order by sumfreight desc limit 1;
+```
