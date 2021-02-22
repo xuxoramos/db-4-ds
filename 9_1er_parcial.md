@@ -16,3 +16,4 @@
 ## Recomendaciones
 1. Recorran todas las preguntas del exámen primero para poder asignar su tiempo de acuerdo a las secciones que más trabajo les cuesten.
 2. Abran y conéctense a la BD de Sakila ANTES de iniciar el examen para ahorrar tiempo.
+3. Hay muchas formas de responder las preguntas donde les pido que escriban un query. No tengo ningún problema con que se avienten algunos hacks con la cláusula `limit N`.
