@@ -56,20 +56,41 @@ La base del `where` es la combinación de expresiones conectadas por operadores 
 ## Tipos de condiciones
 
 ### Igualdad 
-Son las condiciones dadas con `=`, `>`, `<` y sus combinaciones `>=`, `<=`. Ojo que podemos combinar los operadores `and`, `or` y `not` junto con los de igualdad par hacer igualdades más complejas.
+Son las condiciones dadas con `=`, `>`, `<` y sus combinaciones `>=`, `<=`. Ojo que podemos combinar los operadores `and`, `or` y `not` junto con los de igualdad par hacer igualdades más complejas, como:
+
+`select r.return_date from rental r where r.rental_date >= '2005-01-01' and <= '2005-12-31'` para las rentas de todo 2005.
 
 ### Desigualdad
 Podemos hacerlo con `!=` o con `<>`, e igual podemos combinarlos con los operadores lógicos de arriba para condiciones más complejas. Por ejemplo, el query 
 
-`select * where film_actor.actor_id != 1`
+`select fa.actor_id where film_actor.actor_id != 1`
 
 puede refrasearse como `where film_actor.actor_id <> 1`
 
 y ambos tendrían el mismo resultado.
 
 ### Inclusión
-`where film.title in ('ACADEMY DINOSAUR', 'AFRICAN EGG', 'AGENT TRUMAN')`, o bien `where r.rental_date between '2005-01-01' and '2005-12-31'` - ojo con el orden de los umbrales de `between`, inferior priemro, superior segundo.
-  - Caso especial `between` con campos `varchar`: el operador `between` usado en textos es como una búsqueda alfabética caracter por caracter. El query `select f.title from film f where f.title between 'AA' and 'AZ';` va a listar todos los nombres de películas que comiencen con A y cuya 2a letra del título vaya de la A a la Z.
+
+Hay 2 formas de inclusión:
+
+Lista:
+
+`select film.title from film where film.title in ('ACADEMY DINOSAUR', 'AFRICAN EGG', 'AGENT TRUMAN');`
+
+Que también está sujeta a los operadores lógicos principales, de forma que podemos expresar:
+
+`select film.title from film where film.title not in ('ACADEMY DINOSAUR', 'AFRICAN EGG', 'AGENT TRUMAN') and film.rating in ('PG', 'PG13');`
+
+Ojo con el orden de los umbrales de `between`, inferior priemro, superior segundo.
+
+#### Caso especial `between` con campos `varchar`
+
+El operador `between` usado en textos es como una búsqueda alfabética caracter por caracter. El query 
+
+`select f.title from film f where f.title between 'AA' and 'AZ';` 
+
+va a listar todos los nombres de películas que comiencen con A y cuya 2a letra del título vaya de la A a la Z.
+
 ### Matching
 `where film.title like %OLE%'`: el operador `like` toma como argumento un string con el cual intentar hacer match; `_` para hacer match de cualquier 1 caracter, `%` para cualesquiera N caracteres. 
 
