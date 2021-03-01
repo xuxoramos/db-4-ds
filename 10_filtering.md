@@ -101,7 +101,7 @@ va a listar todos los nombres de películas que comiencen con A y cuya 2a letra 
 
 Esto se usa con campos `varchar` y forzosamente con la cláusula `like`. Aquí tenemos 2 formas de hacer este match:
 
-- **`like '%OLI%'`**: matching de cualesquiera N caracteres, incluyendo whitespace, caracter de inicio de línea (^) y final de línea ($). Esto va a matchear _POLICIA_, _HOLI_, _POLITICA_ (así sin acento), _COLITA_, etc. Es **case sensitive** y **tilde sensitive**.
+- **`like '%OLI%'`**: matching de cualesquiera N caracteres, incluyendo whitespace, caracter de inicio de línea (^), final de línea ($) o nueva línea (\n o \r). Esto va a matchear _POLICIA_, _HOLI_, _POLITICA_ (así sin acento), _COLITA_, etc. Es **case sensitive** y **tilde sensitive**.
 - **`like 'POL_TIC_'`**: matching de 1 solo cualquier caracter, incluyendo whitespace, inicio de línea (^) y final de línea ($). Esto va matchear _POLITICA_, _POLÍTICA_, _POLÍTICO_, _POLATICA_ (whatever that means), etc.
 
 Igual podemos combinarlos:
