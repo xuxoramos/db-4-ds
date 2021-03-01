@@ -73,7 +73,7 @@ y ambos tendrían el mismo resultado.
 
 Hay 2 formas de inclusión:
 
-Lista:
+#### Lista
 
 `select film.title from film where film.title in ('ACADEMY DINOSAUR', 'AFRICAN EGG', 'AGENT TRUMAN');`
 
@@ -81,7 +81,13 @@ Que también está sujeta a los operadores lógicos principales, de forma que po
 
 `select film.title from film where film.title not in ('ACADEMY DINOSAUR', 'AFRICAN EGG', 'AGENT TRUMAN') and film.rating in ('PG', 'PG13');`
 
-Ojo con el orden de los umbrales de `between`, inferior priemro, superior segundo.
+#### Rango
+
+Recuerdan el query del inicio que usamos `>=` y `<=`? Podemos hacer lo mismo con rangos usando cláusula `between`:
+
+`select r.rental_date from rental r where r.rental_date between '2005-01-01' and '2005-12-31';`
+
+Ojo con el orden de los umbrales de `between`, inferior priemro, superior segundo. De lo contrario no te va a regresar nada, porque obviamente el tiempo no corre al revés, esto no es Back to the Future.
 
 #### Caso especial `between` con campos `varchar`
 
@@ -92,5 +98,14 @@ El operador `between` usado en textos es como una búsqueda alfabética caracter
 va a listar todos los nombres de películas que comiencen con A y cuya 2a letra del título vaya de la A a la Z.
 
 ### Matching
-`where film.title like %OLE%'`: el operador `like` toma como argumento un string con el cual intentar hacer match; `_` para hacer match de cualquier 1 caracter, `%` para cualesquiera N caracteres. 
+
+Esto se usa con campos `varchar` y forzosamente con la cláusula `like`. Aquí tenemos 2 formas de hacer este match:
+
+- **`like %OLI%`**: matching de cualesquiera N caracteres. Esto va a matchear _POLICIA_, _HOLI_, _POLITICA_ (así sin acento), _COLITA_, etc. Es **case sensitive** y **tilde sensitive**.
+- **`like POL_TIC_`**: matching de 1 solo cualquier caracter. Esto va matchear _POLITICA_, _POLÍTICA_, _POLÍTICO_, _POLATICA_ (whatever that means), etc.
+
+Igual podemos combinarlos:
+
+- **`like POL_TI%`**: esto va a matchear _POLÍTICA_, _POLITIQUERÍA_, _POLOTITLÁN_. 
+
 
