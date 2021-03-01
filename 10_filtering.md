@@ -111,6 +111,20 @@ Igual podemos combinarlos:
 
 ## Ejercicio
 
+Para este ejercicio necesitaremos una versión nueva de la BD Northwind.
+
+La pueden encontrar [aquí](https://github.com/xuxoramos/db-4-ds/blob/gh-pages/northwind/northwind_new_2021-03-01.sql)
+
+Como tiene los mismos nombres que la Northwind original, no podemos instalarla en el mismo esquema `northwind` porque resulta que no puede haber 2 tablas con el mismo nombre en la misma BD, y como estamos conectados a la BD `postgres`, no importa cuantos esquemas tengamos, los nombres de los objetos (tablas, vistas, índices, constraints, secuencias, etc) no pueden repetirse.
+
+Debemos crear otra BD. En DBeaver den click derecho a la BD `postgres`, seleccionen `Create` y luego `Database`:
+
+![](https://i.imgur.com/Mq3kRCc.png)
+
+Denle el nombre `northwind_new`.
+
+Abran un SQL Editor 
+
 Cómo podemos extraer todos los emails válidos de la tabla
 
 
