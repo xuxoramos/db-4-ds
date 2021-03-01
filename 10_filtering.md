@@ -101,11 +101,16 @@ va a listar todos los nombres de películas que comiencen con A y cuya 2a letra 
 
 Esto se usa con campos `varchar` y forzosamente con la cláusula `like`. Aquí tenemos 2 formas de hacer este match:
 
-- **`like %OLI%`**: matching de cualesquiera N caracteres. Esto va a matchear _POLICIA_, _HOLI_, _POLITICA_ (así sin acento), _COLITA_, etc. Es **case sensitive** y **tilde sensitive**.
-- **`like POL_TIC_`**: matching de 1 solo cualquier caracter. Esto va matchear _POLITICA_, _POLÍTICA_, _POLÍTICO_, _POLATICA_ (whatever that means), etc.
+- **`like '%OLI%'`**: matching de cualesquiera N caracteres, incluyendo whitespace, caracter de inicio de línea (^) y final de línea ($). Esto va a matchear _POLICIA_, _HOLI_, _POLITICA_ (así sin acento), _COLITA_, etc. Es **case sensitive** y **tilde sensitive**.
+- **`like 'POL_TIC_'`**: matching de 1 solo cualquier caracter, incluyendo whitespace, inicio de línea (^) y final de línea ($). Esto va matchear _POLITICA_, _POLÍTICA_, _POLÍTICO_, _POLATICA_ (whatever that means), etc.
 
 Igual podemos combinarlos:
 
-- **`like POL_TI%`**: esto va a matchear _POLÍTICA_, _POLITIQUERÍA_, _POLOTITLÁN_. 
+- **`like 'POL_TI%'`**: esto va a matchear _POLÍTICA_, _POLITIQUERÍA_, _POLOTITLÁN_, etc.
+- **`like '%PUEST_'`**: esto va a matchear _IMPUESTO_, _COMPUESTA_, _APUESTO_, _INTERPUESTA_, etc.
+
+## Ejercicio
+
+Cómo podemos extraer todos los emails válidos de la tabla
 
 
