@@ -109,22 +109,18 @@ Igual podemos combinarlos:
 - **`like 'POL_TI%'`**: esto va a matchear _POLÍTICA_, _POLITIQUERÍA_, _POLOTITLÁN_, etc.
 - **`like '%PUEST_'`**: esto va a matchear _IMPUESTO_, _COMPUESTA_, _APUESTO_, _INTERPUESTA_, etc.
 
-## Ejercicio
+## Ejercicios:
 
-Para este ejercicio necesitaremos una versión nueva de la BD Northwind.
+Usando la BD de Sakila:
 
-La pueden encontrar [aquí](https://github.com/xuxoramos/db-4-ds/blob/gh-pages/northwind/northwind_new_2021-03-01.sql)
+1. Cuales pagos no son del cliente con ID 5, y cuyo monto sea mayor a 8 o cuya fecha sea 23 de Agosto de 2005?
+2. Cuales pagos son del cliente con ID 5 y cuyo monto no sea mayor a 6 y su fecha tampoco sea del 19 de Junio de 2005?
+3. Cuales pagos tienen el monto 1.98, 7.98 o 9.98?
+4. Cuales la suma total pagada por los clientes que tienen una letra A en la segunda posición de su apellido y una W en cualquier lugar después de la A?
 
-Como tiene los mismos nombres que la Northwind original, no podemos instalarla en el mismo esquema `northwind` porque resulta que no puede haber 2 tablas con el mismo nombre en la misma BD, y como estamos conectados a la BD `postgres`, no importa cuantos esquemas tengamos, los nombres de los objetos (tablas, vistas, índices, constraints, secuencias, etc) no pueden repetirse.
+## Tarea
 
-Debemos crear otra BD. En DBeaver den click derecho a la BD `postgres`, seleccionen `Create` y luego `Database`:
+Construyan un query que regrese emails inválidos con la siguiente tabla:
 
-![](https://i.imgur.com/Mq3kRCc.png)
-
-Denle el nombre `northwind_new`.
-
-Abran un SQL Editor 
-
-Cómo podemos extraer todos los emails válidos de la tabla
 
 
