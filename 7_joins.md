@@ -218,6 +218,10 @@ Como vimos arriba, podemos hacer joins entre tablas que estructuralmente no teng
 
 No he encontrado tablas o relaciones que me permitan ilustrar el anti-join en la BD de Northwind, así que de momento esta parte tendrá que quedarse en lo teórico.
 
+## Infalible explicación visual
+
+![](https://dataschool.com/assets/images/how-to-teach-people-sql/sqlJoins/sqlJoins_7.png)
+
 ## Ejercicios de la clase pasada
 
 5. Qué ordenes van a Bélgica o Francia?
