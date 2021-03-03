@@ -34,3 +34,46 @@ Hay algunas funciones que nos permiten calcular correlaciones, covarianzas, prom
 
 ![](https://miro.medium.com/max/1644/0*Z4rGZFc-KBPVItZi.png)
 
+## Anatomía de un `group by`
+```
+select columna1, columna2, función_agregación(columna3)
+from tabla
+group by columna1, columna2
+```
+Como podemos ver, es requisito incluir las columnas por las que agrupamos con `group by` y ponerlas de nuevo en el `select`.
+
+Veamos el siguiente ejemplo:
+
+```
+``` 
+
+
+de lo contrario nos vamos a encontrar con el error que ya es tradición en este HHH grupo:
+
+
+
+
+### Orden de ejecución de las sentencias SQL
+
+Para entender el error anterior, debemos conocer el orden de ejecución de los comandos SQL.
+
+PostgreSQL (y realmente la mayoría de los RDBMS) evalúa las cláusulas `group by` después del `from` y el `where`, pero antes del `having`, `select`, `distinct`, `order by` y `limit`.
+
+![](https://sp.postgresqltutorial.com/wp-content/uploads/2020/07/PostgreSQL-GROUP-BY-1.png)
+
+## Ejercicios con 1 solo grupo
+
+## Agrupación con múltiples columnas
+
+A diferencia del agrupado por 1 columna, el agrupado por más de 1 columna nos permite armar múltiples grupos.
+
+Tomemos por ejemplo un agrupado de `orders` VS 
+
+```
+select c.company_name as customer, s.company_name as shipper, avg(o.freight) as flete
+from orders o join shippers s on (o.ship_via = s.shipper_id) 
+join order_details od on (od.order_id = o.order_id) 
+join customers c on (c.customer_id = o.customer_id)
+group by c.company_name, s.company_name  
+```
+
