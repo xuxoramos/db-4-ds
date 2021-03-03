@@ -155,12 +155,8 @@ Todas las funciones de agregación **se reinicializan** al comenzar a actuar sob
 
 ### Ejercicios:
 1. Cuál es el promedio de flete gastado para enviar productos de un proveedor a un cliente?
-2. 
-```
-select c.company_name as customer, s.company_name as shipper, avg(o.freight) as flete
-from orders o join shippers s on (o.ship_via = s.shipper_id) 
-join order_details od on (od.order_id = o.order_id) 
-join customers c on (c.customer_id = o.customer_id)
-group by c.company_name, s.company_name  
-```
+2. Cuál es nuestra balanza comercial por país?
+
+## Próxima clase
+Agrupaciones II
 
