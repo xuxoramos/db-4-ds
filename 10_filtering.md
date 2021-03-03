@@ -48,10 +48,10 @@ La base del `where` es la combinación de expresiones conectadas por operadores 
 | where not (TRUE or FALSE) and TRUE   | FALSE     |
 | where not (FALSE or TRUE) and TRUE   | FALSE     |
 | where not (FALSE or FALSE) and TRUE  | TRUE      |
-| where not (TRUE or TRUE) or FALSE   | TRUE      |
-| where not (TRUE or FALSE) or FALSE  | TRUE      |
-| where not (FALSE or TRUE) or FALSE  | TRUE      |
-| where not (FALSE or FALSE) or FALSE | TRUE      |
+| where not (TRUE or TRUE) or FALSE   | FALSE      |
+| where not (TRUE or FALSE) or FALSE  | FALSE      |
+| where not (FALSE or TRUE) or FALSE  | FALSE      |
+| where not (FALSE or FALSE) or FALSE | FALSE      |
 
 ### Representaciones visuales de operadores lógicos (pa que quede claro)
 
