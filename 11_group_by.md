@@ -114,14 +114,48 @@ Usando la base de datos Northwind, ayúdenme a obtener:
 1. El flete promedio que enviamos por cada shipping company.
 2. La correlación entre el monto pagado por un producto en una orden y el descuento aplicado.
 3. Si algún producto de cada categoría está descontinuado.
-4. Si hay relación entre el reorder level de un producto y las cantidades promedio de las órdenes de ese mismo producto.
+4. Si hay relación entre el reorder level de un producto y las cantidades promedio de las órdenes de ese mismo producto (este no lo he resuelto).
 
 ## Agrupación con múltiples columnas
 
 A diferencia del agrupado por 1 columna, el agrupado por más de 1 columna nos permite armar múltiples grupos.
 
-Tomemos por ejemplo un agrupado de `orders` VS 
+Retomando el ejemplo de la tabla `superheroes_anios_servicio`
 
+| nombre          | equipo                      | anios_servicio |
+|-----------------|-----------------------------|----------------|
+| Tony Stark      | Avengers                    | 10             |
+| Wanda Maximoff  | Avengers                    | 5              |
+| Wanda Maximoff  | X Men                       | 3              |
+| Erik Lensherr   | Acolytes                    | 10             |
+| Erik Lensherr   | Brotherhood of Evil Mutants | 12             |
+| Natasja Romanov | KGB                         | 8              |
+| Natasja Romanov | Avengers                    | 10             |
+
+Si al query original agregamos el `equipo` como parte de los grupos, entonces ya funcionaría.
+
+La cláusula `group by nombre, equipo` armaría los siguientes grupos, para quien **la función de agregación correrá de forma separada**, por cada uno.
+
+| nombre          | equipo                      | **num de grupo (interno a PostgreSQL)** |
+|-----------------|-----------------------------|-------------------------------------|
+| Tony Stark      | Avengers                    | **1**                                   |
+| Wanda Maximoff  | Avengers                    | **2**                                   |
+| Wanda Maximoff  | X Men                       | **3**                                   |
+| Erik Lensherr   | Acolytes                    | **4**                                   |
+| Erik Lensherr   | Brotherhood of Evil Mutants | **5**                                   |
+| Natasja Romanov | KGB                         | **6**                                   |
+| Natasja Romanov | Avengers                    | **7**                                   |
+
+Todas las funciones de agregación **se reinicializan** al comenzar a actuar sobre un grupo diferente:
+
+1. `sum()` se resetea a 0
+2. `avg()` resetea su numerador a 0, mientras que el denominador se mantiene como `count()` de observaciones del grupo
+3. `count()` se resetea a 0
+4. `bool_and() / bool_or()` se resetean a `null`
+
+### Ejercicios:
+1. Cuál es el promedio de flete gastado para enviar productos de un proveedor a un cliente?
+2. 
 ```
 select c.company_name as customer, s.company_name as shipper, avg(o.freight) as flete
 from orders o join shippers s on (o.ship_via = s.shipper_id) 
