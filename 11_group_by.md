@@ -114,7 +114,7 @@ Usando la base de datos Northwind, ayúdenme a obtener:
 1. El flete promedio que enviamos por cada shipping company.
 2. La correlación entre el monto pagado por un producto en una orden y el descuento aplicado.
 3. Si algún producto de cada categoría está descontinuado.
-4. 
+4. Si hay relación entre el reorder level de un producto y las cantidades promedio de las órdenes de ese mismo producto.
 
 ## Agrupación con múltiples columnas
 
