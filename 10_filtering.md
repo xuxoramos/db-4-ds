@@ -167,6 +167,19 @@ Igual podemos combinarlos:
 - **`like 'POL_TI%'`**: esto va a matchear _POLÍTICA_, _POLITIQUERÍA_, _POLOTITLÁN_, etc.
 - **`like '%PUEST_'`**: esto va a matchear _IMPUESTO_, _COMPUESTA_, _APUESTO_, _INTERPUESTA_, etc.
 
+### Manejando `null`
+
+Expliquémoslo rápido con un meme
+
+![](https://imgur.com/EBFDYfu.png)
+
+Queda claro, no?
+
+`...where rental.return_date = null` **no va a tronar**, pero **tampoco** te va a regresar lo que esperas.
+
+`where rental.return_date is null` o `...is not null` es la forma correcta.
+
+
 #### Nota sobre expresiones regulares
 
 Las expresiones regulares son formas sofisticadas de matching de strings. Es un tema complejo y difícilmente lo usarán en la vida real, así que dejamos como ejercicio al lector que se familiaricen con ellas. **No aparecerán en ninguna evaluación y además probablemente no será necesario usarlas en el proyecto final**.
