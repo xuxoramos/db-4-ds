@@ -19,7 +19,13 @@ Las funciones de agregación más comunes que usarán en clase, en el proyecto f
 
 ## Funciones estadísticas de agregación
 
-Hay algunas funciones que nos permiten calcular correlaciones, covarianzas, promedios y desviaciones estándar, tanto de la población como de la muestra. También existen funciones para hacer regresiones lineales. Están padres y todo, pero para hacer este trabajo de análisis, es mejor utilizar plataformas hechas para eso como el tidyverse de R o Pandas de Python. De todos modos les pongo las más comunes:
+Hay algunas funciones que nos permiten calcular correlaciones, covarianzas, promedios y desviaciones estándar, tanto de la población como de la muestra. También existen funciones para hacer regresiones lineales.
+
+Están padres y todo, pero para hacer este trabajo de análisis, es mejor utilizar plataformas hechas para eso como el tidyverse de R o Pandas de Python.
+
+> **IMPORTANTE:** Es un best-practice el paradigma de que _el análisis debe ser "vecino" de los datos_. Esto significa que el procesamiento y análisis debe, en la medida de lo posible, vivir en la misma infraestructura. Esto de todos modos no es razón para usar SQL para análisis avanzado como regresiones lineales, aún cuando logremos el máximo performance. El tradeoff de ganar _flexibilidad de cambio_, _readability_, _fault tolerance_ y _error control_ VS perder un poco de _performance_ justifica que el análisis se lleve a cabo en la misma infraestructura, pero en diferente plataforma (R, Python, Tableau, etc).
+
+De todos modos les pongo las más comunes:
 
 | función                              | qué hace?                                           |
 |--------------------------------------|-----------------------------------------------------|
@@ -28,40 +34,87 @@ Hay algunas funciones que nos permiten calcular correlaciones, covarianzas, prom
 | var_pop(x, y) / var_samp(x, y)       | varianza de la población / de la muestra            |
 | stddev_pop(x) / stddev_samp(x) | desviación estándar de la población / de la muestra |
 
-**IMPORTANTE:** Todas estas funciones requieren que x y y (osea, las columnas numéricas que pasamos como argumento) sean de tipo `double precision` o convertidas a este tipo antes de ser usadas en las funciones.
+**IMPORTANTE:** Todas estas funciones requieren que x y y (osea, las columnas numéricas que pasamos como argumento) sean de tipo `double precision` o convertidas a este tipo antes de ser usadas en las funciones. Algunos SQL Clients (como DBeaver) trabajan con el driver para ahorrarnos esta conversión.
 
 ## Explicación visual
 
 ![](https://miro.medium.com/max/1644/0*Z4rGZFc-KBPVItZi.png)
 
-## Anatomía de un `group by`
+## Errores comunes en `group by`
+
+### No incluir los campos del `group by` en el `select`
+
+La anatomía del `group by` podemos decir que es:
 ```
 select columna1, columna2, función_agregación(columna3)
 from tabla
 group by columna1, columna2
 ```
-Como podemos ver, es requisito incluir las columnas por las que agrupamos con `group by` y ponerlas de nuevo en el `select`.
+**OJO:** es requisito incluir las columnas por las que agrupamos con `group by` y ponerlas de nuevo en el `select`. De lo contrario obtendremos un error que ya es tradición en este HHH grupo:
 
-Veamos el siguiente ejemplo:
+![](https://i.imgur.com/EYwGbzB.png)
+
+Por qué sucede esto?
+
+Imaginemos la siguiente tabla `superheroes_anios_servicio` y query:
+
+| nombre          | equipo                      | anios_servicio |
+|-----------------|-----------------------------|----------------|
+| Tony Stark      | Avengers                    | 10             |
+| Wanda Maximoff  | Avengers                    | 5              |
+| Wanda Maximoff  | X Men                       | 3              |
+| Erik Lensherr   | Acolytes                    | 10             |
+| Erik Lensherr   | Brotherhood of Evil Mutants | 12             |
+| Natasja Romanov | KGB                         | 8              |
+| Natasja Romanov | Avengers                    | 10             |
 
 ```
+select nombre, equipo, sum(anios_servicio)
+from superheroes_anios_servicio
+group by nombre
 ``` 
 
-
-de lo contrario nos vamos a encontrar con el error que ya es tradición en este HHH grupo:
-
-
-
-
-### Orden de ejecución de las sentencias SQL
+Vamos a obtener el error descrito arriba. Por qué?
 
 Para entender el error anterior, debemos conocer el orden de ejecución de los comandos SQL.
 
-PostgreSQL (y realmente la mayoría de los RDBMS) evalúa las cláusulas `group by` después del `from` y el `where`, pero antes del `having`, `select`, `distinct`, `order by` y `limit`.
+PostgreSQL (y realmente la mayoría de los RDBMS) evalúa las cláusulas en este orden:
 
 ![](https://sp.postgresqltutorial.com/wp-content/uploads/2020/07/PostgreSQL-GROUP-BY-1.png)
 
+Entonces tenemos la siguiente secuencia de ejecución para el query de ejemplo sobre la tabla `superheroes_anios_servicio`:
+
+1. se arma el dataset sobre el cual vamos a correr el query, ya sea tomando 1 sola tabla, o conectándolas con la serie de `joins` que aparezcan en el `from`. En este caso, solo es la tabla `superheroes_anios_servicio`.
+2. se filtran los rows de ese dataset con las condiciones que aparezcan en el `where`. En este caso, no hay `where`.
+3. se toman las columnas del `group by` y se forman los grupos. En este caso, se forma 1 solo grupo con el campo `nombre`.
+4. se filtran los grupos con las condiciones en el `having`. En este caso no hay `having`.
+5. se filtran las columnas que queremos regresar en el query con los argumentos del `select`. En este caso tomamos `nombre`, `equipo` y la sumatoria de `anios_servicio`.
+    - :warning: Aquí es donde truena todo como ejote. El motor de PostgreSQL no sabe qué regresar en el query porque armó un grupo con `nombre`, hizo la sumatoria de `anios_servicio` y además tiene que anexar la columna `equipo`, pero **con qué valor?** Tomemos a Wanda Maximoff. Su renglón resultante de ese query será que tiene 8 años de servicio, pero **con qué equipo?** Avengers? X Men? Ambos?
+
+![](https://i.kym-cdn.com/entries/icons/facebook/000/022/628/Screen_Shot_2017-04-05_at_2.58.07_PM.jpg)
+
+### Usar funciones de agregación en el `where`
+
+En este HHH grupo también hemos tenido errores con este tipo de queries:
+
+`SELECT city FROM weather WHERE temp_lo = max(temp_lo);`
+
+El origen de este error está también en el orden de evaluación del comando `select`. Sigamos esta ejecución:
+
+1. traemos al espacio de ejecución la tabla `weather`.
+2. intentamos filtrar los renglones con la función `max()` en la cláusula `where`.
+    - :warning: aquí es donde sucede el error, porque la función `max` debe seleccionar el máximo de todos los renglones filtrados por el `where`, y por tanto para que esto funcione debe ser evaluado antes que el mismo `where`, lo cual es una violación a las reglas de compilación de SQL. Es un problema de tipo "fue primero el huevo, o la gallina?"
+
+![image](https://user-images.githubusercontent.com/1316464/109833084-97998200-7c06-11eb-94a5-abc237157b05.png)
+
 ## Ejercicios con 1 solo grupo
+
+Usando la base de datos Northwind, ayúdenme a obtener:
+
+1. El flete promedio que enviamos por cada shipping company.
+2. La correlación entre el monto pagado por un producto en una orden y el descuento aplicado.
+3. Si algún producto de cada categoría está descontinuado.
+4. 
 
 ## Agrupación con múltiples columnas
 
