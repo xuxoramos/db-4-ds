@@ -177,6 +177,8 @@ numeric|
 10.34  |
 ```
 
+## Continuemos con los ejercicios
+
 4. Qué pasa si repetimos el ejercicio de arriba, pero con la función de agregación `string_agg(x, delim)`?
 ```
 select string_agg(c.category_name, ',')
