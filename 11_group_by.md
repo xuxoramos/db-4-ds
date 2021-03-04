@@ -186,7 +186,7 @@ from products p join categories c using (category_id)
 group by c.category_name
 ```
 6. Si hay relación entre el reorder level de un producto y las cantidades promedio de las órdenes de ese mismo producto (este no lo he resuelto).
-> Este ejercicio tiene poco sentido porque para que la función `corr(x,y)` sea efectiva, debe haber una correspondencia de puntos, y lo que propongo aquí implica que `x` es `products.reorder_level`, lo cual es un solo dato VS las transacciones del mismo producto, que son N datos.
+> :warning: Este ejercicio tiene poco sentido porque para que la función `corr(x,y)` sea efectiva, debe haber una correspondencia de puntos, y lo que propongo aquí implica que `x` es `products.reorder_level`, lo cual es un solo dato VS las transacciones del mismo producto, que son N datos.
 
 ## Agrupación con múltiples columnas
 
