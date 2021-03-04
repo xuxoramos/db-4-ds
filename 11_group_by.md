@@ -112,9 +112,78 @@ El origen de este error está también en el orden de evaluación del comando `s
 Usando la base de datos Northwind, ayúdenme a obtener:
 
 1. El flete promedio que enviamos por cada shipping company.
+```
+select s.company_name , avg(o.freight) 
+from orders o join shippers s on (o.ship_via = s.shipper_id)
+group by s.shipper_id;
+```
 2. La correlación entre el monto pagado por un producto en una orden y el descuento aplicado.
+```
+select od.product_id , corr(od.unit_price * od.quantity, od.discount) 
+from orders o join order_details od using (order_id)
+group by od.product_id
+```
 3. Si algún producto de cada categoría está descontinuado.
-4. Si hay relación entre el reorder level de un producto y las cantidades promedio de las órdenes de ese mismo producto (este no lo he resuelto).
+```
+select c.category_name , bool_or(cast(p.discontinued as boolean))
+from products p join categories c using (category_id)
+group by c.category_name
+```
+
+**Una notita sobre cast()**
+La función `cast(columna as tipo_nuevo)` nos permite convertir _al vuelo_ entre tipos de datos, para uso en algún comando SQL, sin necesariamente modificar estructuralmente el tipo de columna.
+
+Ejemplos:
+```
+> select cast(0 as boolean)
+
+bool |
+-----|
+false|
+
+> select cast(1 as boolean)
+ 
+bool |
+-----|
+true |
+
+> select cast(10 as boolean)
+ 
+bool |
+-----|
+true |
+
+> select cast(99999999999 as boolean)
+ 
+bool |
+-----|
+true |
+
+> select cast('a' as boolean)
+ 
+ERROR: invalid input syntax for type boolean: "a"
+
+> select cast(10.34 as varchar)
+ 
+varchar|
+-------|
+10.34  |
+
+> select cast('10.34' as numeric)
+ 
+numeric|
+-------|
+10.34  |
+```
+
+4. Qué pasa si repetimos el ejercicio de arriba, pero con la función de agregación `string_agg(x, delim)`?
+```
+select string_agg(c.category_name, ',')
+from products p join categories c using (category_id)
+group by c.category_name
+```
+6. Si hay relación entre el reorder level de un producto y las cantidades promedio de las órdenes de ese mismo producto (este no lo he resuelto).
+> Este ejercicio tiene poco sentido porque para que la función `corr(x,y)` sea efectiva, debe haber una correspondencia de puntos, y lo que propongo aquí implica que `x` es `products.reorder_level`, lo cual es un solo dato VS las transacciones del mismo producto, que son N datos.
 
 ## Agrupación con múltiples columnas
 
@@ -155,7 +224,23 @@ Todas las funciones de agregación **se reinicializan** al comenzar a actuar sob
 
 ### Ejercicios:
 1. Cuál es el promedio de flete gastado para enviar productos de un proveedor a un cliente?
+```
+select c.company_name as customer, s.company_name as shipper, avg(o.freight) as flete
+from orders o join shippers s on (o.ship_via = s.shipper_id) 
+join order_details od on (od.order_id = o.order_id) 
+join customers c on (c.customer_id = o.customer_id)
+group by c.company_name, s.company_name;
+```
 2. Cuál es nuestra balanza comercial por país?
+```
+select c.country as pais_cliente, s.country as pais_proveedor, sum(od.quantity * od.unit_price) as balanza
+from order_details od join orders o using (order_id)
+join customers c using (customer_id)
+join products p using (product_id)
+join suppliers s using (supplier_id)
+group by c.country, s.country
+order by balanza;
+```
 
 ## Próxima clase
 Agrupaciones II
