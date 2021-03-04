@@ -130,7 +130,8 @@ from products p join categories c using (category_id)
 group by c.category_name
 ```
 
-**Una notita sobre cast()**
+### Una notita sobre cast()
+
 La función `cast(columna as tipo_nuevo)` nos permite convertir _al vuelo_ entre tipos de datos, para uso en algún comando SQL, sin necesariamente modificar estructuralmente el tipo de columna.
 
 Ejemplos:
