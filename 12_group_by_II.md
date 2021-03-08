@@ -4,6 +4,18 @@
 
 ## Grupos dinámicos con funciones
 
+Como hemos visto, en la cláusula `select` podemos poner no solo columnas, sino también funciones.
+
+Lo que no sabían es que igual podemos poner funciones en el `group by`.
+
+Estas funciones ⚠️**no deben ser de agregación**⚠️, sino de **preprocesamiento** del dato que está en la columna que nos vamos a traer.
+
+Ejemplo:
+
+Cómo podemos agrupar por año-mes las órdenes en `orders` de la BD Northwind?
+
+
+
 ## Agrupando múltiples criterios con `grouping sets`, `rollup` y `cube`
 
 Ya hemos visto el uso de `group by`, con una columna (i.e. `nombre` con la tabla `superheroes_anios_servicio`):
@@ -178,7 +190,17 @@ Esto generará los `grouping set`s removiendo recursivamente una columna de agru
 
 #### Ejercicio:
 
-Cómo podemos obtener el conteo del num de películas por rating que cada actor ha tenido, y generar un subtotal concentrando todos los ratings, y agregar un conteo total?
+De la BD Sakila, cómo podemos obtener el conteo del num de películas por rating que cada actor ha tenido, y generar un subtotal concentrando todos los ratings, y agregar un conteo total?
+
+<details>
+  <summary>No se vale ver!</summary>
+  
+  ## Heading
+  1. A numbered
+  2. list
+     * With some
+     * Sub bullets
+</details>
 
 ### Condensando `grouping set` con `cube`
 
