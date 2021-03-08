@@ -261,7 +261,6 @@ group by
 	grouping sets (
 		(brand, segment)
 		(brand),
-		(segment),
 		()
 	)
 ```
