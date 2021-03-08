@@ -35,7 +35,7 @@ join (
 	select c.company_name, max(o.order_date) as max_order_date
 	from orders o join customers c on o.customer_id = c.customer_id
 	group by c.company_name 
-) t on o.order_date = t.max_date and c.company_name = t.company_name
+) t on o.order_date = t.max_order_date and c.company_name = t.company_name
 ```
 
 En este ejercicio, hacemos join entre una tabla existente y una _tabla dinámica_ creada al vuelo con un _subselect_ que llamaremos `t`. Lo que estamos haciendo es lo siguiente:
