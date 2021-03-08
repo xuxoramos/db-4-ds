@@ -236,7 +236,7 @@ group by c.company_name, s.company_name;
 ```
 2. Cuál es nuestra balanza comercial por país?
 ```
-select c.country as pais_cliente, s.country as pais_proveedor, sum(od.quantity * od.unit_price) as balanza
+select s.country as pais_proveedor, c.country as pais_cliente, sum(od.quantity * od.unit_price) as balanza
 from order_details od join orders o using (order_id)
 join customers c using (customer_id)
 join products p using (product_id)
