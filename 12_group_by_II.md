@@ -12,9 +12,23 @@ Estas funciones ⚠️**no deben ser de agregación**⚠️, sino de **preproces
 
 Ejemplo:
 
-Cómo podemos agrupar por año-mes las órdenes en `orders` de la BD Northwind?
+Cómo podemos agrupar por quarter las órdenes en `orders` de la BD Northwind?
 
+```
+select c.company_name  , extract(quarter from o.order_date) as q_year, avg(o.freight)
+from orders o join customers c using (customer_id)
+group by c.company_name , q_year
+```
 
+En este `select`, q_year es el alias de una columna que está dada por función para procesamiento de campos `date` o `timestamp`.
+
+La función `extract(`_parte_` from `_campo_de_fecha_`)` obtiene una parte del dato de un campo de fecha. En este caso, `quarter` representa el trimestre del año. 
+
+El resultado es:
+
+![](https://i.imgur.com/qY8f1Ex.png)
+
+Este query agrupa por trimestre del año, así  concentra todos los trimestres de todos los años, lo cual es una excelente manera de condensar información en una ventana definida a lo largo de un período
 
 ## Agrupando múltiples criterios con `grouping sets`, `rollup` y `cube`
 
@@ -198,7 +212,7 @@ De la BD Sakila, cómo podemos obtener el conteo del num de películas por ratin
 	select concat(a.first_name,' ', a.last_name) as full_name, f.rating , count(a.actor_id) 
 	from film_actor fa join film f using (film_id)
 	join actor a using (actor_id)
-	group by cube (full_name, f.rating)
+	group by rollup (full_name, f.rating)
 	order by 1,2;
   </code></pre>
 </details>
