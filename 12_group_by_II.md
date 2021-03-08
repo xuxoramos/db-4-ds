@@ -129,6 +129,76 @@ Si **grouping_brand = 0** entonces el registro **si pertenece**
 
 Confuso. Qué clase de monstruo hizo esta función? Cómo mejoramos legibilidad?
 
+```
+select
+	not cast(grouping(brand) as boolean) agrupando_con_brand,
+	not cast(grouping(segment) as boolean) agrupando_con_segment,
+	brand,
+	segment,
+	sum (quantity)
+from
+	sales
+group by
+	grouping sets (
+		(brand),
+		(segment),
+		()
+	)
+order by
+	brand,
+	segment;
+```
+Verboso, pero mejor, no?
 
+### Condensando `grouping set` con `rollup`
 
-Es por eso que no vamos usar `grouping set` **nunca**, y en lugar de ello vamos a usar `cube` y `rollup`
+En lugar de 
+
+```
+...
+...
+group by
+	grouping sets (
+		(brand, segment)
+		(brand),
+		(segment),
+		()
+	)
+```
+
+Podemos usar
+
+```
+select brand, segment, sum(quantity)
+from sales
+group by rollup (brand, segment);
+```
+
+Esto generará los `grouping set`s removiendo recursivamente una columna de agrupamiento.
+
+#### Ejercicio:
+
+Cómo podemos obtener el conteo del num de películas por rating que cada actor ha tenido, y generar un subtotal concentrando todos los ratings, y agregar un conteo total?
+
+### Condensando `grouping set` con `cube`
+
+Igual que `rollup`, pero en lugar de recursivamente reducir la lista de columnas hasta llegar a grupos individuales, lo hace para todas las combinaciones posibles, de modo que una cláusula como esta:
+
+```
+...
+...
+group by cube (a,b,c)
+```
+
+Es igual a este:
+
+```
+...
+...
+group by grouping sets (
+   (a,b,c),
+   (a,b  ).
+   (a,  c)
+   
+)
+```
