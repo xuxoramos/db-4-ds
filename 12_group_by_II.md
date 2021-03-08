@@ -2,6 +2,77 @@
 
 ## La cláusula `distinct`
 
+Ya ustedes han usado la cláusula `distinct` en el `select` para eliminar repetidos. Su resultado es **parecido** al que obtenemos con `group by` (obviamente sin hacer grupos). Vamos a verla más a detalle, para lo cual crearemos la siguiente tabla:
+
+```
+CREATE TABLE distinct_demo (
+	id serial NOT NULL PRIMARY KEY,
+	bcolor VARCHAR,
+	fcolor VARCHAR
+);
+INSERT INTO distinct_demo (bcolor, fcolor)
+VALUES
+	('red', 'red'),
+	('red', 'red'),
+	('red', NULL),
+	(NULL, 'red'),
+	('red', 'green'),
+	('red', 'blue'),
+	('green', 'red'),
+	('green', 'blue'),
+	('green', 'green'),
+	('blue', 'red'),
+	('blue', 'green'),
+	('blue', 'blue');
+```
+
+### `distinct` con una columna
+
+`select distinct bcolor from distinct_demo order by bcolor;`
+
+Esto regresa `red`, `green`, `blue`, y `null`.
+
+De nuevo, **estos no son grupos**, porque recordemos que lo que va en la cláusula `select` es solo lo que vamos a _presentar_ hacia afuera, no a la estructura de nuestro query.
+
+### `distinct` con varias columnas
+
+`select distinct bcolor, fcolor from distinct_demo order by bcolor, fcolor;`
+
+Esto va a tomar cada **par único** de `bcolor` y `fcolor` como una observación.
+
+### `distinct on`
+`select distinct on (bcolor) as bcolor, fcolor from distinct_demo order by bcolor, fcolor;`
+
+Esta forma del `distinct` primero desduplica una columna, y luego **selecciona el 1er registro** correspondiente de la 2a columna.
+
+El resultado es el siguiente:
+
+![](https://sp.postgresqltutorial.com/wp-content/uploads/2020/07/PostgreSQL-Distinct-select-distinct-on.png)
+
+Como podemos ver, en lugar de desduplicar ambas columnas `bcolor` y `fcolor` al mismo tiempo, haciendo **cada par único**, `distinct on` primero desduplica la columna `bcolor` como si hubiera sido obtenida con `distinct` normal, pero para la 2a columna `fcolor`, en lugar de desduplicar, **selecciona el 1er registro que se encuentre** que corresponda a la columna previamente desduplicada.
+
+Recuerdan el siguiente ejercicio que solicitaba **cuál es la orden más reciente por cliente?** Recuerdan que la respuesta implicaba un subselect?
+
+```
+select o.order_id , o.order_date, c.company_name
+from orders o join customers c on o.customer_id = c.customer_id 
+join (
+	select c.company_name, max(o.order_date) as max_order_date
+	from orders o join customers c on o.customer_id = c.customer_id
+	group by c.company_name 
+) t on o.order_date = t.max_order_date and c.company_name = t.company_name
+```
+
+Pues resulta que con `distinct on` podemos simplificar muchísimo el query:
+
+```
+select distinct on (o.order_date) o.order_date , c.company_name 
+from orders o join customers c using (customer_id)
+order by o.order_date desc;
+```
+
+![](https://media.tenor.com/images/2625369b0af26548818660d7590ac4b3/tenor.png)
+
 ## Grupos dinámicos con funciones
 
 Como hemos visto, en la cláusula `select` podemos poner no solo columnas, sino también funciones.
@@ -28,7 +99,9 @@ El resultado es:
 
 ![](https://i.imgur.com/qY8f1Ex.png)
 
-Este query agrupa por trimestre del año, así  concentra todos los trimestres de todos los años, lo cual es una excelente manera de condensar información en una ventana definida a lo largo de un período
+Este query agrupa por trimestre del año, concentrando el mismo para todos los años, lo cual es una excelente manera de condensar información en una ventana definida a lo largo de un período.
+
+Dedicaremos 2 sesiones enteras de este parcial a ver diferentes funciones de texto, fechas, aritméticas, estadísticas y combinatorias. Todas ellas se pueden usar tanto en `select` como en `group by`.
 
 ## Agrupando múltiples criterios con `grouping sets`, `rollup` y `cube`
 
@@ -219,7 +292,7 @@ De la BD Sakila, cómo podemos obtener el conteo del num de películas por ratin
 
 ### Condensando `grouping set` con `cube`
 
-Igual que `rollup`, pero en lugar de recursivamente reducir la lista de columnas hasta llegar a grupos individuales, lo hace para todas las combinaciones posibles, de modo que una cláusula como esta:
+Igual que `rollup`, pero en lugar de recursivamente reducir la lista de columnas hasta llegar a columnas individuales, y luego a nulo, lo hace para todas las combinaciones posibles, de modo que una cláusula como esta:
 
 ```
 ...
@@ -234,8 +307,27 @@ Es igual a este:
 ...
 group by grouping sets (
    (a,b,c),
-   (a,b  ).
-   (a,  c)
-   
+   (a,b  ),
+   (a,  c),
+   (  b,c),
+   (a    ),
+   (  b  ),
+   (    c),
+   (     )
 )
 ```
+De este modo, cube nos da el producto cruz de los grouping sets que elijamos.
+
+Revisitemos el ejemplo del conteo de películas, pero ahora con `cube`:
+
+<details>
+  <summary>No se vale ver!</summary>
+  <pre><code>
+	select concat(a.first_name,' ', a.last_name) as full_name, f.rating , count(a.actor_id) 
+	from film_actor fa join film f using (film_id)
+	join actor a using (actor_id)
+	group by cube (full_name, f.rating)
+	order by 1,2;
+  </code></pre>
+</details>
+
