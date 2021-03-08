@@ -71,6 +71,8 @@ from orders o join customers c using (customer_id)
 order by o.order_date desc;
 ```
 
+⚠️ Este ejemplo debe ser revisado⚠️
+
 ![](https://media.tenor.com/images/2625369b0af26548818660d7590ac4b3/tenor.png)
 
 ## Grupos dinámicos con funciones
