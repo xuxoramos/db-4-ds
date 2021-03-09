@@ -275,6 +275,34 @@ group by rollup (brand, segment);
 
 Esto generará los `grouping set`s removiendo recursivamente una columna de agrupamiento.
 
+Esto es útil cuando tenemos grupos categóricos jerárquicos. Consideremos la siguiente tabla `ventas`:
+
+| monto | localidad | municipio | estado | region |
+|-|-|-|-|-|
+| 10 | Sapioriz | El Oro | Durango | Centro-Norte |
+| 100 | Valles Altos | Zapotlanejo | Jalisco | Bajío |
+| 200 | Altata | Ahome | Sinaloa | Noroeste |
+
+Tendría muchísimo sentido si lanzáramos un query de la siguiente forma para acumular **jerárquicamente**, los montos por diferentes niveles de agrupación geográfica.
+
+```
+select sum(monto) from ventas
+group by rollup(region, estado, municipio, localidad);
+```
+
+Porque lo que hará PostgreSQL va a hacer lo siguiente:
+```
+...
+group by grouping sets (
+	(region, estado, municipio, localidad),
+	(region, estado, municipio),
+	(region, estado),
+	(region),
+	()
+```
+Y dado que en la jerarquía, `region` > `estado` > `municipio` > `localidad`, entonces los niveles de agregación tienen sentido para el problem domain.
+	
+
 #### Ejercicio:
 
 De la BD Sakila, cómo podemos obtener el conteo del num de películas por rating que cada actor ha tenido, y generar un subtotal concentrando todos los ratings, y agregar un conteo total?
@@ -292,7 +320,7 @@ De la BD Sakila, cómo podemos obtener el conteo del num de películas por ratin
 
 ### Condensando `grouping set` con `cube`
 
-Igual que `rollup`, pero en lugar de recursivamente reducir la lista de columnas hasta llegar a columnas individuales, y luego a nulo, lo hace para todas las combinaciones posibles, de modo que una cláusula como esta:
+Igual que `rollup`, pero en lugar de recursivamente reducir la lista de columnas hasta llegar a una columna individual y luego a nulo, lo hace para todas las combinaciones posibles, de modo que una cláusula como esta:
 
 ```
 ...
@@ -300,7 +328,7 @@ Igual que `rollup`, pero en lugar de recursivamente reducir la lista de columnas
 group by cube (a,b,c)
 ```
 
-Es igual a este:
+Es igual a esta:
 
 ```
 ...
