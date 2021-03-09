@@ -36,6 +36,9 @@ La grabación de la sesión del 15 de Feb: https://itam.zoom.us/rec/share/Y4rtNP
 #### 2021-03-01
 Grabación: https://itam.zoom.us/rec/share/PyaoOvsNXYgjl75_gDtEINJm4jTQhIycaN8KuRj-7nANh91wdP80OBAnKxG9eV17.-w7Q8vBm0hl5Kyy9
 
+#### 2021-03-08
+Grabación: https://itam.zoom.us/rec/share/61A8PU1chzULzSwS045Hq9oKrQi-EbQ2-BOE2clmmIqSdLuYY3wxpAmIjqYTc_U2.Hw3Js_jv7DJGP4MV
+
 
 ### Temario + Fechas = Plan de Materia
 A continuación el temario, fecha por fecha:
@@ -57,7 +60,7 @@ A continuación el temario, fecha por fecha:
 | 12            | 2021/02/24      | Revisión 1er parcial                                                                                                                                                                                          |
 | 13            | 2021/03/01      | [Filtering](https://xuxoramos.github.io/db-4-ds/10_filtering)                                                                                                                                                          |
 | 14            | 2021/03/03      | [Agrupaciones y agregaciones](https://xuxoramos.github.io/db-4-ds/11_group_by)                                                                                                                                                                                  |
-| 15            | 2021/03/08      | Lógica condicional. Case. Exists. Updates condicionales.                                                                                                                                                                                              |
+| 15            | 2021/03/08      | [Agrupaciones y agregaciones II](https://xuxoramos.github.io/db-4-ds/12_group_by_II)                                                                                                                                                                                           |
 | 16            | 2021/03/10      | Lab 2: Queries analíticos complejos.                                                                                                                                                                                                                  |
 | 17            | 2021/03/15      | 2o Parcial                                                                                                                                                                                                                                            |
 | 18            | 2021/03/17      | Asueto                                                                                                                                                                                                                                                |
