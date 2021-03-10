@@ -88,7 +88,7 @@ Sigamos el orden de ejecución de los queries:
 8. ordenamos por `customer_id` y luego por `order_date`
 9. no hay `limit`
 
-Esto resulta 
+Esto resulta en un query más rápido (aunque no lo notemos) y de mucho menor footprint sobre los recursos de nuestra máquina.
 
 ![](https://media.tenor.com/images/2625369b0af26548818660d7590ac4b3/tenor.png)
 
@@ -273,7 +273,6 @@ Verboso, pero mejor, no?
 En lugar de 
 
 ```
-...
 ...
 group by
 	grouping sets (
