@@ -72,6 +72,24 @@ from orders o join customers c using (customer_id)
 order by c.customer_id, o.order_date desc;
 ```
 
+**Por qué funciona esto?**
+
+Sigamos el orden de ejecución de los queries:
+
+1. Primero unimos las tablas `orders` y `customers` con `customer_id` como punto de intersección. Esto nos da todos los orders con su customer, los cuales estarán repetidos porque 1 `customers` puede tener N `orders`.
+2. no hay `where`
+3. no hay `group by`
+4. no hay `having`
+5. seleccionamos `customer_id`, `company_name`, `order_date` y `order_id`
+6. aplicamos el `distinct on` al campo `customer_id`: esto significa que desduplicamos el `customer_id` de los campos seleccionados
+   - luego obtenemos el 1er registro de `company_name` que le corresponde al `customer_id` desduplicado, el cual no puede ser otro debido a que un `customer_id` tiene como uno de sus atributos el `company_name`
+   - luego hacemos lo mismo con el `order_date`, y dado que este es un campo de ordenamiento descendente, entonces el primer registro que tomemos va a ser la fecha máxima de la orden que le corresponde a ese `customer_id`.
+   - finalmente, obtenemos el 1er registro de `order_id` que le corresponde al `customer_id` desduplicado, y como estamos ordenando por `order_date` de forma descendente, entonces el 1er registro corresponderá al máximo `order_id`, el cual, coincidentalmente, es el de la fecha máxima. Esto último puede no ser cierto si tenemos gaps entre la numeración de `order_id` o si por alguna razón no se cumple que el `order_id` máximo le corresponda el `order_date` máximo
+8. ordenamos por `customer_id` y luego por `order_date`
+9. no hay `limit`
+
+Esto resulta 
+
 ![](https://media.tenor.com/images/2625369b0af26548818660d7590ac4b3/tenor.png)
 
 ## Grupos dinámicos con funciones
