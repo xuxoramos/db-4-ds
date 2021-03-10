@@ -16,12 +16,53 @@ Pues resulta que no tan vaaaaaasto, no?
 
 ## Ejercicios con la BD Sakila
 
-1. Cuantos actores comparten apellido con al menos otro actor?
-2. De nuestros empleados, cuál es el que más negocio trajo a nuestro store en 2005?
-3. Cuantos películas tienen un ensemble cast (5 o más actores 5⭐)?
-4. Cuál ha sido nuestro cliente más redituable cada año?
-5. Cuales películas cuyo título comiencen con la letra Q o K están en idioma inglés?
-6. Cómo obtenemos todos los nombres y correos de nuestros clientes canadienses para una campaña?
-7. Qué cliente ha rentado más de nuestra sección de adultos?
-8. Qué películas son las más rentadas en todas nuestras stores?
-9. Cuál es nuestro revenue por store?
+### Cuantos actores comparten apellido con al menos otro actor?
+Si queremos solo listar los apellidos repetidos (apellidos que pertenecen a >=2 actores):
+```
+select a.last_name, count(a.actor_id) actores_apellido_repetido 
+from actor a
+group by a.last_name 
+having count(a.actor_id) > 1
+```
+
+Si queremos CONTAR los apellidos repetidos:
+```
+select count(t.last_name) from (
+	select a.last_name, count(a.actor_id) actores_apellido_repetido  from actor a
+	group by a.last_name 
+	having count(a.actor_id) > 1
+	) as t;
+```
+
+Si queremos contar LOS ACTORES con apellidos repetidos:
+```
+select sum(actores_apellido_repetido) from (
+	select a.last_name, count(a.actor_id) actores_apellido_repetido  from actor a
+	group by a.last_name 
+	having count(a.actor_id) > 1
+	) as t;
+```
+### De nuestros empleados, cuál es el que más negocio trajo a nuestro store en 2005?
+```
+```
+### Cuantos películas tienen un ensemble cast (5 o más actores 5⭐)?
+```
+```
+### Cuál ha sido nuestro cliente más redituable cada año?
+```
+```
+### Cuales películas cuyo título comiencen con la letra Q o K están en idioma inglés?
+```
+```
+### Cómo obtenemos todos los nombres y correos de nuestros clientes canadienses para una campaña?
+```
+```
+### Qué cliente ha rentado más de nuestra sección de adultos?
+```
+```
+### Qué películas son las más rentadas en todas nuestras stores?
+```
+```
+### Cuál es nuestro revenue por store?
+```
+```
