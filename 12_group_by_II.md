@@ -330,7 +330,7 @@ De la BD Sakila, cómo podemos obtener el conteo del num de películas por ratin
 	select concat(a.first_name,' ', a.last_name) as full_name, f.rating , count(a.actor_id) 
 	from film_actor fa join film f using (film_id)
 	join actor a using (actor_id)
-	group by rollup (full_name, f.rating)
+	group by rollup (f.rating, full_name)
 	order by 1,2;
   </code></pre>
 </details>
