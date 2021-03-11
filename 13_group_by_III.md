@@ -122,19 +122,14 @@ Por qué esto funciona aunque esté mal⚠️? Sigamos la secuencia de ejecució
 4. **`having`**: recordemos que `having` filtra grupos, pero como nuestros grupos son **renglones individuales**, entonces actúa como si fuera un `where`.
 5. Y por eso el resultado es idéntico.
 
-### 6. Cómo obtenemos todos los nombres y correos de nuestros clientes canadienses para una campaña?
-```
-TBD
-```
-### 7. Qué cliente ha rentado más de nuestra sección de adultos?
-```
-TBD
-```
-### 8. Qué películas son las más rentadas en todas nuestras stores?
-```
-TBD
-```
-### 9. Cuál es nuestro revenue por store?
-```
-TBD
-```
+## Tarea
+
+Usando la BD de Sakila, y en un script de SQL separado, y **en su propio repo de Github**, escribir los queries necesarios y suficientes para dar respuesta a las siguientes preguntas:
+
+1. Cómo obtenemos todos los nombres y correos de nuestros clientes canadienses para una campaña?
+2. Qué cliente ha rentado más de nuestra sección de adultos?
+3. Qué películas son las más rentadas en todas nuestras stores?
+4. Cuál es nuestro revenue por store?
+
+**Timestamp límite de entrega:** Lunes 15 de Marzo, a las 23:59:59
+**Valor:** 0.5 puntos sobre el final
