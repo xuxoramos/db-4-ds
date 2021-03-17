@@ -113,6 +113,149 @@ Estos operadores arrojan resultados similares al operador `or` encadenado, de fo
 
 `...where payment.amount > any (7.99, 8.99, 9.99)` **es igual a** `...where payment.amount > 7.99 or payment.amount > 8.99 or payment.amount > 9.99`
 
+### Ejercicio:
+
+Cómo podemos obtener los clientes cuyo gasto con nosotros supera el revenue concentrado aportado por Bolivia, Paraguay y Chile?
+
+## Resumen
+
+`<> any` **es igual a** `x <> a or x <> b or x <> c`
+
+`= any` **es igual a** `x in (a, b, c)` **que es igual a** `x = a or x = b or x = c`
+
+`<> all` **es igual a** `x not in (a, b, c)` **que es igual a** `x <> a and x <> b and x <> c`
+
+`= all` **es igual a** `x = a and x = b and x = c`, lo cual no tiene mucho sentido, y aunque el query no tronará, no va a regresar nada
+
+## Queries correlacionados
+
+Hasta ahorita hemos visto subqueries que pueden existir independientes de su query externo, como este ejemplo de los ejercicios que hemos hecho:
+
+```
+select o.order_id , o.order_date, c.company_name
+from orders o join customers c on o.customer_id = c.customer_id 
+join (
+	select c.company_name, max(o.order_date) as max_order_date
+	from orders o join customers c on o.customer_id = c.customer_id
+	group by c.company_name 
+) t on o.order_date = t.max_order_date and c.company_name = t.company_name
+```
+
+Como podemos ver, el subquery interno es independiente del query externo, y puede ejecutarse totalmente aparte, sin necesidad de que ese subquery **necesite** información del query externo que lo engloba. En este caso, el subquery interno está actuando como tabla, y veremos como, dependiendo donde lo pongamos, podemos tener subqueries que actúan **como tabla, como lista, como condición en el where, etc**.
+
+Pero qué sucede con un query como este?
+
+```
+select c.first_name, c.last_name
+from customer c
+where exists (
+	select 1 from payment p 
+	where p.amount > 11
+	and p.customer_id = c.customer_id
+	)
+order by c.first_name, c.last_name;
+```
+
+Si nos fijamos en la parte de **`and p.customer_id = c.customer_id`**, observarán que en el `from` no estamos haciendo join con `customer`, y parece que estamos haciendo un join a la antigüita, pero más bien estamos conectando el subquery con el mismo resultset del query externo, es decir, **no son independientes**. Este es un **query correlacionado**.
+
+> **IMPORTANTE:** Mientras que en los queries independientes el subquery se ejecuta **solo 1 vez**, en los queries correlacionados se ejecuta **1 vez por cada registro del query externo**, y es por eso que debemos tener cuidado con su performance, porque podemos quedarnos ahí la vida o acabarnos los recursos de la máquina.
+
+### El operador `exists`
+
+Para qué sirven los queries correlacionados? Entre otras cosas, para checar existencia de una relación.
+
+Con los operadores de igualdad `=`, `<>`, `<` y `>`, y los operadores lógicos `in`, `not`, `or`, `and`, tratamos de hacer match de un dato a otro o una lista de otros. El operador `exists` permite obtener solamente si una relación **existe**, sea con 1 renglón, o con N. El operador exists pregunta la existencia de 1 o más rows en un subquery. El resultado de un subquery que está como argumento de un `exists` no recae sobre lo que va en el `select`, sino en los renglones que regresa, por lo que lo importante es todo lo demás.
+
+Por ejemplo, el siguiente query encuentra a todos los clientes que rentaron al menos 1 peli previo al 25 de Mayo de 2005, sin importar cuántas rentas haya tenido:
+
+```
+select c.first_name, c.last_name
+from customer c
+where exists (
+	select 1 from rental r
+	where r.rental_date < '2005-05-25'
+	and r.customer_id = c.customer_id 
+	);
+```
+
+El subquery con el statement `select 1` es solo para que regrese algún dato. Es de uso estándar cuando solo te interesa los renglones que se regresan, y no su contenido.
+
+Ejemplo: Cuales de nuestros clientes han tenido un pago de más de 11?
+
+```
+select c.first_name, c.last_name
+from customer c
+where exists (
+	select 1 from payment p
+	where p.amount > 11
+	and p.customer_id = r.customer_id
+	)
+order by c.first_name, c.last_name;
+```
+
+Al igual que el `in`, el `exists` también puede estar sujeto al operador `not`, para de este modo obtener los clientes que han tenido al menos 1 pago menor o igual a 11.
+
+```
+select c.first_name, c.last_name
+from customer c
+where not exists (
+	select 1 from payment p
+	where p.amount > 11
+	and p.customer_id = r.customer_id
+	)
+order by c.first_name, c.last_name;
+```
+
+### OJO CON EL NULL
+
+Si vamos a usar `exists` debemos tener mucho cuidado de que nuestro subquery **no regrese `null`**, porque en SQL, `exists null` es `TRUE`, y esto puede ponerle en la torre a nuestros resultados. Por ejemplo:
+
+```
+select c.first_name, c.last_name
+from customer c
+where exists (select null)
+order by c.first_name, c.last_name
+```
+
+Esto regresa los 599 clientes totales que tenemos.
+
+![](https://i.imgur.com/zg9QbLF.png)
+
+## Dónde podemos usar subqueries?
+
+Los subqueries son una herramienta poderosa, pero como es difícil usarla bien, y por eso la recomendación general es evitar su uso de ser posible. Tampoco hay que considerarla como tabú, y si no hay de otra y ya se les acabaron las opciones, que no les tiemble la mano para usarlos.
+
+### Como tabla
+
+- `select a, b, c from SUBQUERY`
+- `select a, b, c, from X join SUBQUERY using (id)`
+
+### Para formar nuevos datos
+
+Supongamos que queremos dividir nuestros clientes por el revenue que nos aportan para una campaña.
+
+Primero crearemos la tabla con los segmentos:
+
+```
+select 'pecesillo' segmento, 0 limite_inferior, 74.99 limite_superior
+union all
+select 'dos dos' segmento, 75 limite_inferior, 149.99 limite_superior
+union all
+select 'gran pez' segmento, 150 limite_inferior, 9999999.99 limite_superior;
+```
+
+Como podemos ver, esto es una tabla que creamos al vuelo y no existe estructuralmente en la BD, pero para efectos de ponerlo como un subquery, es perfectamente válido. Ahora vamos a pegar esta tabla que creamos al vuelo con nuestros clientes para calificarlos:
+
+```
+select segmentos.name, count(*) num_customers
+from
+(select p.customer_id, count(*) num_rentals, sum(p.amount) tot_payments
+from payment p
+group by p.customer_id) payments join 
+() using (
 
 
+## Próxima clase
+
+_Common table expressions_ para usar subqueries sin (algunos) penalties en performance.
 
