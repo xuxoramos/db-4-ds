@@ -230,6 +230,16 @@ Los subqueries son una herramienta poderosa, pero como es difícil usarla bien, 
 - `select a, b, c from SUBQUERY`
 - `select a, b, c, from X join SUBQUERY using (id)`
 
+### Como filtro de rows
+
+- `select a,b,c from X where X.a in (SUBQUERY)`
+- `select a,b,c from X where X.b = (SUBQUERY)`
+
+### Como filtro de gupos
+
+- `select a,b,c from X group by X.a having X.a > (SUBQUERY)`
+- `select a,b,c from X group by X.a having X.a = (SUBQUERY)`
+
 ### Para formar nuevos datos
 
 Supongamos que queremos dividir nuestros clientes por el revenue que nos aportan para una campaña.
@@ -247,13 +257,19 @@ select 'gran pez' segmento, 150 limite_inferior, 9999999.99 limite_superior;
 Como podemos ver, esto es una tabla que creamos al vuelo y no existe estructuralmente en la BD, pero para efectos de ponerlo como un subquery, es perfectamente válido. Ahora vamos a pegar esta tabla que creamos al vuelo con nuestros clientes para calificarlos:
 
 ```
-select segmentos.name, count(*) num_customers
+select segmentos.segmento, count(*) num_customers
 from
 (select p.customer_id, count(*) num_rentals, sum(p.amount) tot_payments
 from payment p
-group by p.customer_id) payments join 
-() using (
-
+group by p.customer_id) as payments join 
+(select 'pecesillo' segmento, 0 limite_inferior, 74.99 limite_superior
+union all
+select 'dos dos' segmento, 75 limite_inferior, 149.99 limite_superior
+union all
+select 'gran pez' segmento, 150 limite_inferior, 9999999.99 limite_superior) as segmentos
+on (payments.tot_payments between segmentos.limite_inferior and segmentos.limite_superior)
+group by segmentos.segmento;
+```
 
 ## Próxima clase
 
