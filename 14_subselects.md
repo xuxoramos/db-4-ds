@@ -336,6 +336,20 @@ Esto regresa los 599 clientes totales que tenemos.
 
 Qué actor/actriz nunca han aparecido en una película con rating para adultos?
 
+<details>
+  <summary>No se vale ver!</summary>
+  <pre><code>
+select actor.actor_id, actor.first_name, actor.last_name
+from actor
+where not exists
+    (select 1
+    from film, film_actor
+    where actor.actor_id = film_actor.actor_id
+        and film_actor.film_id = film.film_id
+        and film.rating = 'NC-17');
+  </code></pre>
+</details>
+
 ## Todos los lugares donde podemos usar subqueries
 
 Los subqueries son una herramienta poderosa, pero como es difícil usarla bien, y por eso la recomendación general es evitar su uso de ser posible. Tampoco hay que considerarla como tabú, y si no hay de otra y ya se les acabaron las opciones, que no les tiemble la mano para usarlos.
