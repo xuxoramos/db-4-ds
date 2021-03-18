@@ -142,7 +142,7 @@ having count(*) > all ( -- count > reg1 AND count > reg2 AND ...
  );
 ```
 
-![](https://www.pnglib.com/wp-content/uploads/2020/01/versus_5e1705d8d11a9.png)
+![](https://www.pnglib.com/wp-content/uploads/2020/01/versus_5e1705d8d11a9.png | width=100)
 
 ```sql
 --- count > (subquery con order by y limit 1)
@@ -231,7 +231,7 @@ Cómo llegamos a esta respuesta?
 
 Hasta ahorita hemos visto subqueries que pueden existir independientes de su query externo, como este ejemplo de los ejercicios que hemos hecho:
 
-```
+```sql
 select o.order_id , o.order_date, c.company_name
 from orders o join customers c on o.customer_id = c.customer_id 
 join (
@@ -245,7 +245,7 @@ Como podemos ver, el subquery interno es independiente del query externo, y pued
 
 Pero qué sucede con un query como este?
 
-```
+```sql
 select c.first_name, c.last_name
 from customer c
 where exists (
@@ -268,7 +268,7 @@ Con los operadores de igualdad `=`, `<>`, `<` y `>`, y los operadores lógicos `
 
 Por ejemplo, el siguiente query encuentra a todos los clientes que rentaron al menos 1 peli previo al 25 de Mayo de 2005, sin importar cuántas rentas haya tenido:
 
-```
+```sql
 select c.first_name, c.last_name
 from customer c
 where exists (
@@ -282,7 +282,7 @@ El subquery con el statement `select 1` es solo para que regrese algún dato. Es
 
 Ejemplo: Cuales de nuestros clientes han tenido un pago de más de 11?
 
-```
+```sql
 select c.first_name, c.last_name
 from customer c
 where exists (
@@ -295,7 +295,7 @@ order by c.first_name, c.last_name;
 
 Al igual que el `in`, el `exists` también puede estar sujeto al operador `not`, para de este modo obtener los clientes que han tenido al menos 1 pago menor o igual a 11.
 
-```
+```sql
 select c.first_name, c.last_name
 from customer c
 where not exists (
@@ -310,7 +310,7 @@ order by c.first_name, c.last_name;
 
 Si vamos a usar `exists` debemos tener mucho cuidado de que nuestro subquery **no regrese `null`**, porque en SQL, `exists null` es `TRUE`, y esto puede ponerle en la torre a nuestros resultados. Por ejemplo:
 
-```
+```sql
 select c.first_name, c.last_name
 from customer c
 where exists (select null)
@@ -346,7 +346,7 @@ Supongamos que queremos dividir nuestros clientes por el revenue que nos aportan
 
 Primero crearemos la tabla con los segmentos:
 
-```
+```sql
 select 'pecesillo' segmento, 0 limite_inferior, 74.99 limite_superior
 union all
 select 'dos dos' segmento, 75 limite_inferior, 149.99 limite_superior
@@ -356,7 +356,7 @@ select 'gran pez' segmento, 150 limite_inferior, 9999999.99 limite_superior;
 
 Como podemos ver, esto es una tabla que creamos al vuelo y no existe estructuralmente en la BD, pero para efectos de ponerlo como un subquery, es perfectamente válido. Ahora vamos a pegar esta tabla que creamos al vuelo con nuestros clientes para calificarlos:
 
-```
+```sql
 select segmentos.segmento, count(*) num_customers
 from
 (select p.customer_id, count(*) num_rentals, sum(p.amount) tot_payments
