@@ -183,7 +183,7 @@ select (5.573 + 5.944 + 7.938 + 6.116 + 5.293 + 5.512 + 5.414 + 5.586 + 5.453 + 
 
 **OJO:** Estos tiempos se verán afectados por la carga actual de su máquina. Yo en particular tengo esto corriendo, lo cual es suficiente para introducir una cantidad no trivial de ruido en nuestras métricas:
 
-<img src="https://i.imgur.com/8PtKXPK.png" alt="alt text" width="25%" height="25%">
+<img src="https://i.imgur.com/8PtKXPK.png" alt="alt text" width="50%" height="50%">
 
 ## El operador `any`/`some`
 
