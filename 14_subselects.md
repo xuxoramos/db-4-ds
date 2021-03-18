@@ -142,7 +142,7 @@ having count(*) > all ( -- count > reg1 AND count > reg2 AND ...
  );
 ```
 
-<img src="https://www.pnglib.com/wp-content/uploads/2020/01/versus_5e1705d8d11a9.png" alt="alt text" width="50%" height="50%">
+<img src="https://www.pnglib.com/wp-content/uploads/2020/01/versus_5e1705d8d11a9.png" alt="alt text" width="25%" height="25%">
 
 ```sql
 --- count > (subquery con order by y limit 1)
