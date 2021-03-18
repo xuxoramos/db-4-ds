@@ -2,7 +2,7 @@
 
 A lo largo de la clase nuestro uso más común del subselect ha sido para hacer match entre un query externo que obtiene datos, y un query interno que llega al registro del cual necesitamos esos datos, como este ejemplo:
 
-```
+```sql
 select p.amount , concat(c.first_name, ' ', c.last_name) as cliente, concat(s.first_name, ' ', s.last_name) as staff 
 from payment p join customer c using (customer_id)
 join staff s using (staff_id)
@@ -44,13 +44,24 @@ from city ci
 where ci.country_id in (select co.country_id from country co where co.country <> 'India');
 ```
 
+### Por qué no podemos usar joins para este query?
+
+Intentemos escribir un query para obtener los clientes que no tengan registrados pagos por un monto de 0:
+
+```sql
+select distinct c2.first_name, c2.last_name
+from payment p join customer c2 using (customer_id)
+where p.amount > 0;
+```
+
+Dado que aquellos clientes que tienen registrados pagos en 0, también tienen registrados pagos mayores a 0, entonces este query no los elimina de los resultados. Forzosamente requerimos un query que exprese `...where customer_id not in (`_clientes que tienen **al menos 1** pago registrado por un monto de 0_`)`, y esto solo será posible con subqueries.
 
 
  ## La cláusula `all`
  
  Sabemos que la cláusula **`in`** hace una comparación del elemento de la izq VS cada uno de los elementos de la lista de la derecha, parecido a comparaciones con operadores booleanos **`or`** encadenados:
  
- `...where country_id in ('India', 'Pakistan', 'Afghanistan')` **es igual a** `...where country_id = 'India' or country_id = 'Pakistan' or country_id = 'Afghanistan'`
+ 	`...where country_id in ('India', 'Pakistan', 'Afghanistan')` **es igual a** `...where country_id = 'India' or country_id = 'Pakistan' or country_id = 'Afghanistan'`
  
  Sabemos también que el operador **`not`** convierte los **`or`** en **`and`**, y los **`=`** en **`<>`**, de forma que un `not in` es lo mismo que:
  
@@ -58,7 +69,7 @@ where ci.country_id in (select co.country_id from country co where co.country <>
  
  Es cuestión de estilos, pero los queries con `not in` pueden refrasearse como:
  
- ```
+ ```sql
  select c.first_name, c.last_name
  from customer c
  where c.customer_id <> all (
@@ -74,7 +85,7 @@ where ci.country_id in (select co.country_id from country co where co.country <>
 
 Por ejemplo:
 
-```
+```sql
 select c.first_name, c.last_name
  from customer c
  where c.customer_id not in (122, 452, null)
@@ -86,7 +97,7 @@ No va a tronar, pero no va a regresar nada, y claramente no es lo que queremos.
 
 Un uso poco ortodoxo del `all` es ponerlo en el `having`. Veamos el siguiente query:
 
-```
+```sql
 select r.customer_id , count(*)
 from rental r
 group by r.customer_id 
@@ -109,6 +120,71 @@ El resultado es:
 
 Solo tenemos un cliente cuya cantidad de rentas supera a todos nuestros clientes de la zona TMEC, de un país raro que se llama Runion.
 
+#### Qué es más rápido? `count > all (subquery)` o `count > (subquery con order by y limit 1)`
+
+PostgreSQL tiene el comando `explain` y `explain analyze` que genera un árbol de ejecución con costos por cada fase de la evaluación y preparación del query. Es una de las principales herramientas de **profiling**, que es el proceso de medir los recursos computacionales y tiempo que toma preparar, evaluar y ejecutar cualquier comando SQL.
+
+Vamos a ver la interpretación de la salida de `explain` y `explain analyze` más delante, pero por ahora comparemos los siguientes queries:
+
+```sql
+--- count > all (subquery)
+explain analyze select r.customer_id , count(*)
+from rental r
+group by r.customer_id 
+having count(*) > all ( -- count > reg1 AND count > reg2 AND ...
+	select count(*) rentas_totales
+ 	from rental r2 join customer c2 using (customer_id)
+ 	join address a2 using (address_id)
+ 	join city c3 using (city_id)
+ 	join country c4 using (country_id)
+ 	where c4.country in ('United States', 'Mexico', 'Canada')
+ 	group by c2.customer_id
+ );
+```
+
+![](https://www.pnglib.com/wp-content/uploads/2020/01/versus_5e1705d8d11a9.png)
+
+```sql
+--- count > (subquery con order by y limit 1)
+explain analyze select r.customer_id , count(*)
+from rental r
+group by r.customer_id 
+having count(*) > (
+	select count(*) rentas_totales
+ 	from rental r2 join customer c2 using (customer_id)
+ 	join address a2 using (address_id)
+ 	join city c3 using (city_id)
+ 	join country c4 using (country_id)
+ 	where c4.country in ('United States', 'Mexico', 'Canada')
+ 	group by c2.customer_id
+ 	order by rentas_totales desc limit 1
+ );
+```
+
+Cuál es más eficiente? No podemos saberlo con 1 sola ejecución, sino que tenemos que obtener una muestra, y cada ejecución debe ir seguida de una pausa para darle tiempo al sistema operativo de liberar recursos. Levantando una muestra de 10 ejecuciones:
+
+**`count > all (subquery)`**
+```sql
+select (5.500 + 7.537 + 8.936 + 9.018 + 5.961 + 5.832 + 5.913 + 5.816 + 5.755 + 9.557) / 10
+
+?column? |
+---------|
+6.9825000|
+```
+
+**`count > (subquery con order by y limit 1)`**
+```sql
+select (5.573 + 5.944 + 7.938 + 6.116 + 5.293 + 5.512 + 5.414 + 5.586 + 5.453 + 5.555) / 10
+
+?column? |
+---------|
+5.8384000|
+```
+
+**OJO:** Estos tiempos se verán afectados por la carga actual de su máquina. Yo en particular tengo esto corriendo, lo cual es suficiente para introducir una cantidad no trivial de ruido en nuestras métricas:
+
+![](https://i.imgur.com/8PtKXPK.png)
+
 ## El operador `any`/`some`
 
 Estos operadores arrojan resultados similares al operador `or` encadenado, de forma que:
@@ -118,6 +194,28 @@ Estos operadores arrojan resultados similares al operador `or` encadenado, de fo
 ### Ejercicio:
 
 Cómo podemos obtener los clientes cuyo gasto con nosotros supera el revenue concentrado aportado por Bolivia, Paraguay y Chile?
+
+```sql
+select c2.customer_id , sum(p2.amount) as pago_total
+from payment p2 join customer c2 using (customer_id)
+group by c2.customer_id 
+having sum(p2.amount) > any (
+	select sum(p.amount)
+	from payment p join customer c using (customer_id)
+	join address a using (address_id)
+	join city ci using (city_id)
+	join country co using (country_id)
+	where co.country in ('Bolivia', 'Paraguay', 'Chile')
+	group by co.country 
+	);
+```
+
+Cómo llegamos a esta respuesta?
+
+1. Dividimos el problema en 2 subqueries: "el revenue concentrado aportado por Bolivia, Paraguay y Chile" y "obtener los clientes cuyo gasto con nosotros supera".
+2. Escribimos el subquery interno que resuelve el revenue por país para estos 3 paises
+3. Escribimos el query externo: cómo sabemos si la condición va en el `where` o en el `having`? La frase "clientes cuyo gasto con nos" implica un `sum(payment.amount)`, lo que implica un `group by customer_id`, lo que, a su vez, implica un `having sum(payment.amount) >`_revenue de Bolivia, Paraguay y Chile_.
+4. Cómo decidimos si usamos `> any` o `> all`? Al listarse los países en el enunciado "Bolivia, Paraguay y Perú" usan un **y**, y no un **o**. Lamentablemente el `> all` no retorna resultados, lo que significa que no hay ningún cliente que supere en pagos los montos de los 3 paises cada uno.
 
 ## Resumen
 
