@@ -15,7 +15,7 @@ Y aunque hemos dicho que hay que evitarlos, debemos cubrirlos para poder ver des
 
 Consideremos el siguiente query:
 
-```
+```sql
 select ci.city 
 from city ci 
 where ci.country_id = (select co.country_id from country co where co.country = 'India');
@@ -27,7 +27,7 @@ Primero se evalúa el query interior, luego el exterior, lo que significa que pr
 
 Esto es posible porque el subquery **solo regresa 1 registro**. Un subquery usado de esta forma, con una expresión de igualdad `=` debe regresar 1 solo registro. Veamos qué sucede si lo cambiamos para que regrese varios:
 
-```
+```sql
 select ci.city 
 from city ci 
 where ci.country_id = (select co.country_id from country co where co.country <> 'India');
@@ -38,11 +38,13 @@ where ci.country_id = (select co.country_id from country co where co.country <> 
 Sabemos cómo solucionamos esto, no? Con la cláusula **`IN`**.
 
 
-```
+```sql
 select ci.city 
 from city ci 
 where ci.country_id in (select co.country_id from country co where co.country <> 'India');
 ```
+
+
 
  ## La cláusula `all`
  
