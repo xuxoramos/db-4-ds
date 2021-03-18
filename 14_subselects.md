@@ -1,4 +1,4 @@
-# Subselects
+# Subqueries
 
 A lo largo de la clase nuestro uso más común del subselect ha sido para hacer match entre un query externo que obtiene datos, y un query interno que llega al registro del cual necesitamos esos datos, como este ejemplo:
 
@@ -37,7 +37,6 @@ where ci.country_id = (select co.country_id from country co where co.country <> 
 
 Sabemos cómo solucionamos esto, no? Con la cláusula **`IN`**.
 
-
 ```sql
 select ci.city 
 from city ci 
@@ -61,7 +60,7 @@ Dado que aquellos clientes que tienen registrados pagos en 0, también tienen re
  
  Sabemos que la cláusula **`in`** hace una comparación del elemento de la izq VS cada uno de los elementos de la lista de la derecha, parecido a comparaciones con operadores booleanos **`or`** encadenados:
  
- 	`...where country_id in ('India', 'Pakistan', 'Afghanistan')` **es igual a** `...where country_id = 'India' or country_id = 'Pakistan' or country_id = 'Afghanistan'`
+ `...where country_id in ('India', 'Pakistan', 'Afghanistan')` **es igual a** `...where country_id = 'India' or country_id = 'Pakistan' or country_id = 'Afghanistan'`
  
  Sabemos también que el operador **`not`** convierte los **`or`** en **`and`**, y los **`=`** en **`<>`**, de forma que un `not in` es lo mismo que:
  
@@ -246,27 +245,25 @@ Como podemos ver, el subquery interno es independiente del query externo, y pued
 Pero qué sucede con un query como este?
 
 ```sql
-select c.first_name, c.last_name
-from customer c
+select outer_customer.first_name, outer_customer.last_name
+from customer outer_customer
 where exists (
 	select 1 from payment p 
 	where p.amount > 11
-	and p.customer_id = c.customer_id
+	and p.customer_id = outer_customer.customer_id
 	)
-order by c.first_name, c.last_name;
+order by outer_customer.first_name, outer_customer.last_name;
 ```
 
 Si nos fijamos en la parte de **`and p.customer_id = c.customer_id`**, observarán que en el `from` no estamos haciendo join con `customer`, y parece que estamos haciendo un join a la antigüita, pero más bien estamos conectando el subquery con el mismo resultset del query externo, es decir, **no son independientes**. Este es un **query correlacionado**.
 
-> **IMPORTANTE:** Mientras que en los queries independientes el subquery se ejecuta **solo 1 vez**, en los queries correlacionados se ejecuta **1 vez por cada registro del query externo**, y es por eso que debemos tener cuidado con su performance, porque podemos quedarnos ahí la vida o acabarnos los recursos de la máquina.
+> **NOTA SOBRE PERFORMANCE:** Mientras que en los subqueries independientes el subquery se ejecuta **solo 1 vez**, en los queries correlacionados se ejecuta **1 vez por cada registro del query externo**, y es por eso que debemos tener cuidado con su performance, porque podemos quedarnos ahí la vida o acabarnos los recursos de la máquina.
 
-### El operador `exists`
+### El operador `exists` y `not exists`
 
-Para qué sirven los queries correlacionados? Entre otras cosas, para checar existencia de una relación.
+Con los operadores de igualdad `=`, `<>`, `<` y `>`, y los operadores lógicos `in`, `not`, `or`, `and`, tratamos de hacer match de un dato a otro o una lista de otros. El operador `exists` y su recíproco permite obtener solamente si una relación **existe**, sea con 1 renglón, o con N. El operador exists pregunta la existencia de 1 o más rows en un subquery. El resultado de un subquery que está como argumento de un `exists` no recae sobre lo que va en el `select`, sino en los renglones que regresa, por lo que lo importante es todo lo demás.
 
-Con los operadores de igualdad `=`, `<>`, `<` y `>`, y los operadores lógicos `in`, `not`, `or`, `and`, tratamos de hacer match de un dato a otro o una lista de otros. El operador `exists` permite obtener solamente si una relación **existe**, sea con 1 renglón, o con N. El operador exists pregunta la existencia de 1 o más rows en un subquery. El resultado de un subquery que está como argumento de un `exists` no recae sobre lo que va en el `select`, sino en los renglones que regresa, por lo que lo importante es todo lo demás.
-
-Por ejemplo, el siguiente query encuentra a todos los clientes que rentaron al menos 1 peli previo al 25 de Mayo de 2005, sin importar cuántas rentas haya tenido:
+Por ejemplo, el siguiente query encuentra a todos los clientes rentaron al menos 1 peli previo al 25 de Mayo de 2005, sin importar cuántas rentas haya tenido:
 
 ```sql
 select c.first_name, c.last_name
@@ -279,6 +276,12 @@ where exists (
 ```
 
 El subquery con el statement `select 1` es solo para que regrese algún dato. Es de uso estándar cuando solo te interesa los renglones que se regresan, y no su contenido.
+
+### Cuándo debemos usar correlated subqueries?
+
+Cuando queremos responder preguntas sobre **datos negativos**, es decir, cuando buscamos registros que **no cumplen** cierta condición. Un ejemplo simple: _"obtener todas las películas NO dirigidas por Steven Spielberg"_. Para esto nos ayudamos del operador `exists` y `not exists`.
+
+Qué sucede con preguntas sobre **datos positivos**? Es muy probable que estas se respondan con queryes usando `join` normales, y que no requieran usar el `not exists`.
 
 Ejemplo: Cuales de nuestros clientes han tenido un pago de más de 11?
 
@@ -293,7 +296,15 @@ where exists (
 order by c.first_name, c.last_name;
 ```
 
-Al igual que el `in`, el `exists` también puede estar sujeto al operador `not`, para de este modo obtener los clientes que han tenido al menos 1 pago menor o igual a 11.
+Este query es sobre **datos positivos**, por lo que usa `exists` en lugar de `not exists` y por tanto, es muy probable que podamos responderlo con `join` normales, como abajo mostramos:
+
+```sql
+select c.first_name , c.last_name 
+from payment p join customer c using (customer_id)
+where p.amount > 11;
+```
+
+Si transformamos la pregunta a **datos negativos** y buscamos aquellos clientes que no tengan pagos mayores a 11 USD, hacerlo con `join` es más difícil, por lo que debemos recurrir al `not exists`:
 
 ```sql
 select c.first_name, c.last_name
@@ -306,7 +317,7 @@ where not exists (
 order by c.first_name, c.last_name;
 ```
 
-### OJO CON EL NULL
+### Ojo con el `null`
 
 Si vamos a usar `exists` debemos tener mucho cuidado de que nuestro subquery **no regrese `null`**, porque en SQL, `exists null` es `TRUE`, y esto puede ponerle en la torre a nuestros resultados. Por ejemplo:
 
@@ -321,7 +332,11 @@ Esto regresa los 599 clientes totales que tenemos.
 
 ![](https://i.imgur.com/zg9QbLF.png)
 
-## Dónde podemos usar subqueries?
+### Ejercicio con correlated subqueries
+
+Qué actor/actriz nunca han aparecido en una película con rating para adultos?
+
+## Todos los lugares donde podemos usar subqueries
 
 Los subqueries son una herramienta poderosa, pero como es difícil usarla bien, y por eso la recomendación general es evitar su uso de ser posible. Tampoco hay que considerarla como tabú, y si no hay de otra y ya se les acabaron las opciones, que no les tiemble la mano para usarlos.
 
