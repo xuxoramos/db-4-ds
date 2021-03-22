@@ -39,6 +39,15 @@ Grabación: https://itam.zoom.us/rec/share/PyaoOvsNXYgjl75_gDtEINJm4jTQhIycaN8Ku
 #### 2021-03-08
 Grabación: https://itam.zoom.us/rec/share/61A8PU1chzULzSwS045Hq9oKrQi-EbQ2-BOE2clmmIqSdLuYY3wxpAmIjqYTc_U2.Hw3Js_jv7DJGP4MV
 
+#### 2021-03-10
+Grabación: https://itam.zoom.us/rec/share/dycUCehkiSORtDMOQv2ZfLFxB6LYUJbvd6I7-Fhs2SHyTrOzYqHqF3fBkt6Bh4xm.YhUQX0Gol14jnmv_
+
+#### 2021-03-15
+No hay grabación. Sorry 😞.
+
+#### 2021-03-17
+Grabación: https://itam.zoom.us/rec/share/IfrRpOqueegqRmw7rWehSTl6Rx7SAsX4RNPj3lAoaWaIbL7Ph0a0qgYZoofTYDzy.EPXl1yaPyNsaNOrc
+
 
 ### Temario + Fechas = Plan de Materia
 A continuación el temario, fecha por fecha:
@@ -62,7 +71,7 @@ A continuación el temario, fecha por fecha:
 | 14            | 2021/03/03      | [Agrupaciones y agregaciones](https://xuxoramos.github.io/db-4-ds/11_group_by)                                                                                                                                                                                  |
 | 15            | 2021/03/08      | [Agrupaciones y agregaciones II](https://xuxoramos.github.io/db-4-ds/12_group_by_II)                                                                                                                                                                                           |
 | 16            | 2021/03/10      | [Agrupaciones y agregaciones III](https://xuxoramos.github.io/db-4-ds/13_group_by_III)                                                                                                                                                                                                                  |
-| 17            | 2021/03/15      | 2o Parcial                                                                                                                                                                                                                                            |
+| 17            | 2021/03/15      | [Subqueries](https://xuxoramos.github.io/db-4-ds/14_subselects)                                                                                                                                                                                                                                            |
 | 18            | 2021/03/17      | Asueto                                                                                                                                                                                                                                                |
 | 19            | 2021/03/22      | Transacciones. Bloqueos. Aislamiento. Lecturas sucias. Serializaciones.                                                                                                                                                                               |
 | 20            | 2021/03/24      | Transacciones. Propiedades ACID. Transacciones globales. Propiedades BASE.                                                                                                                                                                            |
