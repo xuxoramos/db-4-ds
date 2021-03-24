@@ -31,7 +31,7 @@ group by segmentos.segmento;
 
 Cómo podemos mejorar la legibilidad de este query, aparte de meter chorros de espacios, identaciones, etc?
 
-Los CTEs son una manera de **sacar los subqueries internos y convertirlos en queries externos**, autocontenidos y evaluables, y de este modo hacerlos más legibles y modificables.
+Los CTEs son una manera de **sacar los subqueries internos y convertirlos en queries externos**, autocontenidos y evaluables, y de este modo hacerlos más legibles y modificables. Esto nos permite construir queries complejos porque los hacemos **de adentro hacia afuera**, es decir, primero definimos los _building blocks_, luego con el query final determinamos como los acomodamos para construir nuestro resultado.
 
 Igual la mayoría de las veces ofrecen una ventaja en performance porque son ejecutados 1 sola vez y cargados a memoria, **siempre y cuando los referenciemos 1 sola vez**. Si referenciamos 2 veces un CTE, se cargará en el mismo espacio 2 veces.
 
