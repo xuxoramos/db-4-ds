@@ -255,7 +255,36 @@ Con CTE:
 
 ![](https://lh3.googleusercontent.com/proxy/A4_c2TX-Vw6w6lg5jyhzQKe_CfFJjAqRcdD_uMJgrM1gPxBmxh4viA2Eow1sCb6y6pOzmpup1nxW-PEDXKMzv2kIw6J5RVjQ6dQgtkrfDyR5IFGHM4adwW9jgchPBGHbaqq60At3E66t)
 
+En estricto y ortodoxo sentido, los correlated queries no funcionan con los CTEs, porque por definición, los correlated queries necesitan hacer referencia a las tablas del query exterior que lo envuelve, por lo que los hace **dependientes**, y los CTEs solo sirven para extraer subqueries no correlacionados, porque cuando los extraigamos al CTE, deben, literal, _**stand on their own**_.
 
+Cómo podemos darle la vuelta?
+
+Cambiando los `exist` por `in`, siempre y cuando el query intente responder una pregunta sobre **datos positivos**, es decir, registros que si cumplen un criterio.
+
+Si el query es como el que intentamos convertir a CTEs, sobre **datos negativos**, entonces **no será posible**, y tendremos que conformarnos con subqueries correlacionados a como los vimos la sesión anterior.
+
+![](https://i.imgur.com/50teHx6.png)
+
+### Ejercicio rudo
+
+Tomemos nuestro último query de la clase pasada, y convirtámoslo en CTEs:
+
+```sql
+select segmentos.segmento, count(*) num_customers
+from
+  (select p.customer_id, count(*) num_rentals, sum(p.amount) tot_payments
+  from payment p
+  group by p.customer_id)
+as payments join 
+  (select 'pecesillo' segmento, 0 limite_inferior, 74.99 limite_superior
+  union all
+  select 'dos dos' segmento, 75 limite_inferior, 149.99 limite_superior
+  union all
+  select 'gran pez' segmento, 150 limite_inferior, 9999999.99 limite_superior)
+as segmentos
+on (payments.tot_payments between segmentos.limite_inferior and segmentos.limite_superior)
+group by segmentos.segmento;
+```
 
 
 
