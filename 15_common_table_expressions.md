@@ -183,7 +183,7 @@ having count(*) > all (t);
 
 ![](https://i.imgur.com/Jt67tnt.png)
 
-Como dijimos, los CTEs no funcionan dentro del `having`.
+Como dijimos, los CTEs no funcionan dentro del `having`, ni con funciones `any`, `all`.
 
 ### Cuales clientes NO tienen pagos de más de 11 USD?
 
@@ -309,6 +309,26 @@ No podemos anidar ni encadenar llamadas a funciones de agregación! Qué clase d
 ### Ejercicio
 
 Cómo podemos lograrlo con CTEs?
+
+## Un apunte final sobre ventajas de los CTEs
+
+Permiten recursividad, pero **ni de chiste** vamos a programar funciones recursivas con SQL.
+
+Permiten reuso, que ya vimos cuando usamos un CTE como parte de otro CTE.
+
+Esto, a su vez, permite algunas mejoras de performance, pero ojo con esto, a veces el subir un query a memoria y mantenerlo ahí sale más caro computacionalmente que volverlo a calcular, sobre todo cuando tenemos varios subqueries o varios CTEs que se parecen o que varían un poquito.
+
+**Pero no podemos dejar los subqueries del todo**
+
+Justo como vimos, si requerimos usar `having`, `any`, `all`, no podemos usar CTEs.
+
+Si debemos usar correlated queries, no podemos usar CTEs.
+
+Si debemos usar el `not exists`, no podemos usar CTEs.
+
+# Próxima clase
+
+Funciones!
 
 
 
