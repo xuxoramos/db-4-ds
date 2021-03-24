@@ -192,7 +192,7 @@ Estos operadores arrojan resultados similares al operador `or` encadenado, de fo
 
 ### Ejercicio:
 
-Cómo podemos obtener los clientes cuyo gasto con nosotros supera el revenue concentrado aportado por Bolivia, Paraguay y Chile?
+Cómo podemos obtener los clientes cuyo gasto con nosotros supera el revenue concentrado aportado por Bolivia, Paraguay o Chile?
 
 ```sql
 select c2.customer_id , sum(p2.amount) as pago_total
