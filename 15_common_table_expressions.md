@@ -33,7 +33,7 @@ Cómo podemos mejorar la legibilidad de este query, aparte de meter chorros de e
 
 Los CTEs son una manera de **sacar los subqueries internos y convertirlos en queries externos**, autocontenidos y evaluables, y de este modo hacerlos más legibles y modificables. Esto nos permite construir queries complejos porque los hacemos **de adentro hacia afuera**, es decir, primero definimos los _building blocks_, luego con el query final determinamos como los acomodamos para construir nuestro resultado.
 
-Igual la mayoría de las veces ofrecen una ventaja en performance porque son ejecutados 1 sola vez y cargados a memoria, **siempre y cuando los referenciemos 1 sola vez**. Si referenciamos 2 veces un CTE, se cargará en el mismo espacio 2 veces.
+Igual la mayoría de las veces ofrecen una ventaja en performance porque son ejecutados 1 sola vez y cargados a memoria, **y una vez cargados, podemos referirnos a ellos N veces sin volver a cargarlos**, contrario a los subqueries, donde cada vez que los definimos, se ejecutan en un espacio de memoria separado.
 
 Los CTEs solamente funcionan acompañando las siguientes cláusulas del comando `select`:
 - `select`
@@ -285,6 +285,30 @@ as segmentos
 on (payments.tot_payments between segmentos.limite_inferior and segmentos.limite_superior)
 group by segmentos.segmento;
 ```
+
+## Cuándo y cuándo no debemos usar CTEs?
+
+Aparte de mejorar la legibilidad y modificabilidad, y a veces el performance, las CTEs son idóneos para hacer agregaciones a varios niveles, por ejemplo, un query que pide "el promedio de los máximos" inmediatamente nos imaginaremos un `avg(max(column))`, es decir 2 agregaciones encadenadas.
+
+Vamos a escribir un query para sacar el promedio del máximo y promedio del mínimo de los fletes de la BD de Northwind.
+
+Nuestra intuición sería escribir algo como esto:
+
+```sql
+select s.company_name, min(o.freight) as min_freight, max(o.freight) as max_freight, avg(min(o.freight)) as avg_min_freight, avg(max(o.freight)) as avg_max_freight
+from orders o join shippers s on (o.ship_via = s.shipper_id)
+group by s.company_name;
+```
+
+![](https://i.imgur.com/hd7jNFZ.png)
+
+⚠️NO JALA!!!⚠️
+
+No podemos anidar ni encadenar llamadas a funciones de agregación! Qué clase de lenguaje entonces es SQL?
+
+### Ejercicio
+
+Cómo podemos lograrlo con CTEs?
 
 
 
