@@ -48,6 +48,9 @@ No hay grabación. Sorry 😞.
 #### 2021-03-17
 Grabación: https://itam.zoom.us/rec/share/IfrRpOqueegqRmw7rWehSTl6Rx7SAsX4RNPj3lAoaWaIbL7Ph0a0qgYZoofTYDzy.EPXl1yaPyNsaNOrc
 
+#### 2021-03-22
+Grabación: https://itam.zoom.us/rec/share/3afQQfUA5_YbU3pIjA7Z_v6temCqTqJsWfN8V-tBfmWEGtW9V1w4mnBA7Ky67Dg6.AdbEBf1B_4DAnCKT
+
 
 ### Temario + Fechas = Plan de Materia
 A continuación el temario, fecha por fecha:
