@@ -35,7 +35,7 @@ Ya vimos algunos estadísticos, pero enteramente numéricos, veamos:
 | `log(`_numérico o doble precisión_`)` |  logaritmo base 10 | `select log(100)` | **2** |
 | `log(`_b_`,`_x_`)` | logaritmo base _b_ de _x_ | `select log(2, 64)` | **6** |
 | `mod(`_x_`,`_y_`)` |  operación módulo: residual de la división _x/y_ | `select mod(9,4)` | **1** |
-| `pi()` |  constante "π" | `select pi()` | **3.14159265358979** |
+| `pi()` |  constante  "π" | `select pi()` | **3.14159265358979** |
 | `power(`_a_`,`_b_`)` |  _a_ elevado a la _b_ potencia | `select power(9, 3)` | **729** |
 | `round(`_numérico_`)` |  redondeo al entero más cercano: del 1 al 4 redondea hacia abajo, y del 5 al 9 redondea hacia arriba | `select round(42.4)` | **42** |
 | `round(`_a_`,`_b_`)` |  redondeo de _a_ a _b_ posiciones decimales | `select round(42.4382, 2)` | **42.44** |
@@ -44,8 +44,24 @@ Ya vimos algunos estadísticos, pero enteramente numéricos, veamos:
 | `trunc(`_numérico_`)` |  truncar la parte decimal | `select trunc(42.8)` | **42** |
 | `sin(`_numérico_`)` | seno trigonométrico | `select sin(45)` | **0.8509035245341184** |
 | `cos(`_numérico_`)` | coseno trigonométrico | `select cos(45)` | **0.5253219888177297** |
-| `tan(`_numérico_`)` | truncar _a_ por _b_ posiciones decimales | `select trunc(42.4382, 2)` | **42.43** |
-| `cot(`_numérico_`)` | truncar _a_ por _b_ posiciones decimales | `select trunc(42.4382, 2)` | **42.43** |
+| `tan(`_numérico_`)` | truncar _a_ por _b_ posiciones decimales | `select tan(45)` | **1.6197751905438615** |
+| `cot(`_numérico_`)` | truncar _a_ por _b_ posiciones decimales | `select cot(45)` | **0.6173696237835551** |
+
+### Ejemplos
+
+Lo chido de estas funciones es que, contrario a las funciones de agregación (`avg()`, `sum()`, etc), las numéricas **si se pueden anidar**, e incluso podemos anidar una numérica con una de agregación.
+
+ 1. `select avg(ln(o.freight)) from orders o`: el promedio de los logaritmos naturales de los fletes
+ 2. `select sin(pi()/2)`: seno de 90 grad
+ 3. el promedio de ticket por cliente de Northwind redondeado a 3 decimales:
+ ```sql
+select c.customer_id , round(cast(avg(od.quantity*unit_price) as numeric), 3)
+from order_details od 
+join orders o using (order_id)
+join customers c using (customer_id)
+group by c.customer_id
+ ```
+
 
 ### Generación de nums pseudoaleatorios
 
@@ -58,14 +74,13 @@ Por tanto, si queremos usar números pseudoaleatorios para usos como criptograf�
 | `random()` | número pseudoaleatorio real entre 0.0 y 1.0: para otros números, combinar con `round()` y una multiplicación simple | `select random()` | **0.0969721257729077** |
 | `setseed(`_double precision_`)` | establecer la "semilla" entre -1 y 1 para la generación de nums pseudoaleatorios | `select setseed(-0.5)` | **_sin valor de retorno_** |
 
+### Histogramas
+
+
+
 ### Ejemplos
 
-Lo chido de estas funciones es que, contrario a las funciones de agregación (`avg()`, `sum()`, etc), las numéricas **si se pueden anidar**, e incluso podemos anidar una numérica con una de agregación.
 
-
-```
-select exp(pi()) + 1
-``` 
 
 ## De conversión
 
