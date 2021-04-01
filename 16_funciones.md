@@ -35,10 +35,10 @@ Ya vimos algunos estadísticos, pero enteramente numéricos, veamos:
 | `power(`_a_`,`_b_`)` |  _a_ elevado a la _b_ potencia | `select power(9, 3)` | **729** |
 | `round(`_numérico_`)` |  redondeo al entero más cercano: del 1 al 4 redondea hacia abajo, y del 5 al 9 redondea hacia arriba | `select round(42.4)` | **42** |
 | `round(`_a_`,`_b_`)` |  redondeo de _a_ a _b_ posiciones decimales | `select round(42.4382, 2)` | **42.44** |
-| sign(dp or numeric) |  sign of the argument (-1, 0, +1) | sign(-8.4) | -1 |
-| sqrt(dp or numeric) |  square root | sqrt(2.0) | 1.4142135623731 |
-| trunc(dp or numeric) |  truncate toward zero | trunc(42.8) | 42 |
-| trunc(v numeric, s int) | truncate to s decimal places | trunc(42.4382, 2) | 42.43 |
+| `sign(`_a_`)` |  signo de _a_ (-1, 0, +1) | `select sign(-8.4)` | **-1** |
+| `sqrt(`_numérico_`)` |  raíz cuadrada | `select sqrt(2)` | **1.4142135623731** |
+| `trunc(`_numérico_`)` |  truncar la parte decimal | `select trunc(42.8)` | **42** |
+| `trunc(`_a_`,`_b_`)` | truncar _a_ por _b_ posiciones decimales | `select trunc(42.4382, 2)` | **42.43** |
 
 Lo chido de estas funciones es que, contrario a las funciones de agregación (`avg()`, `sum()`, etc), las numéricas **si se pueden anidar**.
 
@@ -46,6 +46,7 @@ Veamos la Identidad de Euler:
 
 ```
 select exp(pi()) + 1
+``` 
 
 ## De conversión
 
