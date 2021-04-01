@@ -52,15 +52,28 @@ Ya vimos algunos estadísticos, pero enteramente numéricos, veamos:
 Lo chido de estas funciones es que, contrario a las funciones de agregación (`avg()`, `sum()`, etc), las numéricas **si se pueden anidar**, e incluso podemos anidar una numérica con una de agregación.
 
  1. `select avg(ln(o.freight)) from orders o`: el promedio de los logaritmos naturales de los fletes
- 2. `select sin(pi()/2)`: seno de 90 grad
+ 2. `select sin(pi()/2)`: seno de un ángulo de 90 grados
  3. el promedio de ticket por cliente de Northwind redondeado a 3 decimales:
  ```sql
-select c.customer_id , round(cast(avg(od.quantity*unit_price) as numeric), 3)
+select c.customer_id , round(cast(avg(od.quantity*unit_price) as numeric), 2)
 from order_details od 
 join orders o using (order_id)
 join customers c using (customer_id)
 group by c.customer_id
  ```
+ 4. Z score (normalización estadística) de los pagos de Sakila
+ ```sql
+ select (p.amount - avg(p.amount))/stddev(p.amount) from payment p
+ ```
+ Esto parece que no jala, verdad? _Common table expressions_ to the rescue!
+ ```sql
+ with stats_payments as (
+	select avg(p.amount) as avg_amount, stddev(p.amount) as stddev_amount from payment p
+)
+select round((p.amount - sp.avg_amount)/sp.stddev_amount, 2) z_amount
+from stats_payments sp, payment p;
+ ```
+ > **Nota sobre `from stats_payments, payment`:** cuando tenemos este tipo de `from` sin `join`, lo único que hace SQL es una correspondencia simple renglón VS renglón, sin ninguna equivalencia, solo pone un result set al lado de otro.
 
 
 ### Generación de nums pseudoaleatorios
