@@ -10,11 +10,15 @@ Una función que recibe un tipo de dato o columna, puede regresar otro tipo de d
 
 ## Booleanos
 
-Ya los vimos, pero repasemos algunos:
+Ya los vimos, pero repasemos algunos que van usualmente en el `where`:
 
 - `a between x and y` es idéntico a `a >= x and a <= y`
 - `a not between x and y` es idéntico a `a < x or a > y`
 - Recuerden que el `not` convierte los `and` en `or` y los `>` en `<=` y viceversa
+- `is null` e `is not null`: recuerden que _columna_`=null` evalúa a _undefined_.
+
+Y los que vimos para **evaluar columnas**:
+- `bool_or(`_columna_`)` y `bool_and(`_columna_`)`: recuerden que _columna_ debe ser boolean, o castearla a boolean con `cast(`_columna_` as boolean)`.
 
 ## Numéricos
 
@@ -38,11 +42,26 @@ Ya vimos algunos estadísticos, pero enteramente numéricos, veamos:
 | `sign(`_a_`)` |  signo de _a_ (-1, 0, +1) | `select sign(-8.4)` | **-1** |
 | `sqrt(`_numérico_`)` |  raíz cuadrada | `select sqrt(2)` | **1.4142135623731** |
 | `trunc(`_numérico_`)` |  truncar la parte decimal | `select trunc(42.8)` | **42** |
-| `trunc(`_a_`,`_b_`)` | truncar _a_ por _b_ posiciones decimales | `select trunc(42.4382, 2)` | **42.43** |
+| `sin(`_numérico_`)` | seno trigonométrico | `select sin(45)` | **0.8509035245341184** |
+| `cos(`_numérico_`)` | coseno trigonométrico | `select cos(45)` | **0.5253219888177297** |
+| `tan(`_numérico_`)` | truncar _a_ por _b_ posiciones decimales | `select trunc(42.4382, 2)` | **42.43** |
+| `cot(`_numérico_`)` | truncar _a_ por _b_ posiciones decimales | `select trunc(42.4382, 2)` | **42.43** |
 
-Lo chido de estas funciones es que, contrario a las funciones de agregación (`avg()`, `sum()`, etc), las numéricas **si se pueden anidar**.
+### Generación de nums pseudoaleatorios
 
-Veamos la Identidad de Euler:
+Para los matemáticos: no hay números completamente aleatorios generados por máquinas (salvo las quantum computers), todos tienen algún algoritmo que emula verdadera aleatoriedad.
+
+Por tanto, si queremos usar números pseudoaleatorios para usos como criptografía, las funciones a continuación **are not the way to go**.
+
+|Función| Qué hace? | Ejemplo | Resultado |
+|-|-|-|-|
+| `random()` | número pseudoaleatorio real entre 0.0 y 1.0: para otros números, combinar con `round()` y una multiplicación simple | `select random()` | **0.0969721257729077** |
+| `setseed(`_double precision_`)` | establecer la "semilla" entre -1 y 1 para la generación de nums pseudoaleatorios | `select setseed(-0.5)` | **_sin valor de retorno_** |
+
+### Ejemplos
+
+Lo chido de estas funciones es que, contrario a las funciones de agregación (`avg()`, `sum()`, etc), las numéricas **si se pueden anidar**, e incluso podemos anidar una numérica con una de agregación.
+
 
 ```
 select exp(pi()) + 1
