@@ -20,25 +20,32 @@ Ya los vimos, pero repasemos algunos:
 
 Ya vimos algunos estadísticos, pero enteramente numéricos, veamos:
 
-|Función| Qué hace? | Ejemplo | Result |
+|Función| Qué hace? | Ejemplo | Resultado |
 |-|-|-|-|
-| `abs(`_numeric_`)` |  valor absoluto | `select abs(-17.4)` | 17.4 |
-| `ceil(`_numeric_`)` |  nearest integer greater than or equal to argument | ceil(-42.8) | -42 |
-| div(y numeric, x numeric) |  integer quotient of y/x | div(9,4) | 2 |
-| exp(dp or numeric) |  exponential | exp(1.0) | 2.71828182845905 |
-| floor(dp or numeric) |  nearest integer less than or equal to argument | floor(-42.8) | -43 |
-| ln(dp or numeric) |  natural logarithm | ln(2.0) | 0.693147180559945 |
-| log(dp or numeric) |  base 10 logarithm | log(100.0) | 2 |
-| log(b numeric, x numeric) | logarithm to base b | log(2.0, 64.0) | 6.0000000000 |
-| mod(y, x) |  remainder of y/x | mod(9,4) | 1 |
-| pi() |  "π" constant | pi() | 3.14159265358979 |
-| power(a numeric, b numeric) |  a raised to the power of b | power(9.0, 3.0) | 729 |
-| round(dp or numeric) |  round to nearest integer | round(42.4) | 42 |
-| round(v numeric, s int) |  round to s decimal places | round(42.4382, 2) | 42.44 |
+| `abs(`_numeric_`)` |  valor absoluto | `select abs(-17.4)` | **17.4** |
+| `ceil(`_numeric_`)` |  entero más cercano, mayor o igual al argumento | `select ceil(-42.8)` | **-42** |
+| `div(`_x_`,`_y_`)` |  cociente entero de `x/y` | `select div(9,4)` | **2** |
+| `exp(`_numérico o doble precisión_`)` |  exponencial _e_ | `select exp(1)` | **2.71828182845905** |
+| `floor(`_numérico o doble precisión_`)` |  entero más cercano, menor o igual al argumento | `select floor(-42.8)` | **-43** |
+| `ln(`_numérico o doble precisión_`)` |  logaritmo natural, recíproco de _e_ | `select ln(1)` | **0** |
+| `log(`_numérico o doble precisión_`)` |  logaritmo base 10 | `select log(100)` | **2** |
+| `log(`_b_`,`_x_`)` | logaritmo base _b_ de _x_ | `select log(2, 64)` | **6** |
+| `mod(`_x_`,`_y_`)` |  operación módulo: residual de la división _x/y_ | `select mod(9,4)` | **1** |
+| `pi()` |  constante "π" | `select pi()` | **3.14159265358979** |
+| `power(`_a_`,`_b_`)` |  _a_ elevado a la _b_ potencia | `select power(9, 3)` | **729** |
+| `round(`_numérico_`)` |  redondeo al entero más cercano: del 1 al 4 redondea hacia abajo, y del 5 al 9 redondea hacia arriba | `select round(42.4)` | **42** |
+| `round(`_a_`,`_b_`)` |  redondeo de _a_ a _b_ posiciones decimales | `select round(42.4382, 2)` | **42.44** |
 | sign(dp or numeric) |  sign of the argument (-1, 0, +1) | sign(-8.4) | -1 |
 | sqrt(dp or numeric) |  square root | sqrt(2.0) | 1.4142135623731 |
 | trunc(dp or numeric) |  truncate toward zero | trunc(42.8) | 42 |
 | trunc(v numeric, s int) | truncate to s decimal places | trunc(42.4382, 2) | 42.43 |
+
+Lo chido de estas funciones es que, contrario a las funciones de agregación (`avg()`, `sum()`, etc), las numéricas **si se pueden anidar**.
+
+Veamos la Identidad de Euler:
+
+```
+select exp(pi()) + 1
 
 ## De conversión
 
