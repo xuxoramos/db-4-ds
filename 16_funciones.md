@@ -20,6 +20,11 @@ Ya los vimos, pero repasemos algunos que van usualmente en el `where`:
 Y los que vimos para **evaluar columnas**:
 - `bool_or(`_columna_`)` y `bool_and(`_columna_`)`: recuerden que _columna_ debe ser boolean, o castearla a boolean con `cast(`_columna_` as boolean)`.
 
+## De conversión
+
+- `cast(`_columna_` as `_nuevo tipo de dato_`)`
+- ...o su _forma corta_: _columna_`::`_nuevo tipo de dato_ (i.e. `select '2020-12-31 23:59:59'::timestamp as newyearseve` es lo mismo que `select cast('2020-12-31 23:59:59'as timestamp) as newyearseve`)
+
 ## Numéricos
 
 Ya vimos algunos estadísticos, pero enteramente numéricos, veamos:
@@ -38,7 +43,7 @@ Ya vimos algunos estadísticos, pero enteramente numéricos, veamos:
 | `pi()` |  constante  "π" | `select pi()` | **3.14159265358979** |
 | `power(`_a_`,`_b_`)` |  _a_ elevado a la _b_ potencia | `select power(9, 3)` | **729** |
 | `round(`_numérico_`)` |  redondeo al entero más cercano: del 1 al 4 redondea hacia abajo, y del 5 al 9 redondea hacia arriba | `select round(42.4)` | **42** |
-| `round(`_a_`,`_b_`)` |  redondeo de _a_ a _b_ posiciones decimales | `select round(42.4382, 2)` | **42.44** |
+| `round(`_a_`,`_b_`)` |  redondeo de _a_ a _b_ posiciones decimales, mismas reglas que arriba | `select round(42.4382, 2)` | **42.44** |
 | `sign(`_a_`)` |  signo de _a_ (-1, 0, +1) | `select sign(-8.4)` | **-1** |
 | `sqrt(`_numérico_`)` |  raíz cuadrada | `select sqrt(2)` | **1.4142135623731** |
 | `trunc(`_numérico_`)` |  truncar la parte decimal | `select trunc(42.8)` | **42** |
@@ -49,7 +54,7 @@ Ya vimos algunos estadísticos, pero enteramente numéricos, veamos:
 
 ### Ejemplos
 
-Lo chido de estas funciones es que, contrario a las funciones de agregación (`avg()`, `sum()`, etc), las numéricas **si se pueden anidar**, e incluso podemos anidar una numérica con una de agregación.
+Lo chido de estas funciones es que, contrario a las funciones de agregación (`avg()`, `sum()`, etc), las numéricas **si se pueden anidar** y combinarse con funciones de agregación, e incluso podemos anidar una numérica con una de agregación.
 
  1. `select avg(ln(o.freight)) from orders o`: el promedio de los logaritmos naturales de los fletes
  2. `select sin(pi()/2)`: seno de un ángulo de 90 grados
@@ -61,7 +66,7 @@ join orders o using (order_id)
 join customers c using (customer_id)
 group by c.customer_id
  ```
- 4. Z score (normalización estadística) de los pagos de Sakila
+ 4. _Z_ score (normalización estadística) a 2 decimales de los pagos de Sakila
  ```sql
  select (p.amount - avg(p.amount))/stddev(p.amount) from payment p
  ```
@@ -69,14 +74,13 @@ group by c.customer_id
  ```sql
  with stats_payments as (
 	select avg(p.amount) as avg_amount, stddev(p.amount) as stddev_amount from payment p
-)
-select round((p.amount - sp.avg_amount)/sp.stddev_amount, 2) z_amount
-from stats_payments sp, payment p;
+ )
+ select round((p.amount - sp.avg_amount)/sp.stddev_amount, 2) z_amount
+ from stats_payments sp, payment p;
  ```
  > **Nota sobre `from stats_payments, payment`:** cuando tenemos este tipo de `from` sin `join`, lo único que hace SQL es una correspondencia simple renglón VS renglón, sin ninguna equivalencia, solo pone un result set al lado de otro.
 
-
-### Generación de nums pseudoaleatorios
+## Generación de nums pseudoaleatorios
 
 Para los matemáticos: no hay números completamente aleatorios generados por máquinas (salvo las quantum computers), todos tienen algún algoritmo que emula verdadera aleatoriedad.
 
@@ -86,16 +90,128 @@ Por tanto, si queremos usar números pseudoaleatorios para usos como criptograf�
 |-|-|-|-|
 | `random()` | número pseudoaleatorio real entre 0.0 y 1.0: para otros números, combinar con `round()` y una multiplicación simple | `select random()` | **0.0969721257729077** |
 | `setseed(`_double precision_`)` | establecer la "semilla" entre -1 y 1 para la generación de nums pseudoaleatorios | `select setseed(-0.5)` | **_sin valor de retorno_** |
+| `generate_series(`_inicio_`,`_final_`,`_incremento_`)`| genera una tablita dinámica representando una serie, de _inicio_ a _final_ con un incremento entre ellas dada por _incremento_, donde _inicio_ y _final_ pueden ser `numeric`, `date` o `timestamp` | ` select * from generate_series('2020-01-01 00:00'::timestamp, '2020-12-31 23:59'::timestamp, '1 hour')` |
 
-### Histogramas
+### Ejemplo: simular GDP
+
+El GDP de los países que toman decisiones económicas moderadamente buenas se ve así:
+
+![](https://dataschool.com/assets/images/learn-sql/extras/random-sequences/random-sequence-3.svg)
+
+Obviamente aquí aparece la falacia del capitalismo, el hecho que la economía supone crecimiento infinito a lo largo del tiempo.
+
+Supongamos que queremos simular una curva de GDP como la de arriba:
+
+```sql
+select fecha, (row_number() over()), round(((random() + 1) * (row_number() over()))::numeric, 2) as gdp
+from generate_series('1939-01-01'::date, '2020-12-31'::date, '1 month') as fecha;
+```
+Qué está pasando aquí? Sigamos la ejecución:
+
+1. `from`: se genera una serie que va de 1939 a 2020 con incrementos de 1 mes. **OJO: ESTA NO ES UNA SECUENCIA** como las conocemos; una secuencia es un objeto estructural de la BD, mientras que una serie es como una tabla.
+2. no hay `where`, no hay `group by`, no hay `having`.
+3. `select`: tenemos en el execution space la serie de fechas mes con mes de 1939 a 2020, ahora solo debemos recurrir a `random()` para generar datos aleatorios.
+4. para qué sirve `row_number()` y `over()`? Para generar un consecutivo al vuelo para esta tablita dinámica a lo largo de todos los registros. Para qué queremos esto? Necesitamos ese consecutivo incremental para multiplicarlo por el resultado de `random()` y simular un comportamiento que tiene varianza a lo largo del tiempo, pero con una tendencia definitivamente creciente, como los GDPs (al menos a como lo esperan los economistas 🤷)
+
+El resto de los ejemplos continúan la misma estructura.
+
+### Ejemplo: simular casos COVID19
+
+Los casos COVID tienen la siguiente forma:
+
+![](https://dataschool.com/assets/images/learn-sql/extras/random-sequences/random-sequence-4.svg)
+
+Podemos lograr este comportamiento con el siguiente query:
+
+```sql
+select fecha, (row_number() over()), (random() * exp(row_number() over())) as covid_cases
+from generate_series('1939-01-01'::date, '2020-12-31'::date, '1 month') as fecha;
+```
+
+### Ejemplo: simular exponential decay
+
+![](https://dataschool.com/assets/images/learn-sql/extras/random-sequences/random-sequence-5.svg)
+
+```sql
+select fecha, (row_number() over()), exp(-1 * ((random()) * (row_number() over()))) as covid_cases
+from generate_series('1939-01-01'::date, '2020-12-31'::date, '1 month') as fecha;
+```
+
+### Ejemplo: simular crecimiento de cultivo de bacterias
+
+![](https://dataschool.com/assets/images/learn-sql/extras/random-sequences/random-sequence-6.svg)
+
+```sql
+select fecha, (row_number() over()), log((random() + 1) * (row_number() over())) as covid_cases
+from generate_series('1939-01-01'::date, '2020-12-31'::date, '1 month') as fecha;
+```
+
+### Ejemplo: generar 1000 correos electrónicos "aleatorios":
+
+```sql
+select
+  'user_' || seq || '@' || (
+    case (random() * 2)::integer
+      when 0 then 'gmail'
+      when 1 then 'hotmail'
+      when 2 then 'yahoo'
+    end
+  ) || '.com' as email
+from generate_series(1, 1000) seq;
+```
+
+Qué está pasando aquí?
+
+1. `from`: se genera una tablita dinámica en memoria con una serie de 1 a 1000.
+2. sin `where`, sin `group by`, sin `having`.
+3. `select`: aprovechamos el operador `||`, que emula la función `concat()`, para juntar los strings `user_`, el valor de la tablita dinámica que va de 1 a 1000, el caracter `@` y lo que salga de la cláusula `case`, que vamos a explicar abajo:
+4. el `case` [lo vimos ya anteriormente](https://github.com/xuxoramos/db-4-ds/blob/gh-pages/8_ejercicios.md#c%C3%B3mo-creamos-una-columna-en-customers-que-nos-diga-si-un-cliente-es-bueno-regular-o-malo), sirve como un `if...else if...else if...else`. En este caso, estamos obteniendo un número aleatorio entre 0 y 2, y como lo estamos _casteando_ a **integer**, con eso le **quitamos la parte decimal, dejando solo la entera**, y con eso hacemos comparaciones: si el num aleatorio es 0, entonces regresar `gmail`, si es 1 regresa `hotmail`, y si es 2 regresa `yahoo`.
+5. Una vez terminada la cláusula `case`, continuamos concatenando ahora el sufijo `.com` a lo que haya salido del `case` y asignamos `email` como alias.
+
+Qué obtenemos?
+
+![](https://i.imgur.com/McgBeyX.png)
+
+Ya posteriormente podemos pasarle este select a un `insert` para meter los 1000 correos de trancazo a la tabla:
+
+```sql
+insert into users(email)
+select
+  'user_' || seq || '@' || (
+    case (random() * 2)::integer
+      when 0 then 'gmail'
+      when 1 then 'hotmail'
+      when 2 then 'yahoo'
+    end
+  ) || '.com' as email
+from generate_series(1, 1000) seq;
+```
+
+## Funciones con strings
 
 
 
-### Ejemplos
+### Benford's Law
+
+La Ley de Benford es una herramienta que podemos usar para detectar valores fraudulentos en una columna que represente dinero. La ley dice que:
+
+> "En una colección de números provenientes de fenómenos reales, el primero dígito de dichos números tiende a ser pequeño: 1 el 30% de las veces, mientras que el 9 aparecerá solo el 5% de las veces."
+
+En cualquier lenguaje de programación, verificar esta propiedad lleva 3 pasos:
+
+1. La distribución de la columna numérica de interés sigue una distribución log-normal.
+
+![](https://miro.medium.com/max/4200/0*OeCKcqoQ5iB0fqiT.png)
+
+2. Obtener el 1er dígito de todos los valores de la columna en cuestión y verificar que el 1 aparezca ~30% de las veces mediante un histograma
 
 
 
-## De conversión
 
-- `cast(`_columna_` as `_nuevo tipo de dato_`)`
 
+
+
+
+## Tarea
+
+Como parte de la modernización de nuestras video rental stores, vamos a automatizar la recepción y entrega de discos con robots. Parte de la infraestructura es diseñar contenedores cilíndricos giratorios para facilitar la colocación y extracción de discos por brazos automatizados. Cada cajita de Blu-Ray mide 20cm x 13.5cm x 1.5cm, y para que el brazo pueda manipular adecuadamente cada cajita, debe estar contenida dentro de un arnés que cambia las medidas a 30cm x 21cm x 8cm para un espacio total de 5040 centímetros cúbicos, y pesa 200 gr ya con la caja de Blu-Ray dentro. Se nos ha encargado formular la medida de dichos cilindros de manera tal que quepan todas las copias de los Blu-Rays de cada uno de nuestros store. Las medidas deben ser estándar, es decir, la misma para todas nuestras stores, y en cada store pueden ser instalados más de 1 de estos cilindros. Cada cilindro aguanta un peso máximo de 50kg como máximo. 
