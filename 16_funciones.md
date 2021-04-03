@@ -23,7 +23,7 @@ Y los que vimos para **evaluar columnas**:
 ## De conversión
 
 - `cast(`_columna_` as `_nuevo tipo de dato_`)`
-- ...o su _forma corta_: _columna_`::`_nuevo tipo de dato_ (i.e. `select '2020-12-31 23:59:59'::timestamp as newyearseve` es lo mismo que `select cast('2020-12-31 23:59:59'as timestamp) as newyearseve`)
+- ...o su _forma corta_: _antiguo tipo de dato_`::`_nuevo tipo de dato_ (i.e. `select '2020-12-31 23:59:59'::timestamp as newyearseve` es lo mismo que `select cast('2020-12-31 23:59:59'as timestamp) as newyearseve`)
 
 ## Numéricos
 
@@ -189,19 +189,18 @@ from generate_series(1, 1000) seq;
 
 ## Funciones con strings
 
-| Función | Tipo de retorno | Qué hace? | Ejemplo | Resultado |
+| Función | Tipo de retorno | Qué hace? | Ejemplo(s) | Resultado |
 |-|-|-|-|-|
 | _string_` \|\| `_string_ | text | Concatenación de strings | `select 'Post' \|\| 'greSQL'` | **PostgreSQL** |
 | `concat(`_string1_`,`_string2_`,`_..._`,`_stringN_`)` | text | Igual que `||`. Los `null` son ignorados. | `select concat('abcde', 2, null, 22)` | **abcde222** |
 | `length(`_string_`)` | int | Número de caracteres en un string | `select length('PostgreSQL')` | **10** |
 | `position(`_substring_` in `_string_`)` | int | Posición donde _substring_ comienza dentro de _string_. Esta función es _case sensitive_. | `select position('gre' in 'PostgreSQL')` | **5** |
 | `substr(`_string_`,`_desde_`,`_cuántos_`)` | text | Extraer de _string_ comenzando por el caracter en la posición _desde_ hasta _cuántos_ posiciones después | `select substr('alphabet', 3, 2)` | **ph** |
-| trim([leading \| trailing \| both] [characters] from string) | text | Remove the longest string containing only the characters (a space by default) from the start/end/both ends of the string | trim(both 'x' from 'xTomxx') | Tom |
-| upper(string) | text | Convert string to upper case | upper('tom') | TOM |
-| lower(string) | text | Convert string to lo case | lower('tom') | TOM |
-| format(formatstr text [, str "any" [, ...] ]) | text | Format a string. This function is similar to the C function sprintf; but only the following conversion specifications are recognized: %s interpolates the corresponding argument as a string; %I escapes its argument as an SQL identifier; %L escapes its argument as an SQL literal; %% outputs a literal %. A conversion can reference an explicit parameter position by preceding the conversion specifier with n$, where n is the argument position. See also Example 39-1. | format('Hello %s, %1$s', 'World') | Hello World, World |
-| initcap(string) | text | Convert the first letter of each word to upper case and the rest to lower case. Words are sequences of alphanumeric characters separated by non-alphanumeric characters. | initcap('hi THOMAS') | Hi Thomas |
-| lpad(string text, length int [, fill text]) | text | Fill up the string to length length by prepending the characters fill (a space by default). If the string is already longer than length then it is truncated (on the right). | lpad('hi', 5, 'xy') | xyxhi |
+| `trim([leading \| trailing \| both] [`_caracter a recortar_`] from `_string_`)` | text | Remover el mayor número de ocurrencias contínuas de _caracter a recortar_ (espacio en blanco si no se pone nada) del lado izquierdo (`leading`), derecho (`trailing`) o ambos (`both`), de la cadena _string_ | 1.`select trim(both 'X' from 'XXxMrDraKexXX')`\n2.`select trim(both from '   x   ')` | 1.**xMrDraKex**\n2.**x** |
+| `upper(`_string_`)` | text | Pasar _string_ a todo mayúsculas | `select upper('no me grites')` | **NO ME GRITES** |
+| `lower(`_string_`)` | text | Pasar _string_ a todo minúsculas | `select lower('NO ME GRITES')` | **no me grites** |
+| `initcap(`_string_`)` | text | Pasar a mayúscula el 1er caracter de cada palabra separada por espacio en blanco | `select initcap('jesús salvador ramos cardona')` | **Jesús Salvador Ramos Cardona** |
+| `lpad(`_string_`,`_longitud_`,[`_relleno_`])` | text | Rellenar el texto _string_ con el caracter _relleno_ hasta lograr un número de caracteres de _longitud_. Si _longitud_ es menor a los caracteres en _string_ entonces se trunca _string_ hasta  | 1.`select lpad('holamundo', 10, '_')`\n2.`select lpad('holamundo', 4, '_')` | 1.**\_holamundo**\n2.**hola** |
 | repeat(string text, number int) | text | Repeat string the specified number of times | repeat('Pg', 4) | PgPgPgPg |
 | replace(string text, from text, to text) | text | Replace all occurrences in string of substring from with substring to | replace('abcdefabcdef', 'cd', 'XX') | abXXefabXXef |
 | reverse(str) | text | Return reversed string. | reverse('abcde') | edcba |
