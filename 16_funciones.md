@@ -189,6 +189,27 @@ from generate_series(1, 1000) seq;
 
 ## Funciones con strings
 
+| Función | Tipo de retorno | Qué hace? | Ejemplo | Resultado |
+|-|-|-|-|-|
+| _string_` \|\| `_string_ | text | Concatenación de strings | `select 'Post' \|\| 'greSQL'` | **PostgreSQL** |
+| `concat(`_string1_`,`_string2_`,`_..._`,`_stringN_`)` | text | Igual que `||`. Los `null` son ignorados. | `select concat('abcde', 2, null, 22)` | **abcde222** |
+| `length(`_string_`)` | int | Número de caracteres en un string | `select length('PostgreSQL')` | **10** |
+| `position(`_substring_` in `_string_`)` | int | Posición donde _substring_ comienza dentro de _string_. Esta función es _case sensitive_. | `select position('gre' in 'PostgreSQL')` | **5** |
+| `substr(`_string_`,`_desde_`,`_cuántos_`)` | text | Extraer de _string_ comenzando por el caracter en la posición _desde_ hasta _cuántos_ posiciones después | `select substr('alphabet', 3, 2)` | **ph** |
+| trim([leading \| trailing \| both] [characters] from string) | text | Remove the longest string containing only the characters (a space by default) from the start/end/both ends of the string | trim(both 'x' from 'xTomxx') | Tom |
+| upper(string) | text | Convert string to upper case | upper('tom') | TOM |
+| lower(string) | text | Convert string to lo case | lower('tom') | TOM |
+| format(formatstr text [, str "any" [, ...] ]) | text | Format a string. This function is similar to the C function sprintf; but only the following conversion specifications are recognized: %s interpolates the corresponding argument as a string; %I escapes its argument as an SQL identifier; %L escapes its argument as an SQL literal; %% outputs a literal %. A conversion can reference an explicit parameter position by preceding the conversion specifier with n$, where n is the argument position. See also Example 39-1. | format('Hello %s, %1$s', 'World') | Hello World, World |
+| initcap(string) | text | Convert the first letter of each word to upper case and the rest to lower case. Words are sequences of alphanumeric characters separated by non-alphanumeric characters. | initcap('hi THOMAS') | Hi Thomas |
+| lpad(string text, length int [, fill text]) | text | Fill up the string to length length by prepending the characters fill (a space by default). If the string is already longer than length then it is truncated (on the right). | lpad('hi', 5, 'xy') | xyxhi |
+| repeat(string text, number int) | text | Repeat string the specified number of times | repeat('Pg', 4) | PgPgPgPg |
+| replace(string text, from text, to text) | text | Replace all occurrences in string of substring from with substring to | replace('abcdefabcdef', 'cd', 'XX') | abXXefabXXef |
+| reverse(str) | text | Return reversed string. | reverse('abcde') | edcba |
+| rpad(string text, length int [, fill text]) | text | Fill up the string to length length by appending the characters fill (a space by default). If the string is already longer than length then it is truncated. | rpad('hi', 5, 'xy') | hixyx |
+| split_part(string text, delimiter text, field int) | text | Split string on delimiter and return the given field (counting from one) | split_part('abc~@~def~@~ghi', '~@~', 2)| def |
+| strpos(string, substring) | int | Location of specified substring (same as position(substring in string), but note the reversed argument order) | strpos('high', 'ig') | 2 |
+| translate(string text, from text, to text) | text | Any character in string that matches a character in the from set is replaced by the corresponding character in the to set. If from is longer than to, occurrences of the extra characters in from are removed. | translate('12345', '143', 'ax') | a2x5 |
+
 
 
 ### Benford's Law
@@ -214,4 +235,10 @@ En cualquier lenguaje de programación, verificar esta propiedad lleva 3 pasos:
 
 ## Tarea
 
-Como parte de la modernización de nuestras video rental stores, vamos a automatizar la recepción y entrega de discos con robots. Parte de la infraestructura es diseñar contenedores cilíndricos giratorios para facilitar la colocación y extracción de discos por brazos automatizados. Cada cajita de Blu-Ray mide 20cm x 13.5cm x 1.5cm, y para que el brazo pueda manipular adecuadamente cada cajita, debe estar contenida dentro de un arnés que cambia las medidas a 30cm x 21cm x 8cm para un espacio total de 5040 centímetros cúbicos, y pesa 200 gr ya con la caja de Blu-Ray dentro. Se nos ha encargado formular la medida de dichos cilindros de manera tal que quepan todas las copias de los Blu-Rays de cada uno de nuestros store. Las medidas deben ser estándar, es decir, la misma para todas nuestras stores, y en cada store pueden ser instalados más de 1 de estos cilindros. Cada cilindro aguanta un peso máximo de 50kg como máximo. 
+Como parte de la modernización de nuestras video rental stores, vamos a automatizar la recepción y entrega de discos con robots.
+
+[![Brazo robótico manejando storage](http://img.youtube.com/vi/CVN93H6EuAU/0.jpg)](http://www.youtube.com/watch?v=CVN93H6EuAU "Brazo robótico manejando storage")
+
+Parte de la infraestructura es diseñar contenedores cilíndricos giratorios para facilitar la colocación y extracción de discos por brazos automatizados. Cada cajita de Blu-Ray mide 20cm x 13.5cm x 1.5cm, y para que el brazo pueda manipular adecuadamente cada cajita, debe estar contenida dentro de un arnés que cambia las medidas a 30cm x 21cm x 8cm para un espacio total de 5040 centímetros cúbicos y un peso de 200 gr por película.
+
+Se nos ha encargado formular la medida de dichos cilindros de manera tal que quepan todas las copias de los Blu-Rays de cada uno de nuestros stores. Las medidas deben ser estándar, es decir, la misma para todas nuestras stores, y en cada store pueden ser instalados más de 1 de estos cilindros. Cada cilindro aguanta un peso máximo de 50kg como máximo. 
