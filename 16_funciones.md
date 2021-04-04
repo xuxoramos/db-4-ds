@@ -205,25 +205,87 @@ from generate_series(1, 1000) seq;
 | `replace(`_string_`,`_substring a reemplazar_`,`_reemplazo_`)` | text | Reemplazar todas las ocurrencias de _substring a reemplazar_ por _reemplazo_ dentro de _string_ | `select replace('abcdefabcdef', 'cd', 'XX')` | **abXXefabXXef** |
 | `reverse(`_string_`)` | text | Reversar _string_ | `select reverse('Was it a car or a cat I saw?')` | **?was I tac a ro rac a ti saW** |
 | `rpad(`_string_`,`_longitud_`,[`_relleno_`])` | text | El recíproco de `lpad`, excepto las reglas sobre truncado en caso de que _longitud_ sea mayor que la longitud de _string_, que son las mismas. | `select rpad('holamundo', 4, '_')` | **holamundo_** |
-| split_part(string text, delimiter text, field int) | text | Split string on delimiter and return the given field (counting from one) | split_part('abc~@~def~@~ghi', '~@~', 2)| def |
-| strpos(string, substring) | int | Location of specified substring (same as position(substring in string), but note the reversed argument order) | strpos('high', 'ig') | 2 |
-| translate(string text, from text, to text) | text | Any character in string that matches a character in the from set is replaced by the corresponding character in the to set. If from is longer than to, occurrences of the extra characters in from are removed. | translate('12345', '143', 'ax') | a2x5 |
+| `split_part(`_string_`,`_delimiter_`,`_num de substring_`)` | text | Partir _string_ cada _delimiter_ y retornar el substring separado con _num de substring_ | `select split_part('2020-12-12', '-', 2)`| **12** |
+| `strpos(`_string_`,`_substring_`)` | int | Posición en donde _substring_ se encuentra dentro de _string_ | `select strpos('high', 'ig')` | **2** |
+| `translate(`_string_`,`_from_`,`_to_`)` | text | Correspondencia de 1 a 1 entre _from_ y _to_, y luego reemplazo en _string_. | `select translate('Las actitudes son más importantes que las aptitudes', 'aeiou', 'eeeee')` | `Les ectetedes sen más empertentes qee les eptetedes` |
 
 
-
-### Benford's Law
+## Ejemplo integrador: Benford's Law
 
 La Ley de Benford es una herramienta que podemos usar para detectar valores fraudulentos en una columna que represente dinero. La ley dice que:
 
 > "En una colección de números provenientes de fenómenos reales, el primero dígito de dichos números tiende a ser pequeño: 1 el 30% de las veces, mientras que el 9 aparecerá solo el 5% de las veces."
 
-En cualquier lenguaje de programación, verificar esta propiedad lleva 3 pasos:
+Esto significa que si alguna columna que represente dinero no cumple con las propiedades de arriba, probablemente estemos ante un caso de datos fabricados.
+
+En cualquier lenguaje de programación, verificar esta propiedad lleva 2 pasos:
 
 1. La distribución de la columna numérica de interés sigue una distribución log-normal.
 
 ![](https://miro.medium.com/max/4200/0*OeCKcqoQ5iB0fqiT.png)
 
 2. Obtener el 1er dígito de todos los valores de la columna en cuestión y verificar que el 1 aparezca ~30% de las veces mediante un histograma
+
+Lo primero que debemos hacer es instalar la función `histogram(`_tabla_`,`_campo numérico_`)` de [aquí](https://faraday.ai/blog/how-to-do-histograms-in-postgresql/)
+
+Luego vamos a obtener el histograma de todos los `unit_price * quantity` de todos los registros de `order_details`:
+
+```sql
+select * from histogram('order_details', 'unit_price * quantity');
+```
+
+![](https://i.imgur.com/6zXsJO6.png)
+
+Como podemos ver, al menos estamos cumpliendo con la 1er propiedad, que la distribución de los datos de la columna se ajuste a una lognormal.
+
+Verifiquemos ahora la 2a propiedad:
+
+```sql
+select substr((od.unit_price * od.quantity)::text, 1, 1) as primer_digito, count(*)
+from order_details od 
+group by primer_digito
+order by primer_digito;
+```
+
+Qué estamos haciendo aquí?
+
+1. estamos cargando `order_details` en nuestro execution space
+2. `group by primer_digito` agrupamos por cada 1er dígito encontrado
+3. `order by primer_digito` ordenamos por ese 1er dígito encontrado
+4. seleccionamos la multiplicación de `unit_price * quantity`, luego la _casteamos_ a tipo `text` y obtenmemos el 1er caracter de cada resultado
+5. contamos estos renglones
+
+Ahora resta verificar si los números que comienzan con el dígito `1` componen ~30% de todos los primeros dígitos:
+
+```sql
+with benford_freqs as (
+	select substr((od.unit_price * od.quantity)::text, 1, 1) as primer_digito, count(*) as freq
+	from order_details od 
+	group by primer_digito
+	order by primer_digito
+),
+benford_totals as (
+	select sum(freq) as tot from benford_freqs 
+)
+select bf.primer_digito , bf.freq, round((bf.freq/bt.tot) * 100, 2)
+from benford_freqs bf, benford_totals bt;
+```
+
+![](https://i.imgur.com/dqWoRps.png)
+
+Con una proporción de **~28%**, podemos decir que las órdenes de la BD de Northwind no son fabricadas y si son reales.
+
+...
+
+...
+
+...
+
+No lo son, pero le echaron ganas :)
+
+## Funciones con `date` y sus variantes
+
+
 
 
 
