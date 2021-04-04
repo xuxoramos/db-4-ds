@@ -283,9 +283,33 @@ Con una proporción de **~28%**, podemos decir que las órdenes de la BD de Nort
 
 No lo son, pero le echaron ganas :)
 
+![](https://i.kym-cdn.com/entries/icons/facebook/000/028/021/work.jpg)
+
 ## Funciones con `date` y sus variantes
 
+### Operadores con `date`
 
+| Operador | Ejemplo | Resultado | Explicación |
+|-|-|-|-|
+| + | `select '2001-09-28'::date + 7` | '2001-10-05' | 1) Conversión de `string` a `date`, 2) suma de `7` (por default, y si no se especifican qué son esos `7`, serán `days`).
+| + | date '2001-09-28' + interval '1 hour' | timestamp '2001-09-28 01:00:00' |
+| + | date '2001-09-28' + time '03:00' | timestamp '2001-09-28 03:00:00' |
+| + | interval '1 day' + interval '1 hour' | interval '1 day 01:00:00' |
+| + | timestamp '2001-09-28 01:00' + interval '23 hours' | timestamp '2001-09-29 00:00:00' |
+| + | time '01:00' + interval '3 hours' | time '04:00:00' |
+| - | - interval '23 hours' | interval '-23:00:00' |
+| - | date '2001-10-01' - date '2001-09-28' | integer '3' (days) |
+| - | date '2001-10-01' - integer '7' | date '2001-09-24' |
+| - | date '2001-09-28' - interval '1 hour' | timestamp '2001-09-27 23:00:00' |
+| - | time '05:00' - time '03:00' | interval '02:00:00' |
+| - | time '05:00' - interval '2 hours' | time '03:00:00' |
+| - | timestamp '2001-09-28 23:00' - interval '23 hours' | timestamp '2001-09-28 00:00:00' |
+| - | interval '1 day' - interval '1 hour' | interval '1 day -01:00:00' |
+| - | timestamp '2001-09-29 03:00' - timestamp '2001-09-27 12:00' | interval '1 day 15:00:00' |
+| * | 900 * interval '1 second' | interval '00:15:00' |
+| * | 21 * interval '1 day' | interval '21 days' |
+| * | double precision '3.5' * interval '1 hour' | interval '03:30:00' |
+| / | interval '1 hour' / double precision '1.5' | interval '00:40:00' |
 
 
 
