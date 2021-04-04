@@ -291,8 +291,8 @@ No lo son, pero le echaron ganas :)
 
 | Operador | Ejemplo | Resultado | Explicación |
 |-|-|-|-|
-| + | `select '2001-09-28'::date + 7` | '2001-10-05' | 1) Conversión de `string` a `date`, 2) suma de `7` (por default, y si no se especifican qué son esos `7`, serán `days`).
-| + | date '2001-09-28' + interval '1 hour' | timestamp '2001-09-28 01:00:00' |
+| + | `select '2001-09-28'::date + 7` | **2001-10-05** | 1) Conversión de `string` a `date`, 2) suma de `7` (por default, y si no se especifican qué son esos `7`, serán `days`).
+| + | `select '2001-09-28'::date + '1 hour'::interval` | **2001-09-28 01:00:00** | 
 | + | date '2001-09-28' + time '03:00' | timestamp '2001-09-28 03:00:00' |
 | + | interval '1 day' + interval '1 hour' | interval '1 day 01:00:00' |
 | + | timestamp '2001-09-28 01:00' + interval '23 hours' | timestamp '2001-09-29 00:00:00' |
