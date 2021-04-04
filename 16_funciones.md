@@ -207,7 +207,7 @@ from generate_series(1, 1000) seq;
 | `rpad(`_string_`,`_longitud_`,[`_relleno_`])` | text | El recíproco de `lpad`, excepto las reglas sobre truncado en caso de que _longitud_ sea mayor que la longitud de _string_, que son las mismas. | `select rpad('holamundo', 4, '_')` | **holamundo_** |
 | `split_part(`_string_`,`_delimiter_`,`_num de substring_`)` | text | Partir _string_ cada _delimiter_ y retornar el substring separado con _num de substring_ | `select split_part('2020-12-12', '-', 2)`| **12** |
 | `strpos(`_string_`,`_substring_`)` | int | Posición en donde _substring_ se encuentra dentro de _string_ | `select strpos('high', 'ig')` | **2** |
-| `translate(`_string_`,`_from_`,`_to_`)` | text | Correspondencia de 1 a 1 entre _from_ y _to_, y luego reemplazo en _string_. | `select translate('Las actitudes son más importantes que las aptitudes', 'aeiou', 'eeeee')` | `Les ectetedes sen más empertentes qee les eptetedes` |
+| `translate(`_string_`,`_from_`,`_to_`)` | text | Correspondencia de 1 a 1 entre _from_ y _to_, y luego reemplazo en _string_. | `select translate('Las actitudes son más importantes que las aptitudes', 'aeiou', 'eeeee')` | **Les ectetedes sen más empertentes qee les eptetedes** |
 
 
 ## Ejemplo integrador: Benford's Law
