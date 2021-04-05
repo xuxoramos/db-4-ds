@@ -292,33 +292,27 @@ No lo son, pero le echaron ganas :)
 | Operador | Ejemplo | Resultado | Explicación |
 |-|-|-|-|
 | + | `select '2001-09-28'::date + 7` | **2001-10-05** | 1) Conversión de `string` a `date`, 2) suma de `7` (por default, y si no se especifican qué son esos `7`, serán `days`).
-| + | `select '2001-09-28'::date + '1 hour'::interval` | **2001-09-28 01:00:00** | 
-| + | date '2001-09-28' + time '03:00' | timestamp '2001-09-28 03:00:00' |
-| + | interval '1 day' + interval '1 hour' | interval '1 day 01:00:00' |
-| + | timestamp '2001-09-28 01:00' + interval '23 hours' | timestamp '2001-09-29 00:00:00' |
-| + | time '01:00' + interval '3 hours' | time '04:00:00' |
-| - | - interval '23 hours' | interval '-23:00:00' |
-| - | date '2001-10-01' - date '2001-09-28' | integer '3' (days) |
-| - | date '2001-10-01' - integer '7' | date '2001-09-24' |
-| - | date '2001-09-28' - interval '1 hour' | timestamp '2001-09-27 23:00:00' |
-| - | time '05:00' - time '03:00' | interval '02:00:00' |
-| - | time '05:00' - interval '2 hours' | time '03:00:00' |
-| - | timestamp '2001-09-28 23:00' - interval '23 hours' | timestamp '2001-09-28 00:00:00' |
-| - | interval '1 day' - interval '1 hour' | interval '1 day -01:00:00' |
-| - | timestamp '2001-09-29 03:00' - timestamp '2001-09-27 12:00' | interval '1 day 15:00:00' |
-| * | 900 * interval '1 second' | interval '00:15:00' |
-| * | 21 * interval '1 day' | interval '21 days' |
-| * | double precision '3.5' * interval '1 hour' | interval '03:30:00' |
-| / | interval '1 hour' / double precision '1.5' | interval '00:40:00' |
+| + | `select '2001-09-28'::date + '1 hour'::interval` | **2001-09-28 01:00:00** | 1) Conversión de `string` a `date`, 2) convertir la cadena `1 hour` en tipo `interval`, 3) sumarle 1h a un `date` convierte ese `date` a `timestamp`.
+| + | `select '2001-09-28'::date + '03:00'::time` | **2001-09-28 03:00:00** | 1) Conversión de `string` a `date`, 2) conversión de la cadena `3:00` en `time`, 3) suma de `3:00` como `time` a `date`, convirtiéndolo en `timestamp`
+| + | `select '1 day'::interval + '1 hour'::interval` | **1 day 01:00:00** | Conversión de strings a `interval` y suma de ambos
+| + | `select '2001-09-28 01:00'::timestamp + '23 hours'::interval` | **2001-09-29 00:00:00** | Suma de un `interval` de 23h a un `timestamp` de un día a la 1am, lo cual da como resultado de un timestamp del siguiente día a las 00h
+| + | `select '01:00'::time + '3 hours'::interval` | **04:00:00** | Suma de un `interval` de 3h a un `time` de 1am, dando como resultado las 4am.
+| - | `select  -'23 hours'::interval` | **-23:00:00** | Creamos un intervalo de 23h contrario al flujo del tiempo.
+| - | `select (('2000-10-01'::date - '2001-09-28'::date) \|\| 'days')::interval` | **3** | Restar _fecha final_ menos _fecha inicial_, resultando en un `interval` de 3 días. Si invertimos las fechas para que sea _fecha inicial_ menos _fecha final_, el `interval` resulta negativo, es decir, un intervalo que va contrario al flujo del tiempo.
+| - | `select '2001-10-01'::date - 7` | **2001-09-24** | Resta del numérico `7` de una fecha X, resultando en un "go back in time"
+| - | `select '2001-09-28'::date - '1 hour'::interval` | **2001-09-27 23:00:00** | Recuerden que todos los `date`, al instanciarlos, tienen por default las 00h, por lo que al restarle 1h, nos regresamos a la noche anterior, a las 11pm.
+| - | `select '05:00'::time - '03:00'::time` | **02:00:00** | Las 5am menos las 2am resultan en un `interval` de 2h.
+| - | `select '05:00'::time - '2 hours'::interval` | **03:00:00** | Las 5am menos un `interval` de 2h nos da las 3am.
+| - | `select '2001-09-28 23:00'::timestamp - '23 hours'::interval` | **2001-09-28 00:00:00** | Una `timestamp` de una fecha X a las 11pm menos un intervalo de las 11pm
+| - | `select '1 day'::interval - '1 hour'::interval` | **1 day -01:00:00** | Creamos un intervalo conjunto de +1 `day` y -1 `hour`. Si sumáramos esto a `2020-01-01`, resultaría en un `timestamp` de `2020-01-01 23:00:00`
+| - | `select '2001-09-29 03:00'::timestamp - '2001-09-27 12:00'::timestamp` | **1 day 15:00:00** | Restar _timestamp final_ menos _timestamp inicial_ resulta en un intervalo de días y una fracción expresada en horas.
+| * | `select 900 * '1 second'::interval` | **00:15:00** | 900 como entero multiplicado por un `interval` de 1 seg resulta en 900 segundos, o 15 min.
+| * | `select 21 * '1 day':interval` | **21 days** | 21 como entero * `1 day` como `interval` es un `interval` de 21 días.
+| * | `select 3.5 * '1 hour'::interval` | **03:30:00** | 3.5 horas == `03:30:00`
+| / | `select '1 hour'::interval / 1.5` | **00:40:00** | 60 min / 1.5 (float) = 40 min
 
 
-
-
-
-
-
-
-## Tarea
+## Ejercicio
 
 Como parte de la modernización de nuestras video rental stores, vamos a automatizar la recepción y entrega de discos con robots.
 
