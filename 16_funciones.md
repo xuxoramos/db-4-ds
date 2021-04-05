@@ -289,6 +289,15 @@ No lo son, pero le echaron ganas :)
 
 ### Operadores con `date`
 
+Para saber cómo realizar operaciones y las funciones que actúan sobre fechas, debemos definir 3 tipos de dato en PostgreSQL:
+
+1. `date`: fecha, sin hora
+2. `time`: hora, sin fecha
+3. `timestamp`: fecha + hora
+4. `interval`: una duración entre 2 `time` (en horas), `date` (en días), o `timestamp` (en días u horas)
+
+Ahora si, primero los operadores:
+
 | Operador | Ejemplo | Resultado | Explicación |
 |-|-|-|-|
 | + | `select '2001-09-28'::date + 7` | **2001-10-05** | 1) Conversión de `string` a `date`, 2) suma de `7` (por default, y si no se especifican qué son esos `7`, serán `days`).
