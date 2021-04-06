@@ -329,8 +329,8 @@ Ahora si, primero los operadores:
 | `current_date` (constante, no función) | `date` | Fecha actual |   |   |
 | `current_time` (constante, no función) | `time` con zona horaria | Hora actual |   |   |
 | `current_timestamp` (constante, no función) | `timestamp` con zona horaria | Fecha con hora actual |   |   |
-| `date_part(['hour' \| 'minute' \| 'year' \| 'day'], timestamp) | double precision | Get subfield (equivalent to extract); see Section 9.9.1 | date_part('hour', timestamp '2001-02-16 20:38:40') | 20 |
-| date_part(text, interval) | double precision | Get subfield (equivalent to extract); see Section 9.9.1 | date_part('month', interval '2 years 3 months') | 3 |
+| `date_part(['hour'\|'minute'\|'year'\|'day'\|'month'],`_timestamp_`)` o bien `extract(['hour'\|'minute'\|'year'\|'day'] from `_timestamp_`)` | `double precision` | Obtener una parte (hora, minuto, año, mes, día) de _timestamp_. | `select date_part('hour', '2001-02-16 20:38:40'::timestamp)` | **20** |
+| `date_part(['hour'\|'minute'\|'year'\|'day'\|'month'],`_interval_`)` o bien `extract(['hour'\|'minute'\|'year'\|'day'\|'month'] from `_interval_`)` | double precision | Obtener | `select extract('hour' from '40 days 3 months 2 hour'::interval)`  | 3 |
 | date_trunc(text, timestamp) | timestamp | Truncate to specified precision; see also Section 9.9.2 | date_trunc('hour', timestamp '2001-02-16 20:38:40') | 2001-02-16 20:00:00 |
 | extract(field from timestamp) | double precision | Get subfield; see Section 9.9.1 | extract(hour from timestamp '2001-02-16 20:38:40') | 20 |
 | extract(field from interval) | double precision | Get subfield; see Section 9.9.1 | extract(month from interval '2 years 3 months') | 3 |
