@@ -285,7 +285,7 @@ No lo son, pero le echaron ganas :)
 
 ![](https://i.kym-cdn.com/entries/icons/facebook/000/028/021/work.jpg)
 
-## Funciones con `date` y sus variantes
+## Funciones y operadores con `date` y variantes
 
 ### Operadores con `date`
 
@@ -320,6 +320,32 @@ Ahora si, primero los operadores:
 | * | `select 3.5 * '1 hour'::interval` | **03:30:00** | 3.5 horas == `03:30:00`
 | / | `select '1 hour'::interval / 1.5` | **00:40:00** | 60 min / 1.5 (float) = 40 min
 
+### Funciones con `date`
+
+| Funcóon | Tipo de retorno | Qué hace? | Ejemplo | Resultado |
+|-|-|-|-|-|
+| `select age(`_timestamp final_`,`_timestamp inicinal_`)` | `interval` | Expresa un `interval` en forma _human-readable_, como se expresaría una edad, restando _timestamp inicial_ de _timestamp final_; los resultados se vuelven negativos si se invierten los argumentos. | `select age('2001-04-10'::timestamp, '1957-06-13'::timestamp)` | **43 years 9 mons 27 days** |
+| `select age(`_timestamp_`)` | `interval` | Mismo que el anterior, excepto que el _timestamp final_ es `now()` a las 00h. | `select age('1957-06-13 00:00:00'::timestamp)` | **63 years 9 mons 22 days** (now() = 2021-04-05 23:45:00) |
+| `current_date` (constante, no función) | `date` | Fecha actual |   |   |
+| `current_time` (constante, no función) | `time` con zona horaria | Hora actual |   |   |
+| `current_timestamp` (constante, no función) | `timestamp` con zona horaria | Fecha con hora actual |   |   |
+| `date_part(['hour' \| 'minute' \| 'year' \| 'day'], timestamp) | double precision | Get subfield (equivalent to extract); see Section 9.9.1 | date_part('hour', timestamp '2001-02-16 20:38:40') | 20 |
+| date_part(text, interval) | double precision | Get subfield (equivalent to extract); see Section 9.9.1 | date_part('month', interval '2 years 3 months') | 3 |
+| date_trunc(text, timestamp) | timestamp | Truncate to specified precision; see also Section 9.9.2 | date_trunc('hour', timestamp '2001-02-16 20:38:40') | 2001-02-16 20:00:00 |
+| extract(field from timestamp) | double precision | Get subfield; see Section 9.9.1 | extract(hour from timestamp '2001-02-16 20:38:40') | 20 |
+| extract(field from interval) | double precision | Get subfield; see Section 9.9.1 | extract(month from interval '2 years 3 months') | 3 |
+| isfinite(date) | boolean | Test for finite date (not +/-infinity) | isfinite(date '2001-02-16') | true |
+| isfinite(timestamp) | boolean | Test for finite time stamp (not +/-infinity) | isfinite(timestamp '2001-02-16 21:28:30') | true |
+| isfinite(interval) | boolean | Test for finite interval | isfinite(interval '4 hours') | true |
+| justify_days(interval) | interval | Adjust interval so 30-day time periods are represented as months | justify_days(interval '35 days') | 1 mon 5 days |
+| justify_hours(interval) | interval | Adjust interval so 24-hour time periods are represented as days | justify_hours(interval '27 hours') | 1 day 03:00:00 |
+| justify_interval(interval) | interval | Adjust interval using justify_days and justify_hours, with additional sign adjustments | justify_interval(interval '1 mon -1 hour') | 29 days 23:00:00 |
+| localtime | time | Current time of day; see Section 9.9.4 |   |   |
+| localtimestamp | timestamp | Current date and time (start of current transaction); see Section 9.9.4 |   |   |
+| now() | timestamp with time zone | Current date and time (start of current transaction); see Section 9.9.4 |   |   |
+| statement_timestamp() | timestamp with time zone | Current date and time (start of current statement); see Section 9.9.4 |   |   |
+| timeofday() | text | Current date and time (like clock_timestamp, but as a text string); see Section 9.9.4 |   |   |
+| transaction_timestamp() | timestamp with time zone | Current date and time (start of current transaction); see Section 9.9.4 |   |   |
 
 ## Ejercicio
 
