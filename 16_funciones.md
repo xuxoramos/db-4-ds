@@ -324,8 +324,8 @@ Ahora si, primero los operadores:
 
 | Funcóon | Tipo de retorno | Qué hace? | Ejemplo | Resultado |
 |-|-|-|-|-|
-| `select age(`_timestamp final_`,`_timestamp inicinal_`)` | `interval` | Expresa un `interval` en forma _human-readable_, como se expresaría una edad, restando _timestamp inicial_ de _timestamp final_; los resultados se vuelven negativos si se invierten los argumentos. | `select age('2001-04-10'::timestamp, '1957-06-13'::timestamp)` | **43 years 9 mons 27 days** |
-| `select age(`_timestamp_`)` | `interval` | Mismo que el anterior, excepto que el _timestamp final_ es `now()` a las 00h. | `select age('1957-06-13 00:00:00'::timestamp)` | **63 years 9 mons 22 days** (now() = 2021-04-05 23:45:00) |
+| `age(`_timestamp final_`,`_timestamp inicinal_`)` | `interval` | Expresa un `interval` en forma _human-readable_, como se expresaría una edad, restando _timestamp inicial_ de _timestamp final_; los resultados se vuelven negativos si se invierten los argumentos. | `select age('2001-04-10'::timestamp, '1957-06-13'::timestamp)` | **43 years 9 mons 27 days** |
+| `age(`_timestamp_`)` | `interval` | Mismo que el anterior, excepto que el _timestamp final_ es `now()` a las 00h. | `select age('1957-06-13 00:00:00'::timestamp)` | **63 years 9 mons 22 days** (now() = 2021-04-05 23:45:00) |
 | `current_date` (constante, no función) | `date` | Fecha actual |   |   |
 | `current_time` (constante, no función) | `time` con zona horaria | Hora actual |   |   |
 | `current_timestamp` (constante, no función) | `timestamp` con zona horaria | Fecha con hora actual |   |   |
@@ -334,13 +334,28 @@ Ahora si, primero los operadores:
 | `date_trunc(['hour'\|'minute'\|'year'\|'day'\|'month'],`_timestamp_`)` | timestamp | Truncar _timestamp_ hasta la precisión dada. | `select date_trunc('hour', '2001-02-16 20:38:40'::timestamp)` | **2001-02-16 20:00:00** |
 
 
+### Tarea 1
 
-## Ejercicio
+Una aplicación frecuente de Ciencia de Datos aplicada a la industria del microlending es el de calificaciones crediticias (credit scoring). Puede interpretarse de muchas formas: propensión a pago, probabilidad de default, etc. La intuición nos dice que las variables más importantes son el saldo o monto del crédito, y la puntualidad del pago; sin embargo, otra variable que frecuentemente escapa a los analistas es el tiempo entre cada pago. La puntualidad es una pésima variable para anticipar default o inferir capacidad de pago de micropréstamos, por su misma naturaleza. Si deseamos examinar la viabilidad de un producto de crédito para nuestras videorental stores, cuál es el promedio de días entre cada pago por cliente de la BD Sakila? Sigue una distribución normal?
+
+Fecha de entrega: Viernes 9 de Abril, antes de las 23:59:59
+Valor: 0.5 puntos sobre el final
+Medio de entrega: su propio repositorio de Github
+
+### Tarea 2
 
 Como parte de la modernización de nuestras video rental stores, vamos a automatizar la recepción y entrega de discos con robots.
 
 [![Brazo robótico manejando storage](http://img.youtube.com/vi/CVN93H6EuAU/0.jpg)](http://www.youtube.com/watch?v=CVN93H6EuAU "Brazo robótico manejando storage")
 
-Parte de la infraestructura es diseñar contenedores cilíndricos giratorios para facilitar la colocación y extracción de discos por brazos automatizados. Cada cajita de Blu-Ray mide 20cm x 13.5cm x 1.5cm, y para que el brazo pueda manipular adecuadamente cada cajita, debe estar contenida dentro de un arnés que cambia las medidas a 30cm x 21cm x 8cm para un espacio total de 5040 centímetros cúbicos y un peso de 200 gr por película.
+Parte de la infraestructura es diseñar contenedores cilíndricos giratorios para facilitar la colocación y extracción de discos por brazos automatizados. Cada cajita de Blu-Ray mide 20cm x 13.5cm x 1.5cm, y para que el brazo pueda manipular adecuadamente cada cajita, debe estar contenida dentro de un arnés que cambia las medidas a 30cm x 21cm x 8cm para un espacio total de 5040 centímetros cúbicos y un peso de 500 gr por película.
 
-Se nos ha encargado formular la medida de dichos cilindros de manera tal que quepan todas las copias de los Blu-Rays de cada uno de nuestros stores. Las medidas deben ser estándar, es decir, la misma para todas nuestras stores, y en cada store pueden ser instalados más de 1 de estos cilindros. Cada cilindro aguanta un peso máximo de 50kg como máximo.  
+Se nos ha encargado formular la medida de dichos cilindros de manera tal que quepan todas las copias de los Blu-Rays de cada uno de nuestros stores. Las medidas deben ser estándar, es decir, la misma para todas nuestras stores, y en cada store pueden ser instalados más de 1 de estos cilindros. Cada cilindro aguanta un peso máximo de 50kg como máximo. El volúmen de un cilindro se calcula de [ésta forma.](volume of a cylinder)
+
+Esto no se resuelve con 1 solo query. El problema se debe partir en varios cachos y deben resolver cada uno con SQL.
+
+La información que no esté dada por el enunciado del problema o el contenido de la BD, podrá ser establecida como supuestos o assumptions, pero deben ser razonables para el problem domain que estamos tratando.
+
+Fecha de entrega: Viernes 9 de Abril, antes de las 23:59:59
+Valor: 2 punto sobre el final
+Medio de entrega: su propio repositorio de Github
