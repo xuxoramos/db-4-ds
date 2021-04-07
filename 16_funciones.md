@@ -336,10 +336,14 @@ Ahora si, primero los operadores:
 
 ### Tarea 1
 
-Una aplicación frecuente de Ciencia de Datos aplicada a la industria del microlending es el de calificaciones crediticias (credit scoring). Puede interpretarse de muchas formas: propensión a pago, probabilidad de default, etc. La intuición nos dice que las variables más importantes son el saldo o monto del crédito, y la puntualidad del pago; sin embargo, otra variable que frecuentemente escapa a los analistas es el tiempo entre cada pago. La puntualidad es una pésima variable para anticipar default o inferir capacidad de pago de micropréstamos, por su misma naturaleza. Si deseamos examinar la viabilidad de un producto de crédito para nuestras videorental stores, cuál es el promedio de días entre cada pago por cliente de la BD Sakila? Sigue una distribución normal?
+Una aplicación frecuente de Ciencia de Datos aplicada a la industria del microlending es el de calificaciones crediticias (credit scoring). Puede interpretarse de muchas formas: propensión a pago, probabilidad de default, etc. La intuición nos dice que las variables más importantes son el saldo o monto del crédito, y la puntualidad del pago; sin embargo, otra variable que frecuentemente escapa a los analistas es el tiempo entre cada pago. La puntualidad es una pésima variable para anticipar default o inferir capacidad de pago de micropréstamos, por su misma naturaleza. Si deseamos examinar la viabilidad de un producto de crédito para nuestras videorental stores:
+
+1. Cuál es el promedio, en formato human-readable, de tiempo entre cada pago por cliente de la BD Sakila?
+2. Sigue una distribución normal?
+3. Qué tanto difiere ese promedio del tiempo entre rentas por cliente?
 
 Fecha de entrega: Viernes 9 de Abril, antes de las 23:59:59
-Valor: 0.5 puntos sobre el final
+Valor: 1 puntos sobre el final
 Medio de entrega: su propio repositorio de Github
 
 ### Tarea 2
