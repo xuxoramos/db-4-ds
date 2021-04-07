@@ -330,22 +330,10 @@ Ahora si, primero los operadores:
 | `current_time` (constante, no función) | `time` con zona horaria | Hora actual |   |   |
 | `current_timestamp` (constante, no función) | `timestamp` con zona horaria | Fecha con hora actual |   |   |
 | `date_part(['hour'\|'minute'\|'year'\|'day'\|'month'],`_timestamp_`)` o bien `extract(['hour'\|'minute'\|'year'\|'day'] from `_timestamp_`)` | `double precision` | Obtener una parte (hora, minuto, año, mes, día) de _timestamp_. | `select date_part('hour', '2001-02-16 20:38:40'::timestamp)` | **20** |
-| `date_part(['hour'\|'minute'\|'year'\|'day'\|'month'],`_interval_`)` o bien `extract(['hour'\|'minute'\|'year'\|'day'\|'month'] from `_interval_`)` | double precision | Obtener | `select extract('hour' from '40 days 3 months 2 hour'::interval)`  | 3 |
-| date_trunc(text, timestamp) | timestamp | Truncate to specified precision; see also Section 9.9.2 | date_trunc('hour', timestamp '2001-02-16 20:38:40') | 2001-02-16 20:00:00 |
-| extract(field from timestamp) | double precision | Get subfield; see Section 9.9.1 | extract(hour from timestamp '2001-02-16 20:38:40') | 20 |
-| extract(field from interval) | double precision | Get subfield; see Section 9.9.1 | extract(month from interval '2 years 3 months') | 3 |
-| isfinite(date) | boolean | Test for finite date (not +/-infinity) | isfinite(date '2001-02-16') | true |
-| isfinite(timestamp) | boolean | Test for finite time stamp (not +/-infinity) | isfinite(timestamp '2001-02-16 21:28:30') | true |
-| isfinite(interval) | boolean | Test for finite interval | isfinite(interval '4 hours') | true |
-| justify_days(interval) | interval | Adjust interval so 30-day time periods are represented as months | justify_days(interval '35 days') | 1 mon 5 days |
-| justify_hours(interval) | interval | Adjust interval so 24-hour time periods are represented as days | justify_hours(interval '27 hours') | 1 day 03:00:00 |
-| justify_interval(interval) | interval | Adjust interval using justify_days and justify_hours, with additional sign adjustments | justify_interval(interval '1 mon -1 hour') | 29 days 23:00:00 |
-| localtime | time | Current time of day; see Section 9.9.4 |   |   |
-| localtimestamp | timestamp | Current date and time (start of current transaction); see Section 9.9.4 |   |   |
-| now() | timestamp with time zone | Current date and time (start of current transaction); see Section 9.9.4 |   |   |
-| statement_timestamp() | timestamp with time zone | Current date and time (start of current statement); see Section 9.9.4 |   |   |
-| timeofday() | text | Current date and time (like clock_timestamp, but as a text string); see Section 9.9.4 |   |   |
-| transaction_timestamp() | timestamp with time zone | Current date and time (start of current transaction); see Section 9.9.4 |   |   |
+| `date_part(['hour'\|'minute'\|'year'\|'day'\|'month'],`_interval_`)` o bien `extract(['hour'\|'minute'\|'year'\|'day'\|'month'] from `_interval_`)` | double precision | Obtener | `select extract('hour' from '40 days 3 months 2 hour'::interval)`  | **3** |
+| `date_trunc(['hour'\|'minute'\|'year'\|'day'\|'month'],`_timestamp_`)` | timestamp | Truncar _timestamp_ hasta la precisión dada. | `select date_trunc('hour', '2001-02-16 20:38:40'::timestamp)` | **2001-02-16 20:00:00** |
+
+
 
 ## Ejercicio
 
