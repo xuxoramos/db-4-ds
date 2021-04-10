@@ -21,7 +21,7 @@ El desarrollo de una plataforma tecnológica que contemple lo siguiente:
 ## Evaluación
 
 1. **Levantamiento y análisis de información:**
-  - Entregable: documentos de historias de usuario e historias del problem domain en repositorio público de Github
+  - Entregable: 1) **Prototipo** de web application con la encuesta materializada en él, ó bien, diseño de la encuesta en alguna plataforma como TypeFrom, Google Forms, etc. OJO: Para esta fecha ya debe haber una conexión a una BD, aún cuando dicha BD solo tenga de momento 1 tabla. 2) documentos de historias de usuario e historias del problem domain en repositorio público de Github
   - Valor: 15%
   - Fecha de entrega: 28 de Abril
 
