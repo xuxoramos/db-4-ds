@@ -179,9 +179,84 @@ Verifiquen que en esta pantalla, la columna de la derecha `Mapping` diga `existi
 
 ![](https://i.imgur.com/zoz2g9y.png)
 
-### Ahora si, window functions
+#### Ahora si, window functions `last_value()` y `first_value()`
+
+Vamos a calcular el [_daily return_](https://www.investopedia.com/terms/r/return.asp) acumulado del dogecoin desde el inicio del año.
+
+El return es la plusvalía de un período a otro de un asset financiero, dado por:
+
+![](https://advfinangelinvestor.files.wordpress.com/2012/04/untitled2.png?w=584}
+
+Donde _t-1_ es cada fecha de cada registro, y _t_ es el último registro del año.
+
+```sql
+select d as fecha, 
+extract(year from d) as yr, 
+close as cierre,
+last_value(close) over w as value_year_end,
+((last_value(close) over w - close) / close) * 100 as percentage_annual_return
+from t_stock 
+window w as (partition by extract(year from d) order by extract(year from d) asc);
+```
+
+![](https://i.imgur.com/cUKst1x.png)
+
+Qué hicimos aquí?
+1. creamos un _window_ de cada año de nuestros datos
+2. llamamos una función que actuará sobre cada window para obtener el último valor de cada ventana
+3. aplicamos la fórmula del _return_ entre el valor de cada día del dogecoin VS el valor del día final del año (osea, el valor final de la ventana)
+4. Sacamos % de cambio
+
+Vamos ahora a hacer el mismo cálculo pero con retorno mensual y con `first_value()`:
+
+```sql
+select d as fecha, 
+extract(year from d) as yr, 
+close as cierre,
+first_value(close) over w as value_year_end,
+((close - first_value(close) over w) / first_value(close) over w) * 100 as percentage_annual_return
+from t_stock 
+window w as (partition by extract(year from d), extract(month from d) order by extract(year from d) asc);
+```
+
+Qué hicimos aquí?
+
+1. creamos un _window_ con cada mes/año
+2. llamamos la función que actuará sobre cada window para obtener el 1er valor de cada ventana
+3. aplicamos la fórmula de return de cada registro VS el valor del dogecoin al final de cada mes/año (i.e. el valor al final de la ventana)
+4. Sacamos el % de cambio.
+
+### Funciones `lag()` y `lead()`
+
+Lo común para calcular el return no es tener _t_ en el final de mes y _t-1_ al inicio de mes, sobre todo en instrumentos financieros que se intercambian diario, sino tener _t_ en hoy y _t-1_ ayer.
+
+Para eso usamos la función `lag()`:
+
+```sql
+select d as fecha, 
+close as precio_t,
+lag(close,1,0.0) over w as precio_tmenos1,
+((lag(close) over w - close) / close) * 100 as percentage_return
+from t_stock 
+window w as (order by d asc);
+```
+
+![](https://i.imgur.com/XaGogtZ.png)
+
+**OJO:** la función `lag()` y `lead()` para efectos de cálculo de retorno diario de instrumentos financieros debemos definir una ventana que consista en toda la tabla, y ordenarla por fecha de forma ascendente. Esto es para que la window function aplique sobre todo el dataset y no sobre un año o mes en particular.
+
+Qué estamos haciendo aquí?
+
+1. definir una ventana que consiste en todo el dataset ordenado por fecha de forma ascendente
+2. llamar la función `lag(close, 1, 0.0)` para poner en cada registro el valor de precio de cierre en `close` del día anterior _t-1_. Si quisiéramos el precio _t-4_ entonces la función es `lag(close, 4, 0.0)`. El `0.0` sirve para establecer qué valor ponemos si "se nos acaban" los registros a los cuales regresar.
+3. correr la fórmula del return y sacar el porcentaje
+
+Ya para finalizar una vez teniendo los retornos diarios, ahora si podemos promediar por año, y eso es lo que usualmente se reporta en los fact sheets de los instrumentos.
 
 
+## Tarea
+
+Una de las métricas para saber si un cliente es bueno, aparte de la suma y el promedio de sus pagos, es si tenemos una progresión consistentemente creciente en los montos. 
 
 
 
