@@ -63,7 +63,7 @@ A continuación el temario, fecha por fecha:
 | 3             | 2021/01/25      | [Inserción de datos (insert). Borrado de datos (delete). Actualización de datos (update). Borrado o "dropeo" de tablas (drop y truncate). Bloopers y errores en statements.](https://xuxoramos.github.io/db-4-ds/3_insert_delete_update)                                                                                                                                                              |
 | 4             | 2021/01/27      | [Lab 0: De un user story a un modelo E-R](https://xuxoramos.github.io/db-4-ds/4_lab1_de_user_story_a_bd)                                                                                                                                                                                                               |
 | 5             | 2021/02/01      | Asueto                                                                              |
-| 6             | 2021/02/03      | **_Clase a reponer_**                                                                                                                                                                                                                                               |
+| 6             | 2021/02/03      | **_Clase a reponer_** (repuesta el sábado 10 de Abril de 2020)                                                                                                                                                                                                                                                |
 | 7             | 2021/02/08      |  [Normalización en el diseño de BDs. De la 1a a la 3a forma normal.](https://xuxoramos.github.io/db-4-ds/5_normalizacion)                                                                                                                                     |
 | 8             | 2021/02/10      |  [Queries, quieres y más queries!](https://xuxoramos.github.io/db-4-ds/6_queries_y_queries_y_queries)                                                                                                                                                                                                                      |
 | 9             | 2021/02/15      |  [Joins!](https://xuxoramos.github.io/db-4-ds/7_joins)                                                                                                                                                                                                                                          |
@@ -136,6 +136,7 @@ Ahora, para el cliente, descargaremos e instalaremos la edición [Community de D
 Ya los tienes? Va.
 
 ### Cómo vamos a calificar?
+
 1. 1er Parcial: 10%
 2. 2o Parcial: 15%
 3. 3er Parcial: 20%
