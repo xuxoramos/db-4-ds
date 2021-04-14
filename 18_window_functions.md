@@ -119,7 +119,6 @@ Primero vamos a crear la tabla `t_stock`:
 
 ```sql
 CREATE TABLE t_stock (
-  
   d date,
   open numeric,
   high numeric,
