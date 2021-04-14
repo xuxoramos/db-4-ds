@@ -267,6 +267,8 @@ from daily_returns
 group by anio
 ```
 
+![](https://i.imgur.com/w9H2pTa.png)
+
 ## Tarea
 
 Una de las métricas para saber si un cliente es bueno, aparte de la suma y el promedio de sus pagos, es si tenemos una progresión consistentemente creciente en los montos.
