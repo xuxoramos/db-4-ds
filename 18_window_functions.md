@@ -185,7 +185,7 @@ Vamos a calcular el [_daily return_](https://www.investopedia.com/terms/r/return
 
 El return es la plusvalía de un período a otro de un asset financiero, dado por:
 
-![](https://advfinangelinvestor.files.wordpress.com/2012/04/untitled2.png?w=584}
+![](https://advfinangelinvestor.files.wordpress.com/2012/04/untitled2.png?w=584)
 
 Donde _t-1_ es cada fecha de cada registro, y _t_ es el último registro del año.
 
