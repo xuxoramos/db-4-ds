@@ -253,10 +253,31 @@ Qué estamos haciendo aquí?
 
 Ya para finalizar una vez teniendo los retornos diarios, ahora si podemos promediar por año, y eso es lo que usualmente se reporta en los fact sheets de los instrumentos.
 
+```sql
+with daily_returns as (
+	select d as fecha, 
+	close as precio_t,
+	lag(close,1,0.0) over w as precio_tmenos1,
+	((lag(close) over w - close) / close) * 100 as percentage_return
+	from t_stock
+	window w as (order by d asc)
+)
+select extract(year from fecha) as anio, avg(percentage_return)
+from daily_returns
+group by anio
+```
 
 ## Tarea
 
-Una de las métricas para saber si un cliente es bueno, aparte de la suma y el promedio de sus pagos, es si tenemos una progresión consistentemente creciente en los montos. 
+Una de las métricas para saber si un cliente es bueno, aparte de la suma y el promedio de sus pagos, es si tenemos una progresión consistentemente creciente en los montos.
+
+Debemos calcular para cada cliente su promedio mensual de _deltas_ en los pagos de sus órdenes en la tabla `order_details` en la BD de Northwind, es decir, la diferencia entre el monto total de una orden en tiempo _t_ y el anterior en _t-1_, para tener la foto completa sobre el customer lifetime value de cada miembro de nuestra cartera.
+
+- Valor: 1 punto sobre el final
+- Deadline: Viernes 23 de Abril a las 23:59:59
+- Medio de entrega: repositorio en Github
+
+
 
 
 
