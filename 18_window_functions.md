@@ -113,9 +113,9 @@ Igual si usamos `desc`, el num 1 de la partición será el mayor, y si usamos `a
 
 ### `first_value()` y `last_value()`
 
-Para estas funciones, y para las siguientes, vamos a cargar datos de [Yahoo Finance](https://finance.yahoo.com/) del mercado de capitales. Particularmente vamos a descargar la serie de precios diaria para el índice [_Standard&Poors 500_](https://finance.yahoo.com/quote/%5EGSPC?p=^GSPC&.tsrc=fin-srch).
+Para estas funciones, y para las siguientes, vamos a cargar datos de [Yahoo Finance](https://finance.yahoo.com/) del mercado de capitales. Particularmente vamos a descargar la serie de precios diaria para el [DogeCoin}(https://en.wikipedia.org/wiki/Dogecoin) y vamos a calcular su retorno diario y su retorno anual. Los pasos son:
 
-Primero vamos a crear la tabla `t_stock`:
+1. Crear la tabla `t_stock`:
 
 ```sql
 CREATE TABLE t_stock (
@@ -124,14 +124,67 @@ CREATE TABLE t_stock (
   high numeric,
   low numeric,
   close numeric,
-  volume int8,
-  adj_close numeric
+  adj_close numeric,
+  volume int8
 );
 ```
 
 Aunque esta tabla no tiene una llave primaria, creo que podemos inferir que `d date` es un muy buen candidato para serlo. 
 
 Los demás campos se referirán al precio del instrumento que vamos a descargar: cierre, apertura, máximo, mínimo, volumen operado y precio de cierre ajustado.
+
+2. Descargar la serie de precios histórica de [Yahoo Finance](https://query1.finance.yahoo.com/v7/finance/download/DOGE-USD?period1=1586874050&period2=1618410050&interval=1d&events=history&includeAdjustedClose=true)
+
+3. Ir a la tabla `t_stock` en nuestro DBeaver, dar click derecho y dar click en `Import Data`
+
+![](https://i.imgur.com/iTROKtS.png)
+
+4. Seleccionar la opción `Import CSV file(s)` y dar click en `Next`. Saldrá una ventanita para ir por nuestro CSV que acabamos de descargar. Selecciónenlo.
+
+![](https://i.imgur.com/EqAoaEK.png)
+
+5. Saldrá una ventana de descripción del proceso de import. Scrolleen hacia abajo para encontrar un renglón que dice `NULL value mark` y en el espacio en blanco de la derecha escriban el valor **`null`** y dar click en `Next`.
+
+![](https://i.imgur.com/jjYx5gt.png)
+
+Esto es para que PostgreSQL reconozca el texto `null` en el archivo como un **valor `NULL`** en la base de datos, dado que tenemos días donde no se operó DogeCoin y por tanto no tenemos datos para esas fechas.
+
+6. Esta es la pantalla de configuración del import. Den click en `Columns...` para poder mapear de las columnas del archivo CSV a las columnas de la tabla:
+
+![](https://i.imgur.com/mho7LSV.png)
+
+7. Vamos a mapear las columnas así:
+
+  - Source: "Date"      Target: "d"
+  - Source: "Open"      Target: "open"
+  - Source: "High"      Target: "high"
+  - Source: "Low"       Target: "low"
+  - Source: "Close"     Target: "close"
+  - Source: "Adj Close" Target: "adj_close"
+  - Source: "Volume"    Target: "volume"
+
+![](https://i.imgur.com/sam2QWB.png)
+
+Verifiquen que en esta pantalla, la columna de la derecha `Mapping` diga `existing` en todos los renglones, de lo contrario PostgreSQL creará nuevas columnas en lugar de usar las existentes.
+
+8. Tenemos una pantalla de configuración del proceso de carga que va a suceder (transacciones y creación de columnas). Dejen todo como está, no muevan nada y den `Next`
+
+![](https://i.imgur.com/OcrqQcQ.png)
+
+9. Finalmente tenemos la pantalla de confirmación. Igual, den click en `Start` para comenzar el import:
+
+![](https://i.imgur.com/CuMvntI.png)
+
+10. Voilá! Habemus data!
+
+![](https://i.imgur.com/zoz2g9y.png)
+
+### Ahora si, window functions
+
+
+
+
+
 
 
 
