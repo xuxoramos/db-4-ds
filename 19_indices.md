@@ -10,10 +10,10 @@ create table ecobici_historico (
   bici varchar(100),
   ciclo_estacion_retiro varchar(100),
   fecha_retiro date,
-  hora_retiro time,
+  hora_retiro numeric(3),
   ciclo_estacion_arribo varchar(100),
   fecha_arribo date,
-  hora_arribo time
+  hora_arribo numeric(3)
 );
 create sequence seq_id_ecobici_historico start 1 increment 1;
 alter table ecobici_historico alter column id set default nextval('seq_id_ecobici_historico');
