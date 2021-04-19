@@ -173,7 +173,7 @@ mes_arribo = 12 and genero_usuario = 'M';
 
 ![](https://i.imgur.com/Yr8LmXi.png)
 
-168 mil segundos?!?!?!
+168 mil milisegundos?!?!?!
 
 ![](https://www.meme-arsenal.com/memes/79f825bb34adef7ef49e623d2d96f74a.jpg)
 
