@@ -1,6 +1,6 @@
 # Indices
 
-Un índice en una BD es como un índice en un libro. Si quisieramos encontrar un tema sin un índice o un table of contents, tendríamos que "escanear" página por página buscando el término o tema que queremos checar.
+Un índice en una BD es como un índice en un libro: nos ayuda a encontrar registros más rápido. Si quisieramos encontrar un tema sin un índice o un table of contents, tendríamos que "escanear" página por página buscando el término o tema que queremos checar.
 
 ## Qué forma tienen los índices?
 
@@ -41,7 +41,7 @@ create index freight_index on orders (
 );
 ```
 
-El método para crear índices en la mayoría de las bases de datos es el método B-tree, que resulta (roughly) en lo siguientes:
+El método para crear índices en la mayoría de las bases de datos es el método B-tree (complejidad `O(log(n)`), que resulta (roughly) en lo siguientes:
 
 1. Seleccionamos un punto intermedio de la serie de valores. Supongamos que encontramos uno que se acerca al promedio de `52.12`
 
@@ -57,9 +57,44 @@ El método para crear índices en la mayoría de las bases de datos es el métod
 
 4. Seguimos partiendo recursivamente hasta que lleguemos a los registros individuales.
 
-![](
+![](https://i.imgur.com/NlRM8cw.png)
 
-5. Una vez con los registros individuales, hacemos una lista con el orden logrado.
+![](https://i.imgur.com/hmMQ9vR.png)
+
+5. Una vez con los registros individuales, hacemos una lista con el orden logrado. Este es nuestro índice.
+
+![](https://i.imgur.com/EQTtFm7.png)
+
+
+## Cómo mejora el performance el índice sobre `orders.freight`?
+
+Veamos
+
+```sql
+explain select o.freight
+from orders o
+where o.freight = 148.33 
+```
+
+![](https://i.imgur.com/j0KV65p.png)
+
+Podemos ver que el query planner nos dice que para ejecutar este query está haciendo un `Sequential Scan`, lo que significa que se está yendo **registro por registro** buscando aquel que cumpla con la condición en `where`. Dada la velocidad de mi máquina, y lo pequeño de la BD, la diferencia en tiempo de correr este query con índice y sin él no será muy significativa. Sin índice está tardando `0.106ms`. Y con índice?
+
+![](https://i.imgur.com/Rb3OCYx.png)
+
+Vemos que el tipo de ejecución ha cambiado a `Index-Only Scan`, lo que significa que está precisamente recorriendo el árbol del índice. Dicha búsqueda resulta en mucho menos comparaciones que hacer 1 por cada registro en la tabla. No solamente eso, sino que el tiempo de ejecución ha disminuído dramáticamente, a `0.019ms`.
+
+## Índices creados por default
+
+Cuando creamos un constraint de `primary key` en una tabla, dicho campo se indexa en automático, por lo que las búsquedas por el ID de la tabla deben ser rápidas.
+
+:warning: Muchos suponemos que si las BDs crean índices para las llaves primarias en automático, entonces las llaves foráneas igual van a tener su índice creado en automático. Esto no es así, por lo que **es buena práctica poner índices a las llaves foráneas**, siempre y cuando no sean compuestas, o sean parte de una tabla intermedia.
+
+## Tradeoffs de índices
+
+Los índices aceleran las consultas, PERO imponen un penalty en `insert`, `delete` y `update`, debido a que al haber un nuevo dato, el árbol que representa nuestro índice debe **rebalancearse**, de modo que el nuevo registro pueda acomodarse en el orden que debe ir.
+
+## Ejemplo con una tablotototota
 
 Para esto necesitamos tener una tabla ENORME.
 
