@@ -41,12 +41,24 @@ create index freight_index on orders (
 );
 ```
 
-El método para crear índices en la mayoría de las bases de datos es el método B-tree (o binary tree), que resulta (roughly) en lo siguientes:
+El método para crear índices en la mayoría de las bases de datos es el método B-tree, que resulta (roughly) en lo siguientes:
 
 1. Seleccionamos un punto intermedio de la serie de valores. Supongamos que encontramos uno que se acerca al promedio de `52.12`
+
+![](https://i.imgur.com/JTW0urM.png)
+
 2. Partimos la lista de valores en `order_id.freight <= 52.12` y `order_id.freight > 52.12`
+
+![](https://i.imgur.com/D52sUvh.png)
+
 3. Hacemos lo mismo con esas 2 partes.
+
+![](https://i.imgur.com/jNp8HsA.png)
+
 4. Seguimos partiendo recursivamente hasta que lleguemos a los registros individuales.
+
+![](
+
 5. Una vez con los registros individuales, hacemos una lista con el orden logrado.
 
 Para esto necesitamos tener una tabla ENORME.
