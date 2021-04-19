@@ -1,5 +1,28 @@
 # Indices
 
+Un índice en una BD es como un índice en un libro. Si quisieramos encontrar un tema sin un índice o un table of contents, tendríamos que "escanear" página por página buscando el término o tema que queremos checar.
+
+## Qué forma tienen los índices?
+
+Supongamos una tabla como esta:
+
+order_id|freight|
+--------|-------|
+   10248|  32.38|
+   10249|  11.61|
+   10250|  65.83|
+   10251|  41.34|
+   10252|   51.3|
+   10253|  58.17|
+   10254|  22.98|
+   10255| 148.33|
+   10256|  13.97|
+   10257|  81.91|
+   10258| 140.51|
+   10259|   3.25|
+   10260|  55.09|
+   10261|   3.05|
+
 Para esto necesitamos tener una tabla ENORME.
 
 ```sql
