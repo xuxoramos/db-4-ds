@@ -145,3 +145,80 @@ create table ecobici_historico (
 create sequence seq_id_ecobici_historico start 1 increment 1;
 alter table ecobici_historico alter column id set default nextval('seq_id_ecobici_historico');
 ```
+
+Importaremos datos con el mismo mecanismo que vimos [la clase anterior](https://github.com/xuxoramos/db-4-ds/blob/gh-pages/18_window_functions.md#first_value-y-last_value) para poder insertar [este archivo (2GB zippeado, 19GB expandido)](https://drive.google.com/file/d/1WDl_U59ihAql7PS0XZ4uRU6AVaKxM6ZF/view?usp=sharing)
+
+Cuántos registros tenemos?
+
+```sql
+select count(*) from ecobici_historico;
+```
+
+Suena a que todo lo que hagamos con esta tabla va a ser tardado.
+
+Cuánto tardó en ejecutar este conteo?
+
+![](https://i.imgur.com/ttLH31Q.png)
+
+Como pueden ver, tardó 2.7 segundos, pero para realizar el agregado del `count()` pudo usar un `Parallel Index-Only Scan`, que significa que está usando el índice asociado a la llave primaria que le creamos a la tabla.
+
+Qué pasa con una consulta a una columna sin índice?
+
+```sql
+explain analyze select * 
+from ecobici_historico 
+where anio_arribo = 2017 and 
+mes_arribo = 12 and genero_usuario = 'M';
+```
+
+![](https://i.imgur.com/Yr8LmXi.png)
+
+168 mil segundos?!?!?!
+
+![](https://www.meme-arsenal.com/memes/79f825bb34adef7ef49e623d2d96f74a.jpg)
+
+Terrible el desempeño, no?
+
+Qué pasa si agregamos un índice que contenga `anio_arribo`, `mes_arribo` y `genero_usuario`?
+
+```sql
+create index ecobici_anio_mes_genero_index on ecobici_historico (
+	genero_usuario, anio_arribo, mes_arribo asc
+);
+```
+
+~[](https://i.imgur.com/9JuELQH.png)
+
+Aún la creación del índice se tardó `5.5 minutos`!!! 😵
+
+Volvamos a correr el query:
+
+![](https://i.imgur.com/rA4XFND.png)
+
+Ahora tardamos `0.131 milisegundos`!
+
+Es una mejoría del **128244275%**!!!
+
+![](https://media.wired.com/photos/5e3246cd56bcac00087f0a1e/1:1/w_1329,h_1329,c_limit/Culture-Success-Meme-Kid.jpg)
+
+## Cuándo y cuando no debo usar índices?
+
+### Cuándo sí
+
+1. En Llaves primarias (checar que mi BD la puso por default)
+2. En Llaves foráneas (excepto tablas intermedias)
+3. En Columnas con constraint de tipo `unique`
+4. Cuando la tabla vaya a ser consultada frecuentemente para propósitos analíticos usando varias columnas (índcices multi-columna)
+5. Cuando tengamos tablas con > ~500K registros y +20 columnas (aquí funcionan bien los índices clusterizados)
+6. Columnas que usemos frecuentemente con `order by` y `group by`
+7. En columnas de fechas usadas en tablas históricas (probablemente tarde mucho el índice en construirse)
+
+### Cuándo no
+
+1. Tablas con muchísima actividad I/O, como transaccionales (ventas, high frequency trading, etc)
+2. Columnas cuyo tipo sea caracter con longitudes mayores a 25 posiciones
+3. Cuando ya tengas muchos índices 🤣
+
+## Final thoughts
+
+Un índice es costoso, en memoria, en tiempo, en espacio. Índices bien diseñados nos pueden ayudar a acelerar algunas consultas, pero sobreuso de índices pueden empantanar las escrituras y actualizaciones a una BD hasta volvera inoperable y al punto de tener que destruirla, y volverla a construir, y esto implica regresar el estado del negocio a un punto anterio, y quizá perder días de operatividad, lo cual es fatal para el problem domain.
