@@ -22,6 +22,28 @@ order_id|freight|
    10259|   3.25|
    10260|  55.09|
    10261|   3.05|
+   
+Si queremos buscar el `order_id` con flete `3.25`, tenemos que al menos recorrer 12 registros uno por uno hasta encontrar el `order_id` **10259**. Para los que estudian compu, el tiempo de ejecución de esto es O(n), osea, complejidad lineal con el num de elementos que vayamos a recorrer.
+
+Si creamos un índice sobre el campo `freight`, debemos seguir esta sintaxis:
+
+```sql
+create index [nombre_del_índice] on [tabla] [using method] (
+	columna [asc|desc] [nulls {first|last}]
+);
+```
+
+Crearemos un índice llamado `freight_index` en la tabla `orders`:
+
+```sql
+create index freight_index on orders (
+	freight asc
+);
+```
+
+El método para crear índices en la mayoría de las bases de datos es el método B-tree (o binary tree), que resulta (roughly) en lo siguientes:
+
+1. Seleccionamos un punto intermedio de la serie de valores 
 
 Para esto necesitamos tener una tabla ENORME.
 
