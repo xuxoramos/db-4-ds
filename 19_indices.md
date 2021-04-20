@@ -201,6 +201,54 @@ Es una mejoría del **128244275%**!!!
 
 ![](https://media.wired.com/photos/5e3246cd56bcac00087f0a1e/1:1/w_1329,h_1329,c_limit/Culture-Success-Meme-Kid.jpg)
 
+### Índices compuestos VS índices simples
+
+Un índice compuesto construye un árbol con múltiples columnas, y uno simple lo hace con una sola columna.
+
+Ya hemos visto que un índice compuesto optimiza muy bien un query donde el `where` tiene condiciones sobre las columnas que aparecen en este mismo índice.
+
+Qué pasa si creamos índices individuales?
+
+Eliminemos el índice multicolumna que creamos:
+
+```sql
+drop index ecobici_anio_mes_genero_index;
+```
+
+Y ahora vamos a crear un índice individual para cada columna. OJO! Esto tardará **11 mins**!
+
+```sql
+create index ecobici_genero_index on ecobici_historico (
+	genero_usuario asc
+);
+create index ecobici_anio_index on ecobici_historico (
+	anio_arribo asc
+);
+create index ecobici_mes_index on ecobici_historico (
+	mes_arribo asc
+);
+```
+
+Una vez creados esos índices, ejecutemos de nuevo el query que usa estos 3 campos en su `where`:
+
+```sql
+explain analyze select * 
+from ecobici_historico 
+where anio_arribo = 2017 and 
+mes_arribo = 12 and genero_usuario = 'M';
+```
+
+El resultado es el siguiente:
+
+![](https://i.imgur.com/KKLQkWN.png)
+
+Como podemos ver, de los 3 índices simples que hemos creado, el query planner solo está usando 1, el índice de `ecobici_anio_index`. Por qué?
+
+No importa como pongamos las condiciones en el `where`, **PostgreSQL siempre reordenará los filtros**. PostgreSQL sabe que a veces no escribimos los queries más óptimos, y pone por delante el filtro que tiene el índice que separa mejor los registros.
+
+Al aplicar este índice, quedan demasiado pocos registros para filtrar y terminar el query como para aplicar índices subsecuentes, por lo que PostgreSQL decide no usarlos, so pena de entrar **optimización prematura** el cual es [la raíz de todos los males.](https://stackify.com/premature-optimization-evil/)
+
+
 ## Cuándo y cuando no debo usar índices?
 
 ### Cuándo sí
