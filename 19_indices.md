@@ -187,7 +187,7 @@ create index ecobici_anio_mes_genero_index on ecobici_historico (
 );
 ```
 
-~[](https://i.imgur.com/9JuELQH.png)
+![](https://i.imgur.com/9JuELQH.png)
 
 Aún la creación del índice se tardó `5.5 minutos`!!! 😵
 
