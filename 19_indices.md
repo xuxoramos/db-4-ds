@@ -216,7 +216,7 @@ from ecobici_historico
 where mes_arribo = 12;
 ```
 
-https://i.imgur.com/T4wdoFF.png
+![](https://i.imgur.com/T4wdoFF.png)
 
 Como podemos ver con un runtime de `1.11 mins`, los índices compuestos **no pueden optimizar** sobre queries que usen 1 de las columnas individuales que lo componen, optando por un `Sequential Scan` sobre usar parcialmente el índice.
 
