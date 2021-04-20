@@ -218,9 +218,9 @@ where mes_arribo = 12;
 
 https://i.imgur.com/T4wdoFF.png
 
-Como podemos ver con un runtime de `1.11 mins`, los índices compuestos **no pueden optimizar** sobre queries que usen alguna de las columnas individuales que lo componen, optando por un `Sequential Scan` sobre usar parcialmente el índice.
+Como podemos ver con un runtime de `1.11 mins`, los índices compuestos **no pueden optimizar** sobre queries que usen 1 de las columnas individuales que lo componen, optando por un `Sequential Scan` sobre usar parcialmente el índice.
 
-### Qué pasa si creamos índices individuales?
+### Qué pasa con un query con múltiples filtros e índices individuales?
 
 Eliminemos el índice multicolumna que creamos:
 
@@ -257,13 +257,11 @@ El resultado es el siguiente:
 
 Como podemos ver, de los 3 índices simples que hemos creado, el query planner solo está usando 1, el índice de `ecobici_anio_index`. Por qué?
 
-**PostgreSQL SIEMPRE usará los filtros más óptimos.**
+**PostgreSQL SIEMPRE usará los filtros más óptimos para el query que se está ejecutando.**
 
-No importa como pongamos las condiciones en el `where`, **PostgreSQL siempre reordenará los filtros**. PostgreSQL sabe que a veces no escribimos los queries más óptimos, y pone por delante el filtro que tiene el índice que separa mejor los registros.
+No importa como pongamos las condiciones en el `where`, **PostgreSQL siempre reordenará los filtros** para ese query que estamos corriendo. PostgreSQL sabe que a veces no escribimos los queries más óptimos, y pone por delante el filtro que tiene el índice que separa mejor los registros.
 
 Al aplicar este índice, quedan demasiado pocos registros para filtrar y terminar el query como para aplicar índices subsecuentes, por lo que PostgreSQL decide no usarlos, so pena de entrar **optimización prematura** el cual es [la raíz de todos los males en software.](https://stackify.com/premature-optimization-evil/)
-
-
 
 ## Cuándo y cuando no debo usar índices?
 
