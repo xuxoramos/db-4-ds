@@ -55,20 +55,39 @@ Para ilustrar como funcionan las transacciones, debemos ponerlo en **Manual Comm
 
 No se fijen de momento en las opciones de abajo. Son las opciones de aislamiento, y las veremos más abajo.
 
-Vamos a ejecutar el siguiente código en **Manual Commit**:
+### Ejercicio
+
+Primero, examinemos cuantos registros tenemos:
 
 ```sql
-do $do$
-	begin
-		for counter in 1..10 loop
-			insert into random_data(valor, fecha)
-			select substr(md5(random()::text), 1, 10) as valor,
-			current_timestamp - (((random() * 365) || ' days')::interval) as fecha;
-			perform pg_sleep(30);
-		end loop;
-	end;
-$do$;
+select count(*) from random_data;
 ```
+
+![image](https://user-images.githubusercontent.com/1316464/115492151-d7eca800-a226-11eb-90e6-73ecc78b821f.png)
+
+Si tengo más de 1M, es porque justo estoy ejecutando varias inserciones al desarrollar este apunte. 🤣
+
+Vamos a insertar 5 registros en la tabla `random_data` en modo **Manual Commit** usando el comando con el que insertamos la data inicial y **ejecutándolo 5 veces**:
+
+```sql
+insert into random_data (valor, fecha)
+select substr(md5(random()::text), 1, 10) as valor,
+current_timestamp - (((random() * 365) || ' days')::interval) as fecha;
+```
+
+Vemos que el contador de transacciones tiene 5 statement en el _transaction_log_:
+
+![image](https://user-images.githubusercontent.com/1316464/115492241-08344680-a227-11eb-9514-04f70cf05483.png)
+
+Examinémoslo dándole click:
+
+![image](https://user-images.githubusercontent.com/1316464/115492261-16826280-a227-11eb-91be-942c172d93f0.png)
+
+Vemos que tenemos 5 statements. Cuales son? Demos doble click en la columna `Text`:
+
+
+
+Tiene el bloque de transacciones 
 
 ⚠️Qué estamos haciendo aquí?
 
@@ -80,7 +99,7 @@ $do$;
 6. `perform pg_sleep(30);` suspende la ejecución del ciclo `for` durante **30 segundos**
 7. `end loop;` cierra el ciclo for - todo lo que esté entre `for loop` y `end loop` se va a ejecutar el num de vueltas que de el ciclo
 8. `end;` actúa como corchete de cierre **}** para agrupar código
-9. `$do$;` finaliza el bloque de código
+9. `$do$;` finaliza el bloque de código llamado `do`
 
 
 
