@@ -14,7 +14,7 @@ create table random_data (
 insert into random_data (valor, fecha)
 select substr(md5(random()::text), 1, 10) as valor,                     -- la función md5() cifra justo con el algoritmo md5 una cadena
 current_timestamp - (((random() * 365) || ' days')::interval) as fecha  -- crea fechas de hoy a un num de días random hasta 1 año atrás
-from generate_series(1, 1000000);
+from generate_series(1, 1000000);					-- ejecuta las 2 líneas anteriores 1M de veces
 ```
 
 Igual para esto debemos usar `pgAdmin` en lugar de DBeaver. Lo pueden encontrar en Windows así:
@@ -47,11 +47,41 @@ Fíjense arriba en su toolbar de DBeaver y verán esto:
 
 ![image](https://user-images.githubusercontent.com/1316464/115487955-4d547a80-a21f-11eb-9906-702b13e33bc6.png)
 
-Esto significa que DBeaver está en modo **Auto-commit**, que significa que cada comando(s) que ejecutamos, en automático nuestro cliente los encerrará en `begin` y `commit`.
+Esto significa que DBeaver está en modo **Auto-Commit**, que significa que cada comando(s) que ejecutamos, en automático nuestro cliente los encerrará en `begin` y `commit`.
 
-Para ilustrar como funcionan las transacciones, debemos ponerlo en **Manual commit**.
+Para ilustrar como funcionan las transacciones, debemos ponerlo en **Manual Commit**, que significa que DBeaver va a guardar un _transaction log_ de todos los comandos que meteremos, agregándole un `begin` al inicio, pero sin ningún `commit` al final.
 
-![image](https://user-images.githubusercontent.com/1316464/115488233-c6ec6880-a21f-11eb-9274-f8b82c7aed15.png)
+![image](https://user-images.githubusercontent.com/1316464/115488280-de2b5600-a21f-11eb-9872-38015a422903.png)
+
+No se fijen de momento en las opciones de abajo. Son las opciones de aislamiento, y las veremos más abajo.
+
+Vamos a ejecutar el siguiente código en **Manual Commit**:
+
+```sql
+do $do$
+	begin
+		for counter in 1..10 loop
+			insert into random_data(valor, fecha)
+			select substr(md5(random()::text), 1, 10) as valor,
+			current_timestamp - (((random() * 365) || ' days')::interval) as fecha;
+			perform pg_sleep(30);
+		end loop;
+	end;
+$do$;
+```
+
+⚠️Qué estamos haciendo aquí?
+
+1. `do $do$`: el 1er `do` marca el inicio de un bloque de código, el `$do$` "bautiza" este bloque de código con el nombre de `do`
+2. `begin` actúa como corchete de apertura **{** para agrupar código
+3. `for counter in 1..10 loop`: inicia un ciclo que irá del 1 al 10
+4. `insert into random_data(valor, fecha)` prepara un insert en la tabla que creamos al inicio
+5. `select substr(md5(random()::text), 1, 10) as valor, current_timestamp - (((random() * 365) || ' days')::interval) as fecha;`: genera 1 renglón con datos random para insertar en la tabla que creamos
+6. `perform pg_sleep(30);` suspende la ejecución del ciclo `for` durante **30 segundos**
+7. `end loop;` cierra el ciclo for - todo lo que esté entre `for loop` y `end loop` se va a ejecutar el num de vueltas que de el ciclo
+8. `end;` actúa como corchete de cierre **}** para agrupar código
+9. `$do$;` finaliza el bloque de código
+
 
 
 ## Propiedades ACID
