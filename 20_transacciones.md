@@ -29,9 +29,9 @@ O en Mac así:
 
 Demarcamos las transacciones con 3 comandos:
 
-1. **`begin`** para iniciar la transacción; posterior a esto usualmente incluimos el paquete comandos de escritura como `insert`, `update` y `delete`.
+1. **`start transaction`** para iniciar la transacción; posterior a esto usualmente incluimos el paquete comandos de escritura como `insert`, `update` y `delete`. Algunas BDs agregan el alias `begin transaction` a este comando.
 2. **`commit`** para escribir la transacción (y su paquete de comandos) a PostgreSQL
-3. **`rollback`** para _reversar_ las operaciones que están incluídas en el paquete de transacciones que aparecen después del `begin`
+3. **`rollback`** para _reversar_ las operaciones que están incluídas en el paquete de transacciones que aparecen después del `start transaction`
 
 Dependiendo como nos estemos conectando a la BD, usualmente las transacciones son controladas por:
 
@@ -47,15 +47,15 @@ Fíjense arriba en su toolbar de DBeaver y verán esto:
 
 ![image](https://user-images.githubusercontent.com/1316464/115487955-4d547a80-a21f-11eb-9906-702b13e33bc6.png)
 
-Esto significa que DBeaver está en modo **Auto-Commit**, que significa que cada comando(s) que ejecutamos, en automático nuestro cliente los encerrará en `begin` y `commit`.
+Esto significa que DBeaver está en modo **Auto-Commit**, que significa que cada comando(s) que ejecutamos, en automático nuestro cliente los encerrará en `start transaction` y `commit`.
 
-Para ilustrar como funcionan las transacciones, debemos ponerlo en **Manual Commit**, que significa que DBeaver va a guardar un _transaction log_ de todos los comandos que meteremos, agregándole un `begin` al inicio, pero sin ningún `commit` al final.
+Para ilustrar como funcionan las transacciones, debemos ponerlo en **Manual Commit**, que significa que DBeaver va a guardar un _transaction log_ de todos los comandos que meteremos, agregándole un `start transaction` al inicio, pero sin ningún `commit` al final.
 
 ![image](https://user-images.githubusercontent.com/1316464/115488280-de2b5600-a21f-11eb-9872-38015a422903.png)
 
 No se fijen de momento en las opciones de abajo. Son las opciones de aislamiento, y las veremos más abajo.
 
-### Ejercicio
+#### Ejercicio
 
 Primero, examinemos cuantos registros tenemos:
 
@@ -105,7 +105,7 @@ Y nos quedamos con lo que teníamos?
 
 ![image](https://user-images.githubusercontent.com/1316464/115492151-d7eca800-a226-11eb-90e6-73ecc78b821f.png)
 
-### Por qué no insertamos con un `for`?
+#### Por qué no insertamos con un `for`?
 
 El `for` no existe en SQL estándar, por lo que cada BD tiene que implementarlo ellos mismos. En el caso de PostgreSQL, todo lo que no sea SQL estándar debe estar dentro de un bloque `do`, como el siguiente:
 
@@ -129,7 +129,7 @@ $do$;
 3. `for counter in 1..10 loop`: inicia un ciclo que irá del 1 al 10
 4. `insert into random_data(valor, fecha)` prepara un insert en la tabla que creamos al inicio
 5. `select substr(md5(random()::text), 1, 10) as valor, current_timestamp - (((random() * 365) || ' days')::interval) as fecha;`: genera 1 renglón con datos random para insertar en la tabla que creamos
-6. `perform pg_sleep(30);` suspende la ejecución del ciclo `for` durante **30 segundos**. OJO: el `perform` hace lo mismo que el `select` PERO sin regresar ningún resultado al DBeaver
+6. `perform pg_sleep(10);` suspende la ejecución del ciclo `for` durante **30 segundos**. OJO: el `perform` hace lo mismo que el `select` PERO sin regresar ningún resultado al DBeaver
 7. `end loop;` cierra el ciclo for - todo lo que esté entre `for loop` y `end loop` se va a ejecutar el num de vueltas que de el ciclo
 8. `end;` actúa como corchete de cierre **}** para agrupar código
 9. `$do$;` finaliza el bloque de código llamado `do`
@@ -146,7 +146,82 @@ Esperen, tenemos 10 más, no?
 
 **Por qué se escribieron si no dimos click en `Commit`?**
 
+PostgreSQL **por default** mete cualqier bloque de código `do` en **su propia transacción**, por lo que ignora los settings que tengamos en el DBeaver y en la misma conexión abre **una transacción nueva** para meter la ejecución del bloque.
 
+De hecho, si intentamos **abrir transacción en el codeblock**:
+
+```sql
+Vemos que no está soportado iniciar transacciones dentro de bloques de código de PostgreSQL.
+do $do$
+	begin
+		start transaction;
+			for counter in 1..10 loop
+				insert into random_data(valor, fecha)
+				select substr(md5(random()::text), 1, 10) as valor,
+				current_timestamp - (((random() * 365) || ' days')::interval) as fecha;
+				perform pg_sleep(10);
+			end loop;
+		commit;
+	end;
+$do$;
+```
+
+![image](https://user-images.githubusercontent.com/1316464/115497749-e096ab80-a231-11eb-8914-712be3b6cedb.png)
+
+Vemos que no está soportado iniciar transacciones dentro de bloques de código de PostgreSQL.
+
+### Transacciones manuales
+
+Supongamos que estamos en la chamba, que la tabla `random_data` tiene el histórico de casos COVID19 registrados por el INER y ejecutamos esto:
+
+```sql
+delete from random_data;
+```
+
+Qué tiene de malo este delete?
+
+**NO TIENE WHERE!**
+
+![](https://pbs.twimg.com/media/CteZaLNUAAAg45R.jpg)
+
+Este error es muy frecuente, pero estoy seguro que solo les pasará 1 sola vez en toda su vida profesional, sobre todo cuando la furia de TODA la oficina del CTO: desarrollo, infraestructura, datos, vicepresidencia de arquitectura y del CTO mismo se cierna sobre ustedes.
+
+![](https://res.feednews.com/assets/v2/6a293a7846f87027090633b4fab5c73c?width=1280&height=720&quality=hq&category=us_News_Entertainment)
+
+Por qué no les va a volver a pasar?
+
+Transacciones!
+
+Las operaciones de `delete` y `update` tienen el potencial de destruir información, por lo que es recomendable que si vamos a ejecutar cualquiera de ambas, o activemos **Manual Commit** en DBeaver, o comencemos nuestro trabajo corriendo un `start transaction`:
+
+Vayamos a pgAdmin y pongamos:
+
+```sql
+start transaction;
+delete from northwind.random_data;
+```
+
+Hemos abierto una transacción de manera manual, y hemos borrado toda la tabla.
+
+Pero no hemos cerrado la transacción.
+
+Si contamos los registros de la tabla, tendremos 0. Por qué?
+
+![image](https://user-images.githubusercontent.com/1316464/115501830-839ef380-a239-11eb-8a49-e0980958ac48.png)
+
+Porque este `count(*)` está sucediendo **en la misma transacción** que aún tenemos abierta.
+
+Ok, enough fooling around. Vamos a regresar las cosas como estaban en su lugar:
+
+```sql
+rollback;
+```
+
+Cuántos registros tenemos ahora?
+
+![image](https://user-images.githubusercontent.com/1316464/115502018-e0021300-a239-11eb-9562-9957cf9123db.png)
+
+![image](https://user-images.githubusercontent.com/1316464/115502089-f5773d00-a239-11eb-9ff4-13fdef2224d7.png)
 
 ## Propiedades ACID
 
