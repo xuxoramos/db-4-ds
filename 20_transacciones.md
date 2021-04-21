@@ -85,9 +85,42 @@ Examinémoslo dándole click:
 
 Vemos que tenemos 5 statements. Cuales son? Demos doble click en la columna `Text`:
 
+![image](https://user-images.githubusercontent.com/1316464/115494583-8f83b900-a22b-11eb-9e0a-24f8cdfdf318.png)
 
+Qué hacemos ahora con estos 5 statements?
 
-Tiene el bloque de transacciones 
+Los bajamos a la BD?
+
+![image](https://user-images.githubusercontent.com/1316464/115494868-189af000-a22c-11eb-820f-e388e9887702.png)
+
+Y nos quedamos con 5 registros más?
+
+![image](https://user-images.githubusercontent.com/1316464/115495064-73344c00-a22c-11eb-9d5e-edd074595d83.png)
+
+O los reversamos?
+
+![image](https://user-images.githubusercontent.com/1316464/115494949-3cf6cc80-a22c-11eb-9dc6-865a1c793bb4.png)
+
+Y nos quedamos con lo que teníamos?
+
+![image](https://user-images.githubusercontent.com/1316464/115492151-d7eca800-a226-11eb-90e6-73ecc78b821f.png)
+
+### Por qué no insertamos con un `for`?
+
+El `for` no existe en SQL estándar, por lo que cada BD tiene que implementarlo ellos mismos. En el caso de PostgreSQL, todo lo que no sea SQL estándar debe estar dentro de un bloque `do`, como el siguiente:
+
+```sql
+do $do$
+	begin
+		for counter in 1..10 loop
+			insert into random_data(valor, fecha)
+			select substr(md5(random()::text), 1, 10) as valor,
+			current_timestamp - (((random() * 365) || ' days')::interval) as fecha;
+			perform pg_sleep(10);
+		end loop;
+	end;
+$do$;
+```
 
 ⚠️Qué estamos haciendo aquí?
 
@@ -96,10 +129,22 @@ Tiene el bloque de transacciones
 3. `for counter in 1..10 loop`: inicia un ciclo que irá del 1 al 10
 4. `insert into random_data(valor, fecha)` prepara un insert en la tabla que creamos al inicio
 5. `select substr(md5(random()::text), 1, 10) as valor, current_timestamp - (((random() * 365) || ' days')::interval) as fecha;`: genera 1 renglón con datos random para insertar en la tabla que creamos
-6. `perform pg_sleep(30);` suspende la ejecución del ciclo `for` durante **30 segundos**
+6. `perform pg_sleep(30);` suspende la ejecución del ciclo `for` durante **30 segundos**. OJO: el `perform` hace lo mismo que el `select` PERO sin regresar ningún resultado al DBeaver
 7. `end loop;` cierra el ciclo for - todo lo que esté entre `for loop` y `end loop` se va a ejecutar el num de vueltas que de el ciclo
 8. `end;` actúa como corchete de cierre **}** para agrupar código
 9. `$do$;` finaliza el bloque de código llamado `do`
+
+Cuantos registros tenemos si ejecutamos este código en modo **Manual Commit**?
+
+```sql
+select count(*) from random_data;
+```
+
+![image](https://user-images.githubusercontent.com/1316464/115497097-9e209f00-a230-11eb-8d2f-9c297db19931.png)
+
+Esperen, tenemos 10 más, no? 
+
+**Por qué se escribieron si no dimos click en `Commit`?**
 
 
 
