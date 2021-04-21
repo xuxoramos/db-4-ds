@@ -129,7 +129,7 @@ $do$;
 3. `for counter in 1..10 loop`: inicia un ciclo que irá del 1 al 10
 4. `insert into random_data(valor, fecha)` prepara un insert en la tabla que creamos al inicio
 5. `select substr(md5(random()::text), 1, 10) as valor, current_timestamp - (((random() * 365) || ' days')::interval) as fecha;`: genera 1 renglón con datos random para insertar en la tabla que creamos
-6. `perform pg_sleep(10);` suspende la ejecución del ciclo `for` durante **30 segundos**. OJO: el `perform` hace lo mismo que el `select` PERO sin regresar ningún resultado al DBeaver
+6. `perform pg_sleep(10);` suspende la ejecución del ciclo `for` durante **10 segundos**. OJO: el `perform` hace lo mismo que el `select` PERO sin regresar ningún resultado al DBeaver y solo se puede usar dentro de bloques de código `do`
 7. `end loop;` cierra el ciclo for - todo lo que esté entre `for loop` y `end loop` se va a ejecutar el num de vueltas que de el ciclo
 8. `end;` actúa como corchete de cierre **}** para agrupar código
 9. `$do$;` finaliza el bloque de código llamado `do`
