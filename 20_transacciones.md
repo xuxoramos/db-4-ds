@@ -190,7 +190,7 @@ Este error es muy frecuente, pero estoy seguro que solo les pasará 1 sola vez e
 
 Por qué no les va a volver a pasar?
 
-Transacciones!
+![image](https://user-images.githubusercontent.com/1316464/115502089-f5773d00-a239-11eb-9ff4-13fdef2224d7.png)
 
 Las operaciones de `delete` y `update` tienen el potencial de destruir información, por lo que es recomendable que si vamos a ejecutar cualquiera de ambas, o activemos **Manual Commit** en DBeaver, o comencemos nuestro trabajo corriendo un `start transaction`:
 
@@ -224,6 +224,8 @@ Cuántos registros tenemos ahora?
 ![image](https://user-images.githubusercontent.com/1316464/115502089-f5773d00-a239-11eb-9ff4-13fdef2224d7.png)
 
 ## Propiedades ACID
+
+Las propiedades ACID son exclusivas de bases de datos relacionales, y son una serie de atributos no funcionales que las vuelven confiables y una gran opción para balancear entre rapidez de escritura y de lectura.
 
 ### Atomicity
 
