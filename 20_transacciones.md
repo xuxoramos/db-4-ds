@@ -306,11 +306,49 @@ Las propiedades ACID son exclusivas de bases de datos relacionales, y son una se
 
 ### Atomicity
 
+> Todas las operaciones en la transacción son tratadas como una unidad, y como unidad, o procede, o falla completamente.
+
+Qué feature de la BD nos permite "atomicidad"?
+
+![image](https://user-images.githubusercontent.com/1316464/115502089-f5773d00-a239-11eb-9ff4-13fdef2224d7.png)
+
 ### Consistency
+
+> De una transacción a otra, la BD queda en estados consistentes, sin corrupción. Si la transacción falla, el `rollback` regresa la BD a su estado anterior, sin corrupción.
+
+Ya vimos que cuando hemos hecho rollback, no reversamos parcialmente la transacción, así como cuando hacemos commit, no escribimos parcialmente la transacción.
 
 ### Isolation
 
+En esto nos vamos a enfocar hoy. Este atributo determina cómo y cuándo los resultados de una transacción son visibles a otra.
+
 ### Durability
+
+El resultado de una transacción exitosa persiste en el tiempo, aún después de una interrupción total de energía.
+
+## Isolation a fondo
+
+El aislamiento de una transacción controla la concurrencia. La concurrencia es como controlamos múltiples accesos de diferentes compus (o procesos de CPU) a un mismo recurso. En este caso es la BD, pero puede ser un archivo en disco, la memoria, la tarjeta gráfica, el bus USB, etc.
+
+No controlar los accesos concurrentes puede resultar en bloopers muy chistositos que nos pueden costar muchos dolores de cabeza y desvelos, ya sea debuggeando código, o enderezando bases de datos batidas.
+
+En PostgreSQL tenemos 3 niveles de aislamiento de transacciones:
+
+1. `READ COMMITTED`: los `select` en la TX1 solo pueden ver registros _commiteados_ por la TX2 antes de que la TX1 comenzara a ejecutarse. Este es el comportamiento de PostgreSQL por default.
+2. `REPEATABLE READ`: los `select` en la TX1 que accedan datos que están siendo alterados en una TX2 no verán las alteraciones hasta que TX1 termine y se vuelvan a acceder en una TX3.
+3. `SERIALIZABLE`: es el mayor nivel de bloqueo. Si una TX1 ejecuta cualquier operación en un registro, una TX2 no va a poder hacer uso de ese registro hasta que TX1 termine.
+
+### Concurrencia VS Paralelismo
+
+**Concurrencia** es que el CPU esté atendiendo 2 tareas al mismo tiempo, dedicando todos sus recursos a una y a otra alternativamente.
+
+**Acceso concurrente** es que un único recurso sea accedido por 2 o más procesos del CPU al mismo tiempo.
+
+![](http://tutorials.jenkov.com/images/java-concurrency/concurrency-vs-parallelism-1.png)
+
+**Paralelismo** es que el CPU esté atendiendo 2 tareas al mismo tiempo, dedicando una fracción de recursos por completo a una, y otra fracción de recursos por completo a otra.
+
+![](http://tutorials.jenkov.com/images/java-concurrency/concurrency-vs-parallelism-2.png)
 
 ### Propiedades BASE
 
