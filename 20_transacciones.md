@@ -278,16 +278,27 @@ Suponiendo que tenemos los siguientes instrumentos:
 2. deuda
 3. divisas
 
-En diferentes sistemas, y que tenemos los siguientes verbos/funciones:
+Y suponiendo que los 3 mercados los tenemos en diferentes sistemas, y que para cada sistema tenemos los siguientes verbos/funciones:
 1. transferir_capitales(origen, destino, monto)
 2. transferir_deuda(origan, destino, monto)
 3. transferir_divisas(origen, destino, monto)
 4. transferir_efectivo(origen, destino, monto)
 
-Y suponiendo que en caso de error de cualquiera de estas funciones, se hace `rollback` de la transacción, qué secuencia de funciones hipotéticas, `start transaction`, `commit` y `rollback` se necesitan para asegurar la ejecución _all or nothing_ de los siguientes escenarios?
+Y que como control de flujo de nuestro programa, podemos usar las siguientes funciones de pseudocódigo:
+1. `if error then` para verificar errores
+2. `if success then` para verificar éxito
+
+Y que el único que **NO SOPORTA TRANSACCIONES** es el de Banxico, donde se liquida la parte de cash de todas las transacciones.
+
+Y suponiendo que en caso de error de cualquiera de estas funciones, se hace `rollback` de la transacción, qué secuencia de funciones hipotéticas, de control, `start transaction`, `commit` y `rollback` se necesitan para asegurar la ejecución _all or nothing_ de los siguientes escenarios?
 
 1. Ulises con cuenta en GBM compra a Julieta con cuenta en Santander 400 títulos de AMZ (Amazon) a 66048.20 MXM pagaderos con cash.
 2. Sebas Dulong con cuenta en Citi vende a Javier Orcazas 1200 títulos de GME (GameStop) a 3714.88 pagaderos 100 títulos de deuda gubernamental con valor de 2998.12 y el restante con cash
+3. DJ Delgado con cuenta en Scotia vende 20000 USD a un exchange rate de 25.2 MXN y 300 títulos de deuda corporativa a un precio de 40032.71 a Frida Kaori con cuenta en Inbursa pagaderos enteramente con cash.
+
+Valor: 2 puntos sobre final
+Deadline: 30 de Abril de 2020
+Formato de entrega: documento Markdown en su repo de Github
 
 ## Propiedades ACID
 
