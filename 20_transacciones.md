@@ -332,12 +332,6 @@ El aislamiento de una transacción controla la concurrencia. La concurrencia es 
 
 No controlar los accesos concurrentes puede resultar en bloopers muy chistositos que nos pueden costar muchos dolores de cabeza y desvelos, ya sea debuggeando código, o enderezando bases de datos batidas.
 
-En PostgreSQL tenemos 3 niveles de aislamiento de transacciones:
-
-1. `READ COMMITTED`: los `select` en la TX1 solo pueden ver registros _commiteados_ por la TX2 antes de que la TX1 comenzara a ejecutarse. Este es el comportamiento de PostgreSQL por default.
-2. `REPEATABLE READ`: los `select` en la TX1 que accedan datos que están siendo alterados en una TX2 no verán las alteraciones hasta que TX1 termine y se vuelvan a acceder en una TX3.
-3. `SERIALIZABLE`: es el mayor nivel de bloqueo. Si una TX1 ejecuta cualquier operación en un registro, una TX2 no va a poder hacer uso de ese registro hasta que TX1 termine.
-
 ### Concurrencia VS Paralelismo
 
 **Concurrencia** es que el CPU esté atendiendo 2 tareas al mismo tiempo, dedicando todos sus recursos a una y a otra alternativamente.
@@ -349,6 +343,38 @@ En PostgreSQL tenemos 3 niveles de aislamiento de transacciones:
 **Paralelismo** es que el CPU esté atendiendo 2 tareas al mismo tiempo, dedicando una fracción de recursos por completo a una, y otra fracción de recursos por completo a otra.
 
 ![](http://tutorials.jenkov.com/images/java-concurrency/concurrency-vs-parallelism-2.png)
+
+### Qué errores tenemos si no controlamos concurrencia?
+
+Imaginemos una tabla `X` y sus columnas `id` y `value`.
+
+#### Dirty reads
+
+1. TX1: consulta `X.value` donde `X.id = 1` y obtenemos 50
+2. TX2: actualiza `X.value` de 50 a 100 donde `X.id = 1`
+3. TX1: consulta de nuevo `X.value` donde `X.id = 1` y obtememos 100
+4. TX2: rollback
+5. TX1 se queda con `X.value = 100` a pesar de que TX2 se queda con `X.value = 50`
+
+![](https://backendless.com/docs/images/data/read-uncommitted.png)
+
+Afortunadamente, PostgreSQL implementa un tipo de aislamiento de transacciones que **por default** evitan lecturas sucias, por lo que no podremos simularlas.
+
+#### Non-repeatable Reads
+
+1. TX1: cons
+
+![](https://backendless.com/docs/images/data/read-committed.png)
+
+Cómo se evitan?
+
+En PostgreSQL tenemos 3 niveles de aislamiento de transacciones:
+
+1. `READ COMMITTED`: los `select` en la TX1 solo pueden ver registros _commiteados_ por la TX2 antes de que la TX1 comenzara a ejecutarse. Este es el comportamiento de PostgreSQL por default.
+2. `REPEATABLE READ`: los `select` en la TX1 que accedan datos que están siendo alterados en una TX2 no verán las alteraciones hasta que TX1 termine y se vuelvan a acceder en una TX3.
+3. `SERIALIZABLE`: es el mayor nivel de bloqueo. Si una TX1 ejecuta cualquier operación en un registro, una TX2 no va a poder hacer uso de ese registro hasta que TX1 termine.
+
+
 
 ### Propiedades BASE
 
