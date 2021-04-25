@@ -350,9 +350,8 @@ Imaginemos una tabla `X` y sus columnas `id` y `value`.
 
 #### Dirty reads
 
-1. TX1: consulta `X.value` donde `X.id = 1` y obtenemos 50
-2. TX2: actualiza `X.value` de 50 a 100 donde `X.id = 1`
-3. TX1: consulta de nuevo `X.value` donde `X.id = 1` y obtememos 100
+2. TX1: actualiza `X.value` de 50 a 100 donde `X.id = 1`
+3. TX2: consulta `X.value` donde `X.id = 1` y obtiene 100
 4. TX2: rollback
 5. TX1 se queda con `X.value = 100` a pesar de que TX2 se queda con `X.value = 50`
 
@@ -362,7 +361,9 @@ Afortunadamente, PostgreSQL implementa un tipo de aislamiento de transacciones q
 
 #### Non-repeatable Reads
 
-1. TX1: cons
+1. TX1: consulta `X.value` donde `X.id = 1` y obtenemos 50\
+2. TX2: 
+
 
 ![](https://backendless.com/docs/images/data/read-committed.png)
 
