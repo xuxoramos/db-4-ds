@@ -418,14 +418,54 @@ Con esto logramos CONSISTENCIA, aún cuando otras transacciones escriban en la m
 
 #### Phantom Reads
 
-Esta anomalía solo sucede cuando estamos tratando con un grupo de resultados (i.e. condiciones donde el `where` nos regresa un resultset de varios registros)
+Esta anomalía solo sucede cuando estamos tratando con un grupo de resultados (i.e. condiciones donde el `where` nos regresa un resultset de varios registros), y por lo mismo generalmente los queries de **agregación** (i.e. `sum`,`avg`,`count`,`max`,`min`) son los más susceptibles a este error cuando una 2a transacción entra a hacer **`insert`** o **`delete`**.
 
-Es similar al **Repeatable Read** de arriba, pero en lugar de que nos suceda con 1 registro, nos sucede con una colección de ellos.
+Es similar al **Repeatable Read** de arriba, pero en lugar de que nos suceda con 1 registro, nos sucede con una colección de ellos, y sucede cuando:
 
+1. TX1: cuenta `X.value` donde `X.id > 1` y obtenemos 50 observaciones
+2. TX2: INSERTA en `X` con `X.id = 51`
+3. TX2: commit
+4. TX1: cuenta `X.value` donde `X.id > 1` y obtenemos 51 observaciones
+5. TX1 leyó 2 veces el registro y aunque tenemos los mismos 50 registros, tenemos también 1 de más.
 
+Esto es un error sobre todo al tomar decisiones de negocio como por ejemplo ejecutar `select count(*) from estados_mx`  y siempre esperar 32 y de repente tener 33.
+
+Cómo lo arreglamos?
+
+Con nivel de aislamiento `isolation level serializable`:
+
+|t| **TX1** | **TX2** |
+|-|-----|-----|
+|_t1_| `start transaction isolation level serializable;`<br>`select count(*) from northwind.random_data where valor like '1234%';` <br/> _`Result: '21'`_ | |
+|_t2_| |`start transaction;`<br/>`insert into northwind.random_data(valor, fecha) select '1234abcd' as valor, current_timestamp - (((random() * 365) || ' days')::interval) as fecha;`<br/>_`Result: 1 row inserted`_|
+|_t3_| |`commit;`|
+|_t4_| `select count(*) from northwind.random_data where valor like '1234%';` <br/> _**`Result: '21'`**_ | |
+|_t5_| `21 == 21` 👍| |
+
+### Cuál debemos usar?
+
+Si estamos desarrollando una aplicación, averiguemos cómo funciona el controlador de transacciones del lenguaje o librería en la que estamos implementando nuestra app y **siempre usemos `serializable`** para las que van a hacer `insert`, `delete` o `update`.
+
+Si estamos realizando un análisis, o para las partes de nuestra app que van solamente a leer datos, entonces podemos protegernos aún más y usar lo siguiente:
+
+```sql
+start transaction isolation level [read committed | repeatable read | serializable] read only;
+```
+
+Esto pondrá la transacción en modo de solo lectura y bloqueará cualquier `insert`, `delete` o `update`, y nos deja solo preocuparnos por la concurrencia de lecturas en la que podamos incurrur.
 
 ### Propiedades BASE
 
-## Temas avanzados
+Las propiedades BASE son de las bases de datos no relacionales (MongoDB, Cassandra, MariaDB, MonetDB, etc) y relajan los criterios ACID para "apartentar" su cumplimiento en sistemas sistémicamente no críticos (usualmente los que no tienen que ver con dinero o salud, sea de personas o de todo un país).
 
-### Transacciones anidadas
+Las siglas son:
+
+**B**asically **A**vailable, **S**oft state, **E**ventual consistency.
+
+- **B**asically **A**vailable: la BD está partida en N segmentos a través de sus renglones en diferentes máquinas. Si una máquina se cae, esa parte de los datos no estará disponible, pero como tal la capa de acceso a datos seguirá funcionando
+- **S**oft state: se permiten _dirty reads_ y _phantom reads_. No es fatal si suceden o si se toman decisiones con base a estas anomalías de transacciones.
+- **E**ventual consistency: la BD no garantiza consistencia inmediata, solo garantiza su ocurrencia en un tiempo indefinido. Esto es: posteas tu foto de tu café de Starbucks en IG, pero no tienes red. IG te dice que si la posteó, pero tus amigues no la ven hasta que tienes acceso a red celular y entonces el IG de tu fono se sincroniza con tu IG en los servidores de FB
+
+## Final thoughts
+
+Las transacciones son poderosísimas, y son piedra angular de muchos sistemas críticos. Recuerden que quien dicta si debemos alinearnos a propiedades ACID o propiedades BASE no es el sistema mismo, sino el problem domain en el que tratará de incidir. Si podemos afectar negativamente la vida de las personas, entonces mejor tratar el sistema como crítico y alinearlo a propiedades ACID. Si es algo que sistémicamente no va a impactar o el problem domain puede ser resiliente a nuestro impacto, entonces podemos alinear nuestro sistema con propiedades BASE.
