@@ -381,11 +381,11 @@ Este escenario si lo podemos simular. Lo haremos con la tabla `random_data` que 
 |_t4_| `select valor from northwind.random_data where id = 2000096;` <br/> _`Result: '0000000000'`_ | |
 |_t5_| 😞| 😞|
 
+Como podemos ver, tenemos 2 valores diferentes para una misma lectura.
 
+Cómo evitamos las non-repeatable reads?
 
-![](https://backendless.com/docs/images/data/read-committed.png)
-
-Cómo se evitan?
+Agregando el parámetro
 
 En PostgreSQL tenemos 3 niveles de aislamiento de transacciones:
 
