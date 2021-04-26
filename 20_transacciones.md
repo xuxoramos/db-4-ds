@@ -350,10 +350,6 @@ No controlar los accesos concurrentes puede resultar en bloopers muy chistositos
 
 Imaginemos una tabla `X` y sus columnas `id` y `value`.
 
-|   X    |
-|id|value|
-|--|-----|
-
 #### Dirty reads
 
 2. TX1: actualiza `X.value` de 50 a 100 donde `X.id = 1`
@@ -375,11 +371,13 @@ Afortunadamente, PostgreSQL implementa un tipo de aislamiento de transacciones q
 
 ![](https://backendless.com/docs/images/data/read-committed.png)
 
-Este escenario si lo podemos simular:
+Este escenario si lo podemos simular. Lo haremos con la tabla `random_data` que creamos:
 
-| TX1 | TX2 |
-|-----|-----|
-| `select valor from northwind.random_data where id = 2000096;`<br/>`  087ea30915`` | |
+|t| **TX1** | **TX2** |
+|-|-----|-----|
+|_t1_| `select valor from northwind.random_data where id = 2000096;` <br/> `  087ea30915` | |
+|_t2_| |`start transaction isolation level read committed;`<br/>`update northwind.random_data set valor = '0000000000' where id = 2000096;`|
+
 
 
 ![](https://backendless.com/docs/images/data/read-committed.png)
