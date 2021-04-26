@@ -348,18 +348,37 @@ No controlar los accesos concurrentes puede resultar en bloopers muy chistositos
 
 ### Qué errores tenemos si no controlamos concurrencia?
 
-Imaginemos una tabla `X` y sus columnas `id` y `value`.
+Usemos nuestra tabla `random_data`
 
 #### Dirty reads
 
-2. TX1: actualiza `X.value` de 50 a 100 donde `X.id = 1`
-3. TX2: consulta `X.value` donde `X.id = 1` y obtiene 100
-4. TX2: rollback
-5. TX1 se queda con `X.value = 100` a pesar de que TX2 _rollbackeó_ y dejó `X.value` en 50
+1. TX1: actualiza `X.value` de 50 a 100 donde `X.id = 1`
+2. TX2: consulta `X.value` donde `X.id = 1` y obtiene 100
+3. TX1: rollback
+4. TX2 se queda con `X.value = 100` a pesar de que TX1 _rollbackeó_ y dejó `X.value` en 50
 
 ![](https://backendless.com/docs/images/data/read-uncommitted.png)
 
 Afortunadamente, PostgreSQL implementa un tipo de aislamiento de transacciones que **por default** evitan lecturas sucias, por lo que no podremos simularlas.
+
+|t| **TX1** | **TX2** |
+|-|-----|-----|
+|_t1_| `start transaction isolation level read uncommitted`<br/>`select valor from northwind.random_data where id = 2000096;` <br/> _`Result: '087ea30915'`_ | |
+|_t2_| |`start transaction;`<br/>`update northwind.random_data set valor = '0000000000' where id = 2000096;`<br/>_`Result: 1 row updated`_|
+|_t3_| `select valor from northwind.random_data where id = 2000096;` <br/> _`Result: '087ea30915'`_ | |
+|_t4_| A pesar de que haber usado `read uncommitted`, estamos leyendo solo lo que está _commiteado_||
+
+**Qué tipos de isolation levels tenemos?**
+
+1. `READ COMMITTED`: los `select` en la TX1 solo pueden ver registros _commiteados_ por la TX2 antes de que la TX1 comenzara a ejecutarse. Este es el comportamiento de PostgreSQL por default.
+2. `REPEATABLE READ`: los `select` en la TX1 que accedan datos que están siendo alterados en una TX2 no verán las alteraciones hasta que TX1 termine y se vuelvan a acceder en una TX3.
+3. `SERIALIZABLE`: es el mayor nivel de bloqueo. Si una TX1 ejecuta cualquier operación en un registro, una TX2 no va a poder hacer uso de ese registro hasta que TX1 termine.
+
+![](https://miro.medium.com/max/2416/1*NppBgUymDiDLwBJjAvqbEQ.png)
+
+Dado que, como vimos arriba, `READ UNCOMMITTED` (el nivel más débil de aislamiento) en PostgreSQL no está soportado, por nuestra propia seguridad, entonces la 1a columna y el 1er renglón no aplican.
+
+Vamos a ver ahora cada anomalía de asilamiento que queda:
 
 #### Non-repeatable Reads
 
@@ -375,23 +394,33 @@ Este escenario si lo podemos simular. Lo haremos con la tabla `random_data` que 
 
 |t| **TX1** | **TX2** |
 |-|-----|-----|
-|_t1_| `select valor from northwind.random_data where id = 2000096;` <br/> _`Result: '087ea30915'`_ | |
-|_t2_| |`start transaction isolation level read committed;`<br/>`update northwind.random_data set valor = '0000000000' where id = 2000096;`<br/>_`Result: 1 row updated`_|
+|_t1_| `start transaction isolation level read committed;`<br>`select valor from northwind.random_data where id = 2000096;` <br/> _**`Result: '087ea30915'`**_ | |
+|_t2_| |`start transaction;`<br/>`update northwind.random_data set valor = '0000000000' where id = 2000096;`<br/>_`Result: 1 row updated`_|
 |_t3_| |`commit;`|
-|_t4_| `select valor from northwind.random_data where id = 2000096;` <br/> _`Result: '0000000000'`_ | |
-|_t5_| 😞| 😞|
+|_t4_| `select valor from northwind.random_data where id = 2000096;` <br/> _**`Result: '0000000000'`**_ | |
+|_t5_| `087ea30915 != 0000000000` 😞| |
 
-Como podemos ver, tenemos 2 valores diferentes para una misma lectura.
+Como podemos ver, tenemos 2 valores diferentes para 1 misma lectura **DENTRO DE LA MISMA TRANSACCIÓN**.
 
 Cómo evitamos las non-repeatable reads?
 
-Agregando el parámetro
+Con nivel de aislamiento **`REPEATABLE READ`**:
 
-En PostgreSQL tenemos 3 niveles de aislamiento de transacciones:
+|t| **TX1** | **TX2** |
+|-|-----|-----|
+|_t1_| `start transaction isolation level repeatable read;`<br>`select valor from northwind.random_data where id = 2000096;` <br/> _`Result: '087ea30915'`_ | |
+|_t2_| |`start transaction;`<br/>`update northwind.random_data set valor = '0000000000' where id = 2000096;`<br/>_`Result: 1 row updated`_|
+|_t3_| |`commit;`|
+|_t4_| `select valor from northwind.random_data where id = 2000096;` <br/> _**`Result: '087ea30915'`**_ | |
+|_t5_| `087ea30915 == 087ea30915` 👍| |
 
-1. `READ COMMITTED`: los `select` en la TX1 solo pueden ver registros _commiteados_ por la TX2 antes de que la TX1 comenzara a ejecutarse. Este es el comportamiento de PostgreSQL por default.
-2. `REPEATABLE READ`: los `select` en la TX1 que accedan datos que están siendo alterados en una TX2 no verán las alteraciones hasta que TX1 termine y se vuelvan a acceder en una TX3.
-3. `SERIALIZABLE`: es el mayor nivel de bloqueo. Si una TX1 ejecuta cualquier operación en un registro, una TX2 no va a poder hacer uso de ese registro hasta que TX1 termine.
+Con esto logramos CONSISTENCIA, aún cuando otras transacciones escriban en la misma tabla o modifiquen el mismo registro.
+
+#### Phantom Reads
+
+Esta anomalía solo sucede cuando estamos tratando con **agregados** (`sum`, `avg`, `max`, `min`, `count`, etc).
+
+Es similar al **Repeatable Read** de arriba, pero en lugar de que nos suceda con 1 registro, nos sucede con una colección.
 
 
 
