@@ -324,7 +324,9 @@ En esto nos vamos a enfocar hoy. Este atributo determina cómo y cuándo los res
 
 ### Durability
 
-El resultado de una transacción exitosa persiste en el tiempo, aún después de una interrupción total de energía.
+> El resultado de una transacción exitosa persiste en el tiempo, aún después de una interrupción total de energía.
+
+Ya hemos visto que cuando hacemos `commit`, todo se queda en la BD, y aunque apaguemos la máquina y la volvamos a prender, nuestros datos _commiteados_ permanecerán en la BD.
 
 ## Isolation a fondo
 
@@ -348,12 +350,16 @@ No controlar los accesos concurrentes puede resultar en bloopers muy chistositos
 
 Imaginemos una tabla `X` y sus columnas `id` y `value`.
 
+|   X    |
+|id|value|
+|--|-----|
+
 #### Dirty reads
 
 2. TX1: actualiza `X.value` de 50 a 100 donde `X.id = 1`
 3. TX2: consulta `X.value` donde `X.id = 1` y obtiene 100
 4. TX2: rollback
-5. TX1 se queda con `X.value = 100` a pesar de que TX2 se queda con `X.value = 50`
+5. TX1 se queda con `X.value = 100` a pesar de que TX2 _rollbackeó_ y dejó `X.value` en 50
 
 ![](https://backendless.com/docs/images/data/read-uncommitted.png)
 
@@ -361,8 +367,19 @@ Afortunadamente, PostgreSQL implementa un tipo de aislamiento de transacciones q
 
 #### Non-repeatable Reads
 
-1. TX1: consulta `X.value` donde `X.id = 1` y obtenemos 50\
-2. TX2: 
+1. TX1: consulta `X.value` donde `X.id = 1` y obtenemos 50
+2. TX2: actualiza `X.value` de 50 a 100 donde `X.id = 1`
+3. TX2: commit
+4. TX1: consulta `X.value` donde `X.id = 1` y obtenemos 100
+5. TX1 leyó 2 veces el registro y tuvo valores diferentes
+
+![](https://backendless.com/docs/images/data/read-committed.png)
+
+Este escenario si lo podemos simular:
+
+| TX1 | TX2 |
+|-----|-----|
+| `select valor from northwind.random_data where id = 2000096;`<br/>`  087ea30915`` | |
 
 
 ![](https://backendless.com/docs/images/data/read-committed.png)
