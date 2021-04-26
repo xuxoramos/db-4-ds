@@ -418,9 +418,9 @@ Con esto logramos CONSISTENCIA, aún cuando otras transacciones escriban en la m
 
 #### Phantom Reads
 
-Esta anomalía solo sucede cuando estamos tratando con **agregados** (`sum`, `avg`, `max`, `min`, `count`, etc).
+Esta anomalía solo sucede cuando estamos tratando con un grupo de resultados (i.e. condiciones donde el `where` nos regresa un resultset de varios registros)
 
-Es similar al **Repeatable Read** de arriba, pero en lugar de que nos suceda con 1 registro, nos sucede con una colección.
+Es similar al **Repeatable Read** de arriba, pero en lugar de que nos suceda con 1 registro, nos sucede con una colección de ellos.
 
 
 
