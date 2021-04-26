@@ -375,8 +375,11 @@ Este escenario si lo podemos simular. Lo haremos con la tabla `random_data` que 
 
 |t| **TX1** | **TX2** |
 |-|-----|-----|
-|_t1_| `select valor from northwind.random_data where id = 2000096;` <br/> `  087ea30915` | |
-|_t2_| |`start transaction isolation level read committed;`<br/>`update northwind.random_data set valor = '0000000000' where id = 2000096;`|
+|_t1_| `select valor from northwind.random_data where id = 2000096;` <br/> _`Result: '087ea30915'`_ | |
+|_t2_| |`start transaction isolation level read committed;`<br/>`update northwind.random_data set valor = '0000000000' where id = 2000096;`<br/>_`Result: 1 row updated`_|
+|_t3_| |`commit;`|
+|_t4_| `select valor from northwind.random_data where id = 2000096;` <br/> _`Result: '0000000000'`_ | |
+|_t5_| 😞| 😞|
 
 
 
