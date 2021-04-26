@@ -23,22 +23,26 @@ El desarrollo de una plataforma tecnológica que contemple lo siguiente:
 1. **Levantamiento y análisis de información:**
   - Entregable: 1) **Prototipo** de web application con la encuesta materializada en él, ó bien, diseño de la encuesta en alguna plataforma como TypeFrom, Google Forms, etc. OJO: Para esta fecha ya debe haber una conexión a una BD, aún cuando dicha BD solo tenga de momento 1 tabla. 2) documentos de historias de usuario e historias del problem domain en repositorio público de Github
   - Valor: 15%
-  - Fecha de entrega: 28 de Abril
+  - Fecha de entrega: 28 de Abril antes de las 23:59:59
+  - Medio de entrega: repositorio de Github DEDICADO AL PROYECTO FINAL
 
 2. **Almacenamiento consistente y correcto de datos**:
-  - Entregables: a) Modelo ER, b) 4 scripts: de creación de objetos, inserción de datos, borrado de datos y eliminación de objetos. Todo en repositorio público de Github.
+  - Entregables: a) Modelo ER, b) 4 scripts: de creación de objetos, inserción de datos, borrado de datos y eliminación de objetos. Todo en repositorio público de Github. c) Presentación ejecutiva de 15 mins a VOXMAPP.
   - Valor: 20%
-  - Fecha de entrega: 12 de Mayo
+  - Fecha de entrega: 12 de Mayo antes de las 23:59:59
+  - Medio de entrega: repositorio de Github DEDICADO AL PROYECTO FINAL
 
 3. **Vistas analíticas de información:**
-  - Entregables: a) 1 o N scripts de creación de vistas, b) documentación de lo que contiene cada vista y la respuesta que intenta responder. Ambos en repositorio público de Github.
+  - Entregables: a) 1 o N scripts de creación de vistas, b) documentación de lo que contiene cada vista y la respuesta que intenta responder. Ambos en repositorio público de Github. c) Presentación ejecutiva de 15 mins a VOXMAPP.
   - Valor: 25%
-  - Fecha de entrega: 26 de Mayo
+  - Fecha de entrega: 26 de Mayo antes de las 23:59:59
+  - Medio de entrega: repositorio de Github DEDICADO AL PROYECTO FINAL
 
 4. **Tableros de presentación y presentación final**:
   - Entregable: presentación ejecutiva de la solución con duración de 40 mins, con énfasis en el modelo ER, las vistas analíticas y las preguntas que intentan responder.
   - Valor: 20%
-  - Fecha de entrega: 28 de Mayo
+  - Fecha de entrega: 28 de Mayo antes de las 23:59:59
+  - Medio de entrega: repositorio de Github DEDICADO AL PROYECTO FINAL
  
 ## Deadlines de presentación
 
