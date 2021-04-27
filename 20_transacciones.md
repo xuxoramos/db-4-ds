@@ -437,10 +437,20 @@ Con nivel de aislamiento `isolation level serializable`:
 |t| **TX1** | **TX2** |
 |-|-----|-----|
 |_t1_| `start transaction isolation level serializable;`<br>`select count(*) from northwind.random_data where valor like '1234%';` <br/> _`Result: '21'`_ | |
-|_t2_| |`start transaction;`<br/>`insert into northwind.random_data(valor, fecha) select '1234abcd' as valor, current_timestamp - (((random() * 365) || ' days')::interval) as fecha;`<br/>_`Result: 1 row inserted`_|
+|_t2_| |`start transaction;`<br/>`insert into northwind.random_data(valor, fecha) select '1234abcd' as valor, current_timestamp - (((random() * 365) \|\| ' days')::interval) as fecha;`<br/>_`Result: 1 row inserted`_|
 |_t3_| |`commit;`|
 |_t4_| `select count(*) from northwind.random_data where valor like '1234%';` <br/> _**`Result: '21'`**_ | |
 |_t5_| `21 == 21` 👍| |
+
+#### Serialización para bloqueo de transacciones
+
+Para demostrar que la serialización de transacciones bloquea registros para que no entre ninguna otra a modificarlos, ejecutemos el siguiente ejemplo:
+
+|t| **TX1** | **TX2** |
+|-|-----|-----|
+|_t1_| `start transaction isolation level serializable;`<br>`update northwind.random_data set valor = '0000000000' where id = 2000096;` <br/> _`Result: 1 row inserted`_ | |
+|_t2_| |`start transaction isolation level serializable;`<br/>`update northwind.random_data set valor = '1234abcd' where id = 2000096;`<br/>_`...`_|
+|_t5_| Esperando `commit` o `rollback` | Bloqueada hasta que se finalice TX1 |
 
 ### Cuál debemos usar?
 
