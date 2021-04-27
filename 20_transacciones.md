@@ -450,7 +450,7 @@ Para demostrar que la serialización de transacciones bloquea registros para que
 |-|-----|-----|
 |_t1_| `start transaction isolation level serializable;`<br>`update northwind.random_data set valor = '0000000000' where id = 2000096;` <br/> _`Result: 1 row inserted`_ | |
 |_t2_| |`start transaction isolation level serializable;`<br/>`update northwind.random_data set valor = '1234abcd' where id = 2000096;`<br/>_`...`_|
-|_t5_| Esperando `commit` o `rollback` | Bloqueada hasta que se finalice TX1 |
+|_t3_| Esperando `commit` o `rollback` | Bloqueada hasta que se finalice TX1 |
 
 ### Cuál debemos usar?
 
