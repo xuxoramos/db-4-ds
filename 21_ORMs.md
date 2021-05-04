@@ -36,7 +36,7 @@ Pero SQL ya es el estándar de facto para almacenamiento de datos en todo el mun
 
 Suponiendo que tenemos una aplicación multicapa, entonces a pesar de que nosotros como creadores de esta aplicación si tenemos acceso a la BD, nuestros usuarios tienen acceso a ella mediante una aplicación. Dicha aplicación probablemente no está hecha en SQL, sino en algún lenguaje orientado a objetos, y por tanto no necesariamente correrá en la misma máquina que la BD.
 
-Para esto, debo hacer un paréntesis y explicar arquitectura de aplicaciones
+Para esto, debo hacer un paréntesis y explicar arquitectura de aplicaciones:
 
 ## Aplicaciones multicapa
 
@@ -81,6 +81,12 @@ Esto nos permitió una explosión comercial de ofertas de productos y servicios 
 ### Arquitecturas de N capas
 
 Los sistemas modernos ahora tienen una arquitectura muy compleja con muchísimos moving parts:
+
+![image](https://user-images.githubusercontent.com/1316464/116940104-0ad56980-ac33-11eb-948f-9c6f464de4b5.png)
+
+Sobre todo porque ya estamos hablando de aplicaciones con accesos globales, en diferentes zonas, diferentes frentes y diferentes propósitos, y cada componentito puede ejecutarse en una máquina individual o en contenedores.
+
+Nuestro proyecto final es un ejemplo de una aplicación multicapa.
 
 
 
