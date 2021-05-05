@@ -92,7 +92,19 @@ Y qué tiene que ver todo esto con ORMs y bases de datos?
 
 ## Ahora si, back to our example
 
-Los ORM nos permiten tratar las tablas como objetos y representar relaciones más complejas sin necesidad de salir de nuestro lenguaje de programación.
+Los ORM nos permiten tratar las tablas como objetos y representar relaciones más complejas sin necesidad de salir de nuestro lenguaje de programación, y al mismo tiempo interactuar con nuestra BD gracias a su labor de _traducción_:
+
+De esta forma, podemos tener esto:
+
+![image](https://user-images.githubusercontent.com/1316464/117098626-a569a180-ad34-11eb-9fa1-a15f55dee7c4.png)
+
+### Algunas equivalencias y traducciones entre ORM y SQL
+
+| ORM | SQL |
+|-----|-----|
+var p = repository.getPayment(10) | select * from payment p where p.id = 10
+p2 = new Product() | insert into product values...
+product.setUnitPrice(200) | update product set unit_price = 200 where...
 
 ### Clases VS Tablas
 
@@ -123,14 +135,3 @@ Los diagramas de clase nos permiten mucho más expresividad y contar mucho más 
 - No necesitamos _clases_ intermedias para una relación **N a M**, solo especificar que hay una relación.
 
 
-De esta forma, podemos tener esto:
-
-![image](https://user-images.githubusercontent.com/1316464/117098626-a569a180-ad34-11eb-9fa1-a15f55dee7c4.png)
-
-### Algunas equivalencias y traducciones entre ORM y SQL
-
-| ORM | SQL |
-|-----|-----|
-var p = repository.getPayment(10) | select * from payment p where p.id = 10
-p2 = new Product() | insert into product values...
-product.setUnitPrice(200) | update product set unit_price = 200 where...
