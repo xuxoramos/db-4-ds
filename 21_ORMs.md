@@ -157,5 +157,19 @@ dotnet tool install --global dotnet-ef
 dotnet ef dbcontext scaffold "Server=localhost;Port=5433;Database=hospitapp;User Id=postgres;Password=admin;" Npgsql.EntityFrameworkCore.PostgreSQL -o Model
 ```
 
+Debemos terminar con un archivo llamado `HospitApp.csproj` con el siguiente contenido:
 
+```xml
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="5.0.5"/>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.5"/>
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL.Design" Version="*"/>
+  </ItemGroup>
+</Project>
+```
 
