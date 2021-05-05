@@ -114,11 +114,11 @@ Recordemos este modelo ER del inicio de semestre:
 
 Al desarrollar una aplicación para registro hospitalario, necesitamos varias funcionalidades como autenticación, transacciones, pantallas, y en general user experience...
 
-⚠️**COSA QUE ES PERRÍSIMA CON SQL**⚠️
+**COSA QUE ES PERRÍSIMA CON SQL**
 
 Entonces recurrimos a una plataforma o lenguaje de programación. .NET, Python, Java, etc.
 
-⚠️PERO...⚠️
+PERO...
 
 Estos son lenguajes orientados a objetos.
 
@@ -133,5 +133,29 @@ Los diagramas de clase nos permiten mucho más expresividad y contar mucho más 
 - Un `Cirujano` puede hacer todo lo de un `Doctor`, excepto `operar()`.
 - Un `Paciente` tiene una colección de `Doctor` que son todos los que lo han atendido. Cuando un `Doctor` nuevo se suma a la atención de un `Paciente`, lo agregamos con `addDoctor(Doctor)`.
 - No necesitamos _clases_ intermedias para una relación **N a M**, solo especificar que hay una relación.
+
+⚠️ Pero de todos modos nuestra BD sigue siendo SQL. ⚠️
+
+## Levantando un ORM
+
+Vamos a utilizar la BD de hospital que hicimos al inicio del semestre.
+
+### Descargar e instalar .NET SDK
+
+De [aquí](https://dotnet.microsoft.com/download/dotnet/thank-you/sdk-5.0.202-windows-x64-installer).
+
+### Crear solución y andamiaje de HospitApp
+
+```sh
+mkdir hospitapp
+cd hospitapp
+dotnet new console -o HospitApp
+dotnet new sln
+dotnet sln add HospitApp/HospitApp.csproj
+dotnet add package Npgsql --version 6.0.0-preview3
+dotnet tool install --global dotnet-ef
+dotnet ef dbcontext scaffold "Server=localhost;Port=5433;Database=hospitapp;User Id=postgres;Password=admin;" Npgsql.EntityFrameworkCore.PostgreSQL -o Model
+```
+
 
 
