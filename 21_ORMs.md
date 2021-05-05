@@ -44,7 +44,7 @@ Para esto, debo hacer un paréntesis y explicar arquitectura de aplicaciones:
 
 Corrían sistemas viejitos (afiliación del IMSS, control aéreo, control del metro, registro en el RFC) y en una misma máquina se ejecutaba todo: almacenamiento de datos, procesamiento de entradas, impresión de reportes, etc.
 
-![image](https://user-images.githubusercontent.com/1316464/116915944-4d3a7e80-ac12-11eb-94a7-a5cee5379b58.png)
+![image](https://user-images.githubusercontent.com/1316464/117094165-a98fc200-ad28-11eb-812e-ca373ff650c2.png)
 
 Esto se hacía con un lenguaje viejito que se llama COBOL, que creó esta señora:
 
@@ -60,7 +60,7 @@ Para la parte de acceso se construyeron aplicaciones y sistemas _cliente_ que er
 
 Luego se tendieron conexiones (no de internet) para enlazar las máquinas que corrían estos sistemas con su monolito, en donde se quedó el almacenamiento y procesamiento de datos.
 
-![image](https://user-images.githubusercontent.com/1316464/116916238-af937f00-ac12-11eb-9fc1-2a2808654a76.png)
+![image](https://user-images.githubusercontent.com/1316464/117094522-9f21f800-ad29-11eb-8244-baad3c7e6d9d.png)
 
 Luego vino el internet, y BOOM! 
 
@@ -68,7 +68,7 @@ Luego vino el internet, y BOOM!
 
 Con la adopción del internet a todos los niveles pudimos tener más capas, comenzando por separar ahora el procesamiento de datos del almacenamiento de los mismos:
 
-![image](https://user-images.githubusercontent.com/1316464/116917752-b1f6d880-ac14-11eb-9fc5-dfcbf2d9e8b0.png)
+![image](https://user-images.githubusercontent.com/1316464/117096431-a0a1ef00-ad2e-11eb-9422-12aab57c4b87.png)
 
 Esto nos permitió una explosión comercial de ofertas de productos y servicios para cada capa:
 
@@ -88,15 +88,20 @@ Sobre todo porque ya estamos hablando de aplicaciones con accesos globales, en d
 
 Nuestro proyecto final es un ejemplo de una aplicación multicapa.
 
+Y qué tiene que ver todo esto con ORMs y bases de datos?
 
+## Ahora si, back to our example
 
+Los ORM nos permiten tratar las tablas como objetos y representar relaciones más complejas sin necesidad de salir de nuestro lenguaje de programación.
 
+De esta forma, podemos tener esto:
 
+![image](https://user-images.githubusercontent.com/1316464/117098626-a569a180-ad34-11eb-9fa1-a15f55dee7c4.png)
 
+### Algunas equivalencias y traducciones entre ORM y SQL
 
-
-
-## En BD
-
-## 
-
+| ORM | SQL |
+|-----|-----|
+var p = repository.getPayment(10) | select * from payment p where p.id = 10
+public class Product | create table product
+product.setUnitPrice(200) | update product set unit_price = 200 where id = 
