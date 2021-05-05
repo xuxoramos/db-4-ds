@@ -173,3 +173,102 @@ Debemos terminar con un archivo llamado `HospitApp.csproj` con el siguiente cont
 </Project>
 ```
 
+Creando las tablas con este script:
+
+```sql
+-- paciente definition
+
+-- Drop table
+
+-- DROP TABLE paciente;
+
+CREATE TABLE paciente (
+	id_paciente serial NOT NULL ,
+	nombres varchar(50) NOT NULL,
+	apellidos varchar(50) NOT NULL,
+	tipo_sangre bpchar(2) NOT NULL,
+	factor_rh bool NOT NULL,
+	peso numeric(5,2) NULL,
+	estatura numeric(5,2) NULL,
+	CONSTRAINT pk_paciente PRIMARY KEY (id_paciente)
+);
+
+
+-- tipo_especializacion definition
+
+-- Drop table
+
+-- DROP TABLE tipo_especializacion;
+
+CREATE TABLE tipo_especializacion (
+	id_especializacion serial NOT NULL ,
+	nombre varchar(100) NOT NULL,
+	CONSTRAINT pk_tipo_especializacion PRIMARY KEY (id_especializacion)
+);
+
+
+-- doctor definition
+
+-- Drop table
+
+-- DROP TABLE doctor;
+
+CREATE TABLE doctor (
+	id_doctor serial NOT NULL,
+	nombres varchar(50) NOT NULL,
+	apellidos varchar(50) NOT NULL,
+	fecha_contratacion date NOT NULL,
+	sueldo numeric(8,2) NOT NULL,
+	id_especializacion integer NULL,
+	CONSTRAINT pk_doctor PRIMARY KEY (id_doctor),
+	CONSTRAINT doctor_id_especializacion_fkey FOREIGN KEY (id_especializacion) REFERENCES tipo_especializacion(id_especializacion)
+);
+
+
+-- paciente_doctor definition
+
+-- Drop table
+
+-- DROP TABLE paciente_doctor;
+
+CREATE TABLE paciente_doctor (
+	id_paciente integer NOT NULL,
+	id_doctor integer NOT NULL,
+	CONSTRAINT pk_paciente_doctor PRIMARY KEY (id_paciente, id_doctor),
+	CONSTRAINT paciente_doctor_id_doctor_fkey FOREIGN KEY (id_doctor) REFERENCES doctor(id_doctor) ON UPDATE CASCADE,
+	CONSTRAINT paciente_doctor_id_paciente_fkey FOREIGN KEY (id_paciente) REFERENCES paciente(id_paciente) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+
+-- tipo_estudio definition
+
+-- Drop table
+
+-- DROP TABLE tipo_estudio;
+
+CREATE TABLE tipo_estudio (
+	id_tipo_estudio serial NOT NULL ,
+	nombre varchar(100) NOT NULL,
+	id_especializacion integer NULL,
+	CONSTRAINT pk_tipo_estudio PRIMARY KEY (id_tipo_estudio),
+	CONSTRAINT tipo_estudio_id_especialidadn_fkey FOREIGN KEY (id_especializacion) REFERENCES tipo_especializacion(id_especializacion)
+);
+
+
+-- estudio definition
+
+-- Drop table
+
+-- DROP TABLE estudio;
+
+CREATE TABLE estudio (
+	id_estudio serial NOT NULL ,
+	fecha_prescripcion date NOT NULL,
+	fecha_realizacion date NOT NULL,
+	id_tipo_estudio integer NULL,
+	id_paciente integer NULL,
+	CONSTRAINT pk_estudio PRIMARY KEY (id_estudio),
+	CONSTRAINT estudio_id_paciente_fkey FOREIGN KEY (id_paciente) REFERENCES paciente(id_paciente),
+	CONSTRAINT estudio_id_tipo_estudio_fkey FOREIGN KEY (id_tipo_estudio) REFERENCES tipo_estudio(id_tipo_estudio)
+);
+```
