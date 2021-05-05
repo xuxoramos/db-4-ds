@@ -94,6 +94,35 @@ Y qué tiene que ver todo esto con ORMs y bases de datos?
 
 Los ORM nos permiten tratar las tablas como objetos y representar relaciones más complejas sin necesidad de salir de nuestro lenguaje de programación.
 
+### Clases VS Tablas
+
+Recordemos este modelo ER del inicio de semestre:
+
+![](https://camo.githubusercontent.com/1783c43244b8d415030171d26d899b55a682559b38b43ca3f046a79147414bcb/68747470733a2f2f696d6775722e636f6d2f6a534a75664e742e706e67)
+
+Al desarrollar una aplicación para registro hospitalario, necesitamos varias funcionalidades como autenticación, transacciones, pantallas, y en general user experience...
+
+⚠️**COSA QUE ES PERRÍSIMA CON SQL**⚠️
+
+Entonces recurrimos a una plataforma o lenguaje de programación. .NET, Python, Java, etc.
+
+⚠️PERO...⚠️
+
+Estos son lenguajes orientados a objetos.
+
+Por lo tanto tendríamos este diagrama de clases:
+
+![image](https://user-images.githubusercontent.com/1316464/117180994-653d0a00-ad9a-11eb-9223-377dc52c1789.png)
+
+Los diagramas de clase nos permiten mucho más expresividad y contar mucho más historias de un sistema y sus interacciones:
+
+- Un `Doctor` puede `consultar(Paciente)`
+- Un `Doctor` puede ser `Cirujano`.
+- Un `Cirujano` puede hacer todo lo de un `Doctor`, excepto `operar()`.
+- Un `Paciente` tiene una colección de `Doctor` que son todos los que lo han atendido. Cuando un `Doctor` nuevo se suma a la atención de un `Paciente`, lo agregamos con `addDoctor(Doctor)`.
+- No necesitamos _clases_ intermedias para una relación **N a M**, solo especificar que hay una relación.
+
+
 De esta forma, podemos tener esto:
 
 ![image](https://user-images.githubusercontent.com/1316464/117098626-a569a180-ad34-11eb-9fa1-a15f55dee7c4.png)
@@ -103,5 +132,5 @@ De esta forma, podemos tener esto:
 | ORM | SQL |
 |-----|-----|
 var p = repository.getPayment(10) | select * from payment p where p.id = 10
-public class Product | create table product
-product.setUnitPrice(200) | update product set unit_price = 200 where id = 
+p2 = new Product() | insert into product values...
+product.setUnitPrice(200) | update product set unit_price = 200 where...
