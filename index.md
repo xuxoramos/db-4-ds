@@ -2,54 +2,69 @@
 
 Este website contiene el material para la materia Bases de Datos para Ciencia de Datos.
 
-### NEWS & UPDATES!
+##   Rules of the game
 
-#### 2021-01-18
-Por fin nuestra HHH institución se puso las pilitas y nos pusieron Zoom. Aquí la liga: https://itam.zoom.us/j/3406597105
+### Cómo nos comunicaremos?
+Por [Slack](https://slack.com), que es un chat orientado a equipos y trabajo. Comenzó como un juegoi tipo "Among Us", pero cuando hicieron el chat para el juego quedó tan chingón, que lo sacaron como producto separado. Abajo las ligas de descarga:
+- [Windows](https://slack.com/downloads/windows)
+- [Mac](https://slack.com/help/articles/207677868-Download-Slack-for-Mac)
+- [Linux](https://slack.com/downloads/linux) - .rpm para Fedora o RedHat, .deb para Ubuntu
 
-Todas nuestras clases a partir del 18 de Enero serán por ahí.
+### Por dónde serán las sesiones?
+La sesión 0 será por [Teams de Microsoft](https://www.microsoft.com/es-mx/microsoft-365/microsoft-teams/download-app), y posteriormente nos moveremos a [Zoom](https://zoom.us/download).
 
-También tenemos el video de la 1a clase arriba en mi GoogleDrive: https://drive.google.com/drive/folders/15VTGlkN0i3WGb_Bq5H51uCc-UOzwjxzr?usp=sharing
+### Dónde estará el material?
+Aquí en Github. Github es una plataforma de colaboración y control de versiones para no andar como este meme:
+![](https://i.redd.it/05b6u19pseoz.png)
 
-Y listo el video de la 2a clase: https://itam.zoom.us/rec/share/nqjzFBbGQeX52t07hPU5YyKoDMUYWR7-JbijNcegPwxJyyb7eJu-EgjSt_EVNgjo.vaxyhAF9A8aKQIQt
+Es importante que si nunca has usado Github, o algún otro sistema de control de versiones, [leas esta guía](https://guides.github.com/activities/hello-world/) para que no te agarren en curva y tengas de menos los fundamentos de estas plataformas.
 
-#### 2021-01-19
-Dado el feedback que he recibido de ustedes, he modificado el apunte de la clase pasada para que sea mucho más claro. [Chéquenlo](https://xuxoramos.github.io/db-4-ds/1_database_design_and_creation).
+### Qué necesito para la clase?
+Las bases de datos son parte de un ecosistema de muchas piezas que nutre el flujo de datos de un problem domain. Quizá sean la más importante, pero no la única. Para ello vamos a utilizar diferentes herramientas para poder interactuar con cada una de estas piezas, incluyendo la base de datos, obvi.
+  
+Lo mero, mero. La ráison d'etre de este curso. El motivo por el que estamos aquí. El corazón de todo sistema, toda plataforma, aplicación: twitter, albo, Monzo, FB, Valorant, Fortnite, Destiny, etc.
 
-Adicionalmente, aquí el video de la clase de hoy: https://itam.zoom.us/rec/share/oHIuCloPHXKRfTmKGZDzSxDP_yKhwrTbDrlmZkKVZT-BGVRKyZDe1FaOSW2_7gfo.LyFlWZuNkDmjEcCb
+Para poder crear, diseñar, levantar, consultar, administrar bases de datos, necesitamos 2 paquetes.
 
-#### 2021-01-26
-Aquí la grabación de la sesión del Lunes 25: https://itam.zoom.us/rec/share/n70zTscj7cdzeR8jQgQBo_-Rw9royVV-VgE1VkZ8aaRpgJdakRdMkIPeKe2kD980.jD2JdCWG4EKsz6FD
+Debido a que las bases de datos actúan como servidor (es decir, un programa con una conexión abierta, esperando conexiones y escuchando los comandos que caen por esa conexión después de que establecemos una), obviamente necesitamos un programa cliente que establezca esa conexión. Los 2 paquetes que necesitamos son un cliente, y un servidor.
 
-#### 2021-01-27
-Aquí la grabación del miércoles 27. Recuerden que dejamos 30 mins al final para el ejercicio, así que el contenido real acaba alrededor del minuto 90: https://itam.zoom.us/rec/share/MgPRp8YbBDqw45WEr936dzkLCTPxMUVP1TZTQQUpPRyVITiHTcpe6w6jXeRHSD_Z.31wHFS3ue8_i8Icl
+Como servidor [descargaremos e instalaremos PostgreSQL](https://www.enterprisedb.com/downloads/postgres-postgresql-downloads), la mejor base de datos del mundo :P. 
 
-#### 2021-02-08
-Aquí la grabación de la sesión de hoy: https://itam.zoom.us/rec/share/PkyoX5vUkCUF1KP1EhgKwYyMxPyBDqV6ZQ2g7SbYcqjNhLye-0IkqOKL8Z0D7Azo.btYVQOMKAAuOZbBY
+Si tienes Linux, [descarga el PostgreSQL desde aquí](https://www.postgresql.org/download/linux/ubuntu/).
 
-#### 2021-02-10
-Aquí la grabación de la sesión de hoy: https://itam.zoom.us/rec/share/Xtjg4gYf0Ua6yEYEWPh1y1J_r_Gya-ms7NF6wXJnBMha7pQP29xzYjoMWOvX9v0.mEipNMPueGBxQojj
+Ahora, para el cliente, descargaremos e instalaremos la edición [Community de DBeaver](https://dbeaver.io/download/), uno de los 3 paquetes de software libre para conexión a bases de datos.
 
-#### 2021-02-15
-La grabación de la sesión del 15 de Feb: https://itam.zoom.us/rec/share/Y4rtNP7EuROWPVEm-QBnCckXuKbtJWlwtVhJI3iCKCqXZ15RzgvXzYvjVvHV4J4j.Z6aRh51NIfa3boC_?startTime=1613421405000
+Ya los tienes? Va.
 
-#### 2021-03-01
-Grabación: https://itam.zoom.us/rec/share/PyaoOvsNXYgjl75_gDtEINJm4jTQhIycaN8KuRj-7nANh91wdP80OBAnKxG9eV17.-w7Q8vBm0hl5Kyy9
+### Cómo vamos a calificar?
 
-#### 2021-03-08
-Grabación: https://itam.zoom.us/rec/share/61A8PU1chzULzSwS045Hq9oKrQi-EbQ2-BOE2clmmIqSdLuYY3wxpAmIjqYTc_U2.Hw3Js_jv7DJGP4MV
+1. 1er Parcial (teórico): 10%
+2. 2o Parcial (avance proyecto final): 10%
+3. 3er Parcial (avance proyecto final): 20%
+4. Proyecto final: 50%
+5. Tareas: 10%
 
-#### 2021-03-10
-Grabación: https://itam.zoom.us/rec/share/dycUCehkiSORtDMOQv2ZfLFxB6LYUJbvd6I7-Fhs2SHyTrOzYqHqF3fBkt6Bh4xm.YhUQX0Gol14jnmv_
+### Cómo serán los exámenes?
+Tendrán un componente teórico y/o un componente práctico.
 
-#### 2021-03-15
-No hay grabación. Sorry 😞.
+El componente práctico consistirá generalmente en uno de a) crear o alterar una BD, b) diseñar una BD, c) generar datos en una BD con una cierta forma, o d)  generar un reporte analítico.
 
-#### 2021-03-17
-Grabación: https://itam.zoom.us/rec/share/IfrRpOqueegqRmw7rWehSTl6Rx7SAsX4RNPj3lAoaWaIbL7Ph0a0qgYZoofTYDzy.EPXl1yaPyNsaNOrc
+El componente teórico es un examen de opción múltiplemen la plataforma [Socrative](https://www.socrative.com/) en el cual podrás sacar apuntes o usar una o varias de las plataformas que configuraremos a lo largo del semestre (PostgreSQL, DBeaver, VSCode, Anaconda, etc).
 
-#### 2021-03-22
-Grabación: https://itam.zoom.us/rec/share/3afQQfUA5_YbU3pIjA7Z_v6temCqTqJsWfN8V-tBfmWEGtW9V1w4mnBA7Ky67Dg6.AdbEBf1B_4DAnCKT
+### Y cómo será el examen final?
+Será enteramente práctico y consistirá en el desarrollo de un proyecto integral con todo lo visto en el semestre. Daremos más detalles más adelante durante el curso.
+
+### Cómo me contacto con ud, prof?
+Usen el el correo institucional (jesus.ramos@itam.mx) o Slack, o escriban a ramos.cardona@gmail.com.
+
+Pero preferentemente usen Slack.
+
+### NEWS & UPDATES
+
+Check back here often.
+
+#### 2021-08-04
+Bienvenidos!
 
 
 ### Temario + Fechas = Plan de Materia
@@ -94,65 +109,4 @@ A continuación el temario, fecha por fecha:
 | 34            | 2021/05/12      | Intro a Datawarehousing y Big Data. Bases de datos transaccionales VS bases de datos analíticas. "No analices donde operas"                                                                                                                           |
 | 35            | 2021/05/12      | Bases de datos columnares. MonetDB. ETLs. Desnormalización                                                                                                                                                                                            |
 | 36            | TBD             | Presentación proyecto final                                                                                                                                                                                                                           |
-### Cómo nos comunicaremos?
-Por [Slack](https://slack.com), que es un chat orientado a equipos y trabajo. Comenzó como un juegoi tipo "Among Us", pero cuando hicieron el chat para el juego quedó tan chingón, que lo sacaron como producto separado. Abajo las ligas de descarga:
-- [Windows](https://slack.com/downloads/windows)
-- [Mac](https://slack.com/help/articles/207677868-Download-Slack-for-Mac)
-- [Linux](https://slack.com/downloads/linux) - .rpm para Fedora o RedHat, .deb para Ubuntu
 
-### Por dónde serán las sesiones?
-La sesión 0 será por [Teams de Microsoft](https://www.microsoft.com/es-mx/microsoft-365/microsoft-teams/download-app), y posteriormente nos moveremos a [Zoom](https://zoom.us/download).
-
-### Dónde estará el material?
-Aquí en Github. Github es una plataforma de colaboración y control de versiones para no andar como este meme:
-![](https://i.redd.it/05b6u19pseoz.png)
-
-Es importante que si nunca has usado Github, o algún otro sistema de control de versiones, [leas esta guía](https://guides.github.com/activities/hello-world/) para que no te agarren en curva y tengas de menos los fundamentos de estas plataformas.
-
-### Qué necesito para la clase?
-Las bases de datos son parte de un ecosistema de muchas piezas que nutre el flujo de datos de un problem domain. Quizá sean la más importante, pero no la única. Para ello vamos a utilizar diferentes herramientas para poder interactuar con cada una de estas piezas, incluyendo la base de datos, obvi.
-
-#### Capa de aplicación
-Para esto vamos a descargar e instalar [VSCode](https://code.visualstudio.com/), un I(ntegrated) D(evelopment) E(nvironment) poder construir una pequeña aplicación en [Django](https://www.djangoproject.com/), un poderoso framework web hecho en Python.
-
-> **IMPORTANTE:** Seguro tu OS ya tiene Python instalado, y seguro no es la última versión. **Ni la bajes, ni la instales!**. Usaremos mejor un administrador de ambientes virtuales para que podamos instalar paquetes de Python sin estropear tu instalación de sistema, de la cual depende mucha de la funcionalidad de tu OS.
-
-#### Capa de middleware, APIs y servicios
-Para esto descargaremos e instalaremos [Anaconda](https://www.anaconda.com/products/individual), un administrador de ambientes virtuales de Python para poder hacer nuestros desarrollos más tolerantes a fallos (fallos del tipo "no ma! instalé un paquete y se encimó sobre una dependencia y ahora mi MacOS ya no arranca!". Es una instalación larga y pesada (3GB), así que asegúrate de tener el espacio.
-
-#### Capa de base de datos
-Lo mero, mero. La ráison d'etre de este curso. El motivo por el que estamos aquí. El corazón de todo sistema, toda plataforma, aplicación: twitter, albo, Monzo, FB, Valorant, Fortnite, Destiny, etc.
-
-Para poder crear, diseñar, levantar, consultar, administrar bases de datos, necesitamos 2 paquetes.
-
-Debido a que las bases de datos actúan como servidor (es decir, un programa con una conexión abierta, esperando conexiones y escuchando los comandos que caen por esa conexión después de que establecemos una), obviamente necesitamos un programa cliente que establezca esa conexión. Los 2 paquetes que necesitamos son un cliente, y un servidor.
-
-Como servidor [descargaremos e instalaremos PostgreSQL](https://www.enterprisedb.com/downloads/postgres-postgresql-downloads), la mejor base de datos del mundo :P. 
-
-Si tienes Linux, [descarga el PostgreSQL desde aquí](https://www.postgresql.org/download/linux/ubuntu/).
-
-Ahora, para el cliente, descargaremos e instalaremos la edición [Community de DBeaver](https://dbeaver.io/download/), uno de los 3 paquetes de software libre para conexión a bases de datos.
-
-Ya los tienes? Va.
-
-### Cómo vamos a calificar?
-
-1. 1er Parcial: 10%
-2. 2o Parcial: 15%
-3. 3er Parcial: 20%
-4. Proyecto final: 55%
-
-### Cómo serán los exámenes?
-Tendrán un componente teórico y/o un componente práctico.
-
-El componente práctico consistirá generalmente en uno de a) crear o alterar una BD, b) diseñar una BD, c) generar datos en una BD con una cierta forma, o d)  generar un reporte analítico.
-
-El componente teórico es un examen de opción múltiplemen la plataforma [Socrative](https://www.socrative.com/) en el cual podrás sacar apuntes o usar una o varias de las plataformas que configuraremos a lo largo del semestre (PostgreSQL, DBeaver, VSCode, Anaconda, etc).
-
-### Y cómo será el examen final?
-Será enteramente práctico y consistirá en el desarrollo de un proyecto integral con todo lo visto en el semestre. Daremos más detalles más adelante durante el curso.
-
-### Cómo me contacto con ud, prof?
-No checo casi el correo institucional, así que, fuera de Slack, van a tener que escribir a ramos.cardona@gmail.com.
-
-Pero preferentemente usen Slack.
