@@ -4,6 +4,10 @@ Este website contiene el material para la materia Bases de Datos para Ciencia de
 
 ##   Rules of the game
 
+### Qué texto vamos a usar?
+
+La mayoría del curso está basado en [Learning SQL](https://www.r-5.org/files/books/computers/languages/sql/mysql/Alan_Beaulieu-Learning_SQL-EN.pdf) de A. Bailieau de editorial O'Reilly, que tiene bastantes libros técnicos muy interesantes.
+
 ### Cómo vamos a calificar?
 
 1. 1er Parcial (teórico): 10%
