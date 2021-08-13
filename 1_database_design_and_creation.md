@@ -171,6 +171,25 @@ Y ninguna de las 3 formas cumple con el paradigma relacional (el 1o es más un e
 
 Podemos ver que no es posible definir el `id_contrato` como llave primaria de esta tabla histórica porque se repite por cada evento. Igual no podemos definir el `id_cliente` porque también se repite. Nuestra única forma de definir que cada evento le pertenece a un contrato y a un cliente es definiendo una llave compuesta con el `id_cliente`, `id_contrato` y el `timestamp`. Solamente de este modo podemos responder a la pregunta "por qué nuestro cliente dejó de contratar nuestros servicios?" (hint: vean las fechas).
 
+## Ejemplo con el sistema de Mission Dispatch de Avengers
+
+Aquí [la liga del ejercicio que hicimos](https://docs.google.com/presentation/d/1dFnzWNigZ8yye8Kp2qyb3CX9GClboDrK4naN2pchd-4/edit?usp=sharing) con el sistema hipotético de administración de misiones de los Avengers.
+
+![EjercicioDiseñoBDOperacionesAvengers](https://user-images.githubusercontent.com/1316464/129387595-d72feaa7-c52f-428f-9abc-07a191d5c108.png)
+
+Este fue el proceso que seguimos:
+
+1. Para relacionar Superhero con Mission, no podemos copiar la llave primaria de Mission a Superhero porque eso implica que la misión solo tiene 1 superhéroe (1 Superhero -> N Mission)
+2. Tampoco de Superhero a Mission porque entonces cualquier superhéroe solo puede participar en 1 misión (1 Mission -> N Superhero).
+3. Lo correcto es una relación N a M.
+4. Para ello necesitamos una tabla intermedia a la que le copiemos la llave primaria de Superhero y la de Mission que llamamos MissionSuperhero
+5. Ambas llaves foráneas forman una llave primaria compuesta.
+6. Si necesitamos agregar atributos a MissionSuperhero, podemos hacerlo.
+7. Los diagramas ER representan la parte ESTÁTICA del sistema, por lo que se complica representar comportamientos en el tiempo (la parte DINÁMICA)
+8. Pero con algunas maromas podemos lograrlo: en lugar de que las misiones sean diarias, modelarlas como “dispatches” en la tabla Mission cada vez que sucedan
+9. Y así una batalla en Tepito a las 8am será una misión diferente que otra batalla en Tepito a las 2pm.
+10. Todo esto en lugar de poner la hora como atributo de MissionSuperhero.
+
 
 ## Diseñando una BD
 
