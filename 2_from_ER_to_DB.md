@@ -63,6 +63,8 @@ create sequence especializacion_id_especializacion_seq start 1 increment 1;
 alter table especializacion alter column id_especializacion set default nextval('especializacion_id_especializacion_seq')
 ```
 
+Después de esto ya podremos ejecutar el `create table` de la tabla `doctor` de a mero arriba.
+
 ## Tablas transaccionales y tablas de catálogos
 Antes de crear **en orden** las tablas para que no nos salgan estos errores, debemos de explicar la diferencia entre algunos tipos de tablas para tener claro nuestro diseño de BD.
 
