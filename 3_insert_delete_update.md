@@ -15,7 +15,7 @@ Antes de explicar este comando línea por línea, debemos hacer un apunte sobre 
 
 La jerarquía de _contenedores_ o _folders_ de PostgreSQL es `Database Server -> Database -> Schema`
 
-Tablas dentro del mismo esquema son visibles entre ellas sin referirse explíticamente al esquema al que pertenecen.
+Tablas dentro del mismo esquema son visibles entre ellas sin referirse explíticamente al esquema al que pertenecen, **y por tanto, obviamente sus nombres deben ser únicos** (no podemos tener 2 tablas que se llamen igual).
 
 Tablas en diferentes esquemas, pero dentro de la misma base, son visibles solo con el prefijo `[esquema].[tabla]`, de modo que si tenemos un esquema `hospital` y otro esquema `laboratorio`, y desde la tabla `hospital.estudio` queremos tener acceso a `laboratorio.reactivos`, entonces debemos referirnos a una y a otra tabla como aparecen en el ejemplo, con sus esquemas como prefijos.
 
@@ -84,15 +84,15 @@ Vamos ahora a insertar varios pacientes para probar las relaciones N a N:
 
 | nombres    | apellidos | tipo_sangre | factor_rh | peso | estatura |
 |------------|-----------|-------------|-----------|------|----------|
-| Roger      | Waters    | O           | 1         | 78   | 190      |
-| Alejandro  | Mejía     | O           | 0         | 70   | 175      |
-| Raúl       | Fernández | AB          | 1         | 79   | 180      |
-| Sebastián  | Dulong    | B           | 0         | 68   | 172      |
-| Ulises     | Quevedo   | A           | 1         | 78   | 188      |
+| Roger      | Waters    | O           | y         | 78   | 190      |
+| Alejandro  | Mejía     | O           | n         | 70   | 175      |
+| Raúl       | Fernández | AB          | y         | 79   | 180      |
+| Sebastián  | Dulong    | B           | n         | 68   | 172      |
+| Ulises     | Quevedo   | A           | y         | 78   | 188      |
 
 No puse a las mujeres de nuestro grupo porque no quiero suponer nada sobre su peso porque creo que es considerado una grosería, no?
 
-Un apunte sobre el campo `paciente.factor_rh`: lo hemos declarado como `bool`, que significa que solo puede tomar valores **`true`** o **`false`**, o **`t`** o **`f`**, o **`y`** o **`n`**, o **`yes`** o **`no`**. ⚠️POSTGRESQL YA NO ACEPTA 1 COMO TRUE Y 0 COMO FALSE⚠️. Todos estos tipos son aceptables para este campo, y en el diseño del sistema que alimente esta BD, debe haber esta _traducción_ entre 1 y 0, y **positivo** y **negativo** para el factor RH.
+Un apunte sobre el campo `paciente.factor_rh`: lo hemos declarado como `bool`, que significa que solo puede tomar valores **`true`** o **`false`**, o **`t`** o **`f`**, o **`y`** o **`n`**, o **`yes`** o **`no`**. ⚠️**POSTGRESQL YA NO ACEPTA 1 COMO TRUE Y 0 COMO FALSE**⚠️. Todos estos tipos son aceptables para este campo, y en el diseño del sistema que alimente esta BD, debe haber esta _traducción_ entre 1 y 0, y **positivo** y **negativo** para el factor RH.
 
 [Aquí](https://www.postgresqltutorial.com/postgresql-data-types/) un resumen muy concreto de los data types que podemos asignarle a columnas en PostgreSQL.
 
