@@ -220,7 +220,7 @@ insert into paciente_doctor
 (id_paciente, id_doctor) 
 values 
 ((select id_paciente from paciente where nombres = 'Ulises' and apellidos = 'Quevedo'), 
-(select id_doctor from doctor where nombres = 'Meredith' and apellidos = 'Gray'));
+(select id_doctor from doctor where nombres = 'Meredith' and apellidos = 'Grey'));
 ```
 
 Pero eventualmente, el tratamiento de Ulises le provoca desorden de personalidad múltiple, lo cual lo hace, sin razón alguna, creer que ahora es Djin Darin a.k.a. The Mandalorian, y ahora todas sus frases las termina con "this is the way". Para reflejar este nuevo comportamiento, legalmente debemos cambiar su nombre en nuestro registro de pacientes:
@@ -231,14 +231,14 @@ Dado eso, el hospital cambia sus reglas de negocio para que, en lugar de que **1
 
 `ALTER TABLE paciente_doctor ADD COLUMN principal bool DEFAULT false;`
 
-Y ahora designaremos a la Dra. Gray como la principal que está atendiendo a Ulises...perdón, a Djinn Darin.
+Y ahora designaremos a la Dra. Grey como la principal que está atendiendo a Ulises...perdón, a Djinn Darin.
 
 ```
 update paciente_doctor pd 
 set principal = true 
 from paciente p, doctor d 
 where p.nombres = 'Djinn' and p.apellidos = 'Darin' 
-and d.nombres = 'Meredith' and d.apellidos = 'Gray' 
+and d.nombres = 'Meredith' and d.apellidos = 'Grey' 
 and pd.id_paciente = p.id_paciente and pd.id_doctor = d.id_doctor;
 ```
 
