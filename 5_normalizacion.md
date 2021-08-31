@@ -121,3 +121,7 @@ Como dijimos anteriormente, al estar diseñando BDs, es importante tomar en cuen
 La mayoría de las aplicaciones de la vida real serán suficientes con que tengamos nuestra BD en 3NF. Las NF posteriores garantizan aún mayor cobertura VS anomalías, mayor consistencia en algunos casos frontera, etc. 
 
 Del mismo modo, "normalización" se dió cuando el storage era caro, pero ahora en 2021 la razón más importante es estructura, y optimización de escritura.
+
+### TBD - Relación entre `PACIENTE`, `DOCTOR`, `MEDICAMENTO` en sistema hipotético de ingreso hospitalario
+
+**⚠️TBD!TBD!TBD!TBD!TBD!TBD!TBD!TBD!TBD!TBD!TBD!TBD!⚠️**
