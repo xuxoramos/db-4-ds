@@ -124,4 +124,27 @@ Del mismo modo, "normalización" se dió cuando el storage era caro, pero ahora 
 
 ### TBD - Relación entre `PACIENTE`, `DOCTOR`, `MEDICAMENTO` en sistema hipotético de ingreso hospitalario
 
-**⚠️TBD!TBD!TBD!TBD!TBD!TBD!TBD!TBD!TBD!TBD!TBD!TBD!⚠️**
+1. Comencemos con la relación **N a M** de `paciente -> doctor`:
+
+![image](https://user-images.githubusercontent.com/1316464/131604100-13c70422-60f7-4150-ab05-02040c406efe.png)
+
+2. Luego agreguemos la relación **N a M** de `paciente_doctor -> medicamento`:
+
+![image](https://user-images.githubusercontent.com/1316464/131605580-7f6b5d2f-c14a-49c0-82ec-099cb29ff922.png)
+
+3. Aquí entramos en varios problemas:
+   - Corremos el riesgo de arrastrar la llave compuesta `id_doctor + id_paciente + id_medicamento` a otras relaciones, y podemos incurrir en repetición de datos
+   - Semánticamente, la relación `paciente -> doctor` es una que materializa el verbo _tratar_, el cual es diferente del verbo _recetar_, por lo que debemos manifestarlo con 2 relaciones _N a M_ totalmente diferentes
+   - Esto **no nos introduce** relaciones circulares porque los viajes que podemos hacer son de **N a 1**, es decir, los viajes siempre van desde una observación o instancia única de una entidad hacia otra observación o instancia única de otra entidad, por lo que cuando vamos de una instancia única (el lado de la relación con cardinalidad 1) a instancias múltiples (el lado de la relación con cardinalidad N) ahí se detiene nuestro viaje
+      - Un ejemplo de relación circular puede ser `Entidad1(N)->Entidad2(1)/Entidad2(N)->Entidad3(1)/Entidad3(N)->Entidad1(1)`
+      - ![image](https://user-images.githubusercontent.com/1316464/131610585-89199fe4-b490-48c2-bcdc-6df3966d123b.png)
+
+4. Para poder componer esta relación, vamos a definir por un lado, la relación de _médico tratante_ con la tabla intermedia `paciente -> paciente_doctor <- doctor` por un lado, y por otro lado la _relación ternaria_ `paciente -> doctor -> medicamento`:
+
+![EjercicioDiseñoBDOperaciones (1)](https://user-images.githubusercontent.com/1316464/131611115-9075f01a-1839-4572-be02-1b998c3de2f5.jpg)
+
+5. 👀OJO👀: con esta alternativa ya no es recomendable **TENDER MÁS RELACIONES** entre las tablas intermedias (sea de la relación _N a M_ o de la relación _N a M a P_) y otras tablas, porque estaríamos copiando llaves compuestas más allá de las tablas de soporte. Si absolutamente debemos hacer esto para satisfacer la narrativa del contexto, debemos hacer lo siguiente:
+
+![EjercicioDiseñoBDOperaciones (2)](https://user-images.githubusercontent.com/1316464/131611846-651bd1f5-c6fc-4623-9ada-51540ea5756c.jpg)
+
+Esto es, reemplazar la llave primaria de la tabla de soporte con un entero secuencial y sin relación a la entidad, mantener las llaves foráneas, y entonces sí establecer las relaciones subsecuentes **CON LA NUEVA LLAVE PRIMARIA** en lugar de hacerlo con las llaves compuestas.
