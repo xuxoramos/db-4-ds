@@ -106,47 +106,32 @@ No todos son obligatorios, pero esta es la base para un query útil que puede re
 
 1. Qué contactos de proveedores tienen la posición de sales representative?
 
-`select s.contact_name from suppliers s where s.contact_title = 'Sales Representative';`
 
 2. Qué contactos de proveedores no son marketing managers?
 
-`select s.contact_name from suppliers s where s.contact_title != 'Marketing Manager';` 
+
 
 3. Cuales órdenes no vienen de clientes en Estados Unidos?
 
-`select o.customer_id from orders o join customers c on (o.customer_id = c.customer_id) where c.country != 'USA';` ó bien
-`select o.customer_id from orders o where o.ship_country != 'USA';`
 
 Podemos comprobar que ambos enfoques son los mismos con este query:
-`select o.order_id, o.ship_country, c.customer_id, c.country from orders o join customers c on o.customer_id = c.customer_id where c.country != 'USA'`
 
 4. Qué productos de los que transportamos son quesos?
 
-`select distinct od.product_id, p.product_name from order_details od join products p on (od.product_id = p.product_id) where p.category_id = 4;` ó bien, un enfoque más _pedestrian_:
-`select * from products p2 where p2.product_name like '%Queso%'` 
 
 5. Qué ordenes van a Bélgica o Francia?
 
-_Lo haremos la siguiente clase._
 
 6. Qué órdenes van a LATAM?
 
-_Lo haremos la siguiente clase._
 
 7. Qué órdenes no van a LATAM?
 
-_Lo haremos la siguiente clase._
 
 9. Necesitamos los nombres completos de los empleados, nombres y apellidos unidos en un mismo registro
 
-_Lo haremos la siguiente clase._
 
 10. Cuánta lana tenemos en inventario?
 
-_Lo haremos la siguiente clase._
 
 11. Cuantos clientes tenemos de cada país?
-
-_Lo haremos la siguiente clase._
-
-
