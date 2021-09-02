@@ -114,8 +114,6 @@ No todos son obligatorios, pero esta es la base para un query útil que puede re
 3. Cuales órdenes no vienen de clientes en Estados Unidos?
 
 
-Podemos comprobar que ambos enfoques son los mismos con este query:
-
 4. Qué productos de los que transportamos son quesos?
 
 
