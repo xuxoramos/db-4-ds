@@ -222,43 +222,6 @@ No he encontrado tablas o relaciones que me permitan ilustrar el anti-join en la
 
 ![](https://dataschool.com/assets/images/how-to-teach-people-sql/sqlJoins/sqlJoins_7.png)
 
-## Ejercicios de la clase pasada
-
-5. Qué ordenes van a Bélgica o Francia?
-
-`select * from orders o where ship_country in ('Belgium', 'France');`
-
-6. Qué órdenes van a LATAM?
-
-```
-select order_id , ship_country from orders o 
-where ship_country in ('Mexico', 'Venezuela', 'Brazil', 'Argentina');
-```
-
-7. Qué órdenes no van a LATAM?
-
-```
-select order_id , ship_country from orders o 
-where ship_country not in ('Mexico', 'Venezuela', 'Brazil', 'Argentina');
-```
-
-8. Necesitamos los nombres completos de los empleados, nombres y apellidos unidos en un mismo registro
-
-`select concat(e.first_name , ' ' , e.last_name) as "Full Name" from employees e;`
-
-9. Cuánta lana tenemos en inventario?
-
-`select sum((p.unit_price * p.units_in_stock)) from products p;`
-
-10. Cuantos clientes tenemos de cada país?
-
-`select c.country , count(c.customer_id) from customers c group by c.country;`
-
-
-
-
-
-
 
 
 
