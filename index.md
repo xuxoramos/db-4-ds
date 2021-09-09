@@ -96,3 +96,5 @@ A continuación el temario, fecha por fecha:
 | 6             | 2021/08/26      | [Update, drop, y uso de los comandos IRL](https://xuxoramos.github.io/db-4-ds/3_insert_delete_update) / [Sesión en video](https://drive.google.com/file/d/1wmB_Txrdwy2SwhMvxfIjCpOT30E4qUko/view?usp=sharing)
 | 7             | 2021/08/31      | [Normalización: 1NF, 2NF y 3NF. Best practices para diseño de bases de datos](https://xuxoramos.github.io/db-4-ds/5_normalizacion) / [Sesión en video](https://drive.google.com/file/d/1oVGX5aqj-Fe7URbKRamK2ce3k3I93WW5/view?usp=sharing)
 | 8             | 2021/09/02      | [3.5NF, Relaciones ternarias y sus best practices](https://xuxoramos.github.io/db-4-ds/5_normalizacion). [Intro a queries y ejercicios](https://xuxoramos.github.io/db-4-ds/6_queries_y_queries_y_queries) / [Sesión en video](https://drive.google.com/file/d/1Pg4BrMsnJtSOyzUzmHXd5dv36_6i5l8z/view?usp=sharing)
+| 9             | 2021/09/07      | **SESIÓN A REPONER EN VIDEO**
+| 10             | 2021/09/09      | [Joins](https://xuxoramos.github.io/db-4-ds/7_joins)
