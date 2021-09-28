@@ -191,35 +191,12 @@ Ver un tutorial [aquí](https://www.regular-expressions.info/postgresql.html).
 Usando la BD de Sakila:
 
 ### Cuales pagos no son del cliente con ID 5, y cuyo monto sea mayor a 8 o cuya fecha sea 23 de Agosto de 2005?
-```
-select p.customer_id , p.payment_date, p.amount 
-from payment p  
-where p.customer_id <> 5 and (p.amount > 8 or p.payment_date = '2005-08-23');
-```
-Este query tiene la particularidad de que el predicado `p.payment_date = '2005-08-23'` probalemente va a ser `FALSE` porque recuerden que a bajo nivel, esta comparación es realmente `p.payment_date = '2005-08-23 00:00:00'` debido a que el campo `payment_date` es de tipo `timestamp`, es decir, fecha + hora, y es poco probable que un registro se haya insertado **exactamente** a las 00h.
 
 ### Cuales pagos son del cliente con ID 5 y cuyo monto no sea mayor a 6 y su fecha tampoco sea del 19 de Junio de 2005?
-```
-select p.customer_id , p.payment_date, p.amount 
-from payment p
-where p.customer_id = 5 and not (p.amount > 6 or p.payment_date = '2005-06-19');
-```
-Qué sucede si desagrupamos los últimos 2 predicados y dejamos la cláusula como `...where p.customer_id = 5 and not p.amount > 6 or p.payment_date = '2005-06-19'`?
-
-A falta de agrupación, como en todos los lenguajes de programación, la evaluación se hace **de izquierda a derecha**, por lo que el operador `not` afectaría solo al predicado `p.amount > 6` y no a todo el grupo.
 
 ### Cuales pagos tienen el monto 1.98, 7.98 o 9.98?
-```
-select p.payment_id , p.amount from payment p where p.amount in (1.98, 7.98, 9.98)
-```
 
 ### Cuales la suma total pagada por los clientes que tienen una letra A en la segunda posición de su apellido y una W en cualquier lugar después de la A?
-```
-select c.last_name , sum(p.amount) 
-from payment p join customer c using (customer_id)
-where c.last_name like '_A%W%' group by c.customer_id
-```
-Opcionalmente, podemos no agrupar por `c.customer_id` y sumar todos los clientes.
 
 ## Tarea
 
@@ -236,7 +213,7 @@ En cualquier esquema de su instalación de PostgreSQL, creen la siguiente tabla:
 | The Vision           | vis@westview.sword.gov                                             |
 | Clint Barton         | bul@lse.ye                                                         |
 | Natasja Romanov      | blackwidow@kgb.ru                                                  |
-| Thor                 | god_of_thunder-^_^@royalty.asgard.gov                              |
+| Thor                 | god_of_thunder-^\_^@royalty.asgard.gov                              |
 | Logan                | wolverine@cyclops_is_a_jerk.com                                    |
 | Ororo Monroe         | ororo@weather.co                                                   |
 | Scott Summers        | o@x                                                                |
