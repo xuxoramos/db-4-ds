@@ -59,7 +59,7 @@ Con calabazas:
 ![](https://cdn-blog.adafruit.com/uploads/2020/10/ElGY4auUUAMS6f4.png)
 
 O con facial hair:
-![](https://recruitingtools.com/wp-content/uploads/sites/2/2016/05/tumblr_o37frctj7M1uuf4n4o1_1280.jpg)
+![](https://starecat.com/content/wp-content/uploads/boolean-hair-logic-a-b-and-or-xor-beard.jpg)
 
 ## Tipos de condiciones
 
