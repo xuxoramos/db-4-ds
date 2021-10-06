@@ -1,3 +1,21 @@
+# Orden de ejecución de SQL queries
+
+A continuación un slide de una presentación de productos Microsoft para ilustrar el orden de ejecución de los queries de acuerdo al compilador de SQL.
+
+No hagan caso al paso final de conversión a XML, esto en PostgreSQL no sucede, si no lo pedimos.
+
+![image](https://user-images.githubusercontent.com/1316464/136132578-50266551-571c-453b-905f-80e4b7ea8476.png)
+
+El compilador de SQL cambia el orden de ejecución:
+
+1. Primero ejecuta el `from` y sus respectivos `join`, esto para subir al _transaction log_ el dataset crudo con el que vamos a trabajar.
+2. Luego sucede el _filtering_ de los renglones que no van a participar en el query con la cláusula `where`.
+3. Se arman los grupos con `group by` de acuerdo a las columnas seleccionadas para este propósito. Pueden ser 1 o N, obviamente tener 1 solo grupo, o 18 grupos en una tabla **con 18 registros** con ambas muy mala idea, y lo idóneo es que los grupos nos ayuden a **reducir la complejidad** del análisis.
+4. Se filtran los grupos que no queremos en el query con `having`, ya sea con la misma función de agregación que aparece en el `select`, o bien con otra totalmente diferente.
+5. Seleccionamos las columnas (existentes o recién creadas, o bien datos fijos) que queremos que aparezcan en el resultset final.
+6. Ordenamos el resultado con `order by`, sea ascendente o descendente.
+7. Se ejecuta la cláusula `limit` para seleccionar solamente algunos renglones del resultado final.
+
 # Agrupaciones, agregados y sumarizaciones
 
 La operación `group by` _agrupa_ renglones de acuerdo a un criterio, principalmente para poder aplicar funciones de _agregación_ a cada grupo.
