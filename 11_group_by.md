@@ -253,7 +253,7 @@ join customers c on (c.customer_id = o.customer_id)
 group by c.company_name, s.company_name;
 ```
 2. Cuál es nuestra balanza comercial por país?
-```
+```sql
 -- Este query fue finalmente resuelto por el grupo de BD1 de OI2021 a las 15:14
 -- Felicidades :D <3
 select country,
