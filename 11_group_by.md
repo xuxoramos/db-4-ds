@@ -254,13 +254,32 @@ group by c.company_name, s.company_name;
 ```
 2. Cuál es nuestra balanza comercial por país?
 ```
-select s.country as pais_proveedor, c.country as pais_cliente, sum(od.quantity * od.unit_price) as balanza
-from order_details od join orders o using (order_id)
-join customers c using (customer_id)
-join products p using (product_id)
-join suppliers s using (supplier_id)
-group by c.country, s.country
-order by balanza;
+-- Este query fue finalmente resuelto por el grupo de BD1 de OI2021 a las 15:14
+-- Felicidades :D <3
+select country,
+	case 
+		when export_amount is null and import_amount is null then 0
+		when export_amount is null and import_amount > 0 then import_amount*-1
+		when import_amount is null and export_amount > 0 then export_amount
+		else export_amount - import_amount
+	end as balanza_comercial
+from (
+	select c.country as country, sum(od.unit_price*od.quantity*(1-od.discount)) as export_amount
+	from orders o join customers c using (customer_id)
+	join order_details od using (order_id)
+	join products p using (product_id)
+	join suppliers s using (supplier_id)
+	where s.country != c.country 
+	group by c.country
+) as exports full outer join (
+	select s.country as country , sum(od.unit_price*od.quantity) as import_amount
+	from orders o join customers c using (customer_id)
+	join order_details od using (order_id)
+	join products p using (product_id)
+	join suppliers s using (supplier_id)
+	where s.country != c.country
+	group by s.country
+) as imports using (country);
 ```
 
 ## Próxima clase
