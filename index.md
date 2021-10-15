@@ -105,4 +105,7 @@ A continuación el temario, fecha por fecha:
 | 14             | 2021/09/23      | [Ejercicios](https://xuxoramos.github.io/db-4-ds/8_ejercicios) / [Sesión en video](https://drive.google.com/file/d/1rnSl_MNVyXZ-JXTE9xILRbMzISNOgGbc/view?usp=sharing)
 | 15             | 2021/09/28      | [Cláusula `WHERE`](https://xuxoramos.github.io/db-4-ds/10_filtering) / [Sesión en video](https://drive.google.com/file/d/1I0HS6PYIUUi33kGe0Z5G10ZhjrGASvfk/view?usp=sharing)
 | 16             | 2021/09/30      | **1ER PARCIAL**
-
+| 16             | 2021/10/05      | [Funciones de agregación, estadísticas, booleanas](https://drive.google.com/file/d/1Anlqf_FijDjWt55zyvFMuEzldnsMiJVy/view?usp=sharing)
+| 16             | 2021/10/07      | [Ejercicios con funciones de agregación. Revisión de parte teórica de examen parcial.](https://drive.google.com/file/d/1Anlqf_FijDjWt55zyvFMuEzldnsMiJVy/view?usp=sharing)
+| 16             | 2021/10/12      | [Revisión de parte práctica de examen parcial. Cláusula `distinct on` para combinar funciones de agregación y IDs. Cláusula `grouping sets` para generar subtotales](https://drive.google.com/file/d/1wkRJJrPZQldKrVPKBcwV_OHj51Gvxcig/view?usp=sharing)
+| 16             | 2021/10/14      | [Cláusula `group by rollup()` para agregados jerárquicos. Cláusula `group by cube()` para agregados a lo largo de N columnas. Introducción a bases de datos columnares](https://drive.google.com/file/d/1OYgFXgG9DwRcxdfKx_fUMDpmUseQjpcZ/view?usp=sharing)
