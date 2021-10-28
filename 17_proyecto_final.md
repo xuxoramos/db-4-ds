@@ -66,6 +66,8 @@ El desarrollo de una plataforma tecnológica que contemple lo siguiente:
 
 2. Posterior a la recolección de información, y al análisis, el resultado de ellos deberá ser presentado en tableros de información como estos: https://public.tableau.com/en-gb/s/viz-gallery
 
+3. https://protege.la/
+
 ## Contacto con SocialTIC
 
 Si necesitan contactar a SocialTIC, lo pueden hacer en Slack con nuestro contacto Frida García para que les resuelva dudas en el canal #proyecto-final.
