@@ -99,7 +99,7 @@ A continuación el temario, fecha por fecha:
 | 9             | 2021/09/07      | **SESIÓN A REPONER EN VIDEO**
 | 10             | 2021/09/09      | [Joins](https://xuxoramos.github.io/db-4-ds/7_joins) / [Sesión en video](https://drive.google.com/file/d/10FevN_jq8v0ozO0r3ymRW2D9vewMj_SP/view?usp=sharing)
 | 11             | 2021/09/14      | **SESIÓN A REPONER EN VIDEO**
-| 12             | 2021/09/16      | **SESIÓN A REPONER EN VIDEO**
+| 12             | 2021/09/16      | **Sesión repuesta en video num 26**
 | 13             | 2021/09/21      | [Joins (inner, outer, left, right y el "anti-join"](https://xuxoramos.github.io/db-4-ds/7_joins) / [Sesión en video](https://drive.google.com/file/d/1rmRE9Aic3_05YzBW_VSGkoeMAGRaBVDs/view?usp=sharing)
 | 13             | 2021/09/21      | [Joins (inner, outer, left, right y el "anti-join"](https://xuxoramos.github.io/db-4-ds/7_joins) / [Sesión en video](https://drive.google.com/file/d/1rmRE9Aic3_05YzBW_VSGkoeMAGRaBVDs/view?usp=sharing)
 | 14             | 2021/09/23      | [Ejercicios](https://xuxoramos.github.io/db-4-ds/8_ejercicios) / [Sesión en video](https://drive.google.com/file/d/1rnSl_MNVyXZ-JXTE9xILRbMzISNOgGbc/view?usp=sharing)
