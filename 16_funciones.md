@@ -342,8 +342,8 @@ Una aplicación frecuente de Ciencia de Datos aplicada a la industria del microl
 2. Sigue una distribución normal?
 3. Qué tanto difiere ese promedio del tiempo entre rentas por cliente?
 
-Fecha de entrega: Viernes 9 de Abril, antes de las 23:59:59
-Valor: 1 puntos sobre el final
+Fecha de entrega: Martes 16 de Noviembre antes de las 23:59:59
+Valor: 1 punto EXTRA sobre el final
 Medio de entrega: su propio repositorio de Github
 
 ### Tarea 2
