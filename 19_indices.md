@@ -84,6 +84,9 @@ Podemos ver que el query planner nos dice que para ejecutar este query está hac
 
 Vemos que el tipo de ejecución ha cambiado a `Index-Only Scan`, lo que significa que está precisamente recorriendo el árbol del índice. Dicha búsqueda resulta en mucho menos comparaciones que hacer 1 por cada registro en la tabla. No solamente eso, sino que el tiempo de ejecución ha disminuído dramáticamente, a `0.019ms`.
 
+## Averiguar tipo e índice para datos categóricos, campos `TEXT` y campos `CLOB`
+
+
 ## Índices creados por default
 
 Cuando creamos un constraint de `primary key` en una tabla, dicho campo se indexa en automático, por lo que las búsquedas por el ID de la tabla deben ser rápidas.
