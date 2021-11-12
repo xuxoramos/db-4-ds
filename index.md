@@ -115,3 +115,7 @@ A continuación el temario, fecha por fecha:
 | 24             | 2021/10/28      | [Revisión de proyecto final. Apuntes finales de Common Table Expressions. Intro a funciones](https://github.com/xuxoramos/db-4-ds/blob/gh-pages/17_proyecto_final.md) / [Sesión en video](https://drive.google.com/file/d/1BlAE9uQuLTz6IzNoP-pzrUxzqCfsxLGT/view?usp=sharing)
 | 25             |  **Sesión de reposición del 2021/09/14**      | [Funciones numéricas y trigonométricas. Generación de números aleatorios. Funciones con strings](https://github.com/xuxoramos/db-4-ds/blob/gh-pages/16_funciones.md) / [Sesión en video](https://drive.google.com/file/d/1NEsNy5MR5kAOimX5ltIefxP82cZEO2JI/view?usp=sharing)
 | 26             | **Sesión de reposición del 2021/09/16**      | [Funciones con `date`, `time`, `interval` y `timestamp`. Ejercicio integrador. Ley de Benford y Detección de Fraudes](https://github.com/xuxoramos/db-4-ds/blob/gh-pages/16_funciones.md) / [Sesión en video](https://drive.google.com/file/d/1GctXfgREEX6Ia2Bg3JjfJfGiNBbZdmcU/view?usp=sharing)
+| 27             | 2021/11/09   | [Acelerando queries con índices. Índices simples. Índices compuestos. Significado de _sequential scan_, _index scal_ y _parallel scan_.]() / [Sesión en video](https://drive.google.com/file/d/1PzPxpvu_kwagvOjfYuULIBZyUSZJrI4N/view?usp=sharing)
+
+
+
