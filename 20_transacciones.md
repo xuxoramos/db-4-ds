@@ -297,7 +297,7 @@ Y suponiendo que en caso de error de cualquiera de estas funciones, se hace `rol
 3. DJ Delgado con cuenta en Scotia vende 20000 USD a un exchange rate de 25.2 MXN y 300 títulos de deuda corporativa a un precio de 40032.71 a Frida Kaori con cuenta en Inbursa pagaderos enteramente con cash.
 
 Valor: 2 puntos sobre final
-Deadline: 30 de Abril de 2020
+Deadline: 18 de Nov de 2021 a las 23:59:59
 Formato de entrega: documento Markdown en su repo de Github
 
 ## Propiedades ACID
