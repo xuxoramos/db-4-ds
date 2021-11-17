@@ -146,9 +146,9 @@ Esperen, tenemos 10 más, no?
 
 **Por qué se escribieron si no dimos click en `Commit`?**
 
-PostgreSQL **por default** mete cualqier bloque de código `do` en **su propia transacción**, por lo que ignora los settings que tengamos en el DBeaver y en la misma conexión abre **una transacción nueva** para meter la ejecución del bloque.
+PostgreSQL mete cualqier bloque de código `do` en **la transacción que se esté ejecutando en ese momento**.
 
-De hecho, si intentamos **abrir transacción en el codeblock**:
+De hecho, si intentamos **abrir transacción DENTRO del codeblock**:
 
 ```sql
 Vemos que no está soportado iniciar transacciones dentro de bloques de código de PostgreSQL.
