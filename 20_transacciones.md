@@ -439,23 +439,23 @@ De acuerdo a nuestra tabla, parece que la anomalía de concurrencua **Phantom Re
 
 |t| **TX1** | **TX2** |
 |-|-----|-----|
-|_t1_| `start transaction isolation level read committed;`<br>`select count(*) from northwind.random_data where valor like '1234%';` <br/> _`Result: '21'`_ | |
+|_t1_| `start transaction isolation level read committed;`<br>`select count(*) from northwind.random_data where valor like '1234%';` <br/> _`Result: '45'`_ | |
 |_t2_| |`start transaction;`<br/>`insert into northwind.random_data(valor, fecha) select '1234abcd' as valor, current_timestamp - (((random() * 365) \|\| ' days')::interval) as fecha;`<br/>_`Result: 1 row inserted`_|
 |_t3_| |`commit;`|
-|_t4_| `select count(*) from northwind.random_data where valor like '1234%';` <br/> _**`Result: '21'`**_ | |
-|_t5_| `21 == 21` ❌ | |
+|_t4_| `select count(*) from northwind.random_data where valor like '1234%';` <br/> _**`Result: '46'`**_ | |
+|_t5_| `45 == 46` ❌ | |
 
 Cómo lo arreglamos?
 
-Con nivel de aislamiento `isolation level serializable`:
+Con nivel de aislamiento `isolation level serializable`, el más blindado de todos:
 
 |t| **TX1** | **TX2** |
 |-|-----|-----|
-|_t1_| `start transaction isolation level serializable;`<br>`select count(*) from northwind.random_data where valor like '1234%';` <br/> _`Result: '21'`_ | |
+|_t1_| `start transaction isolation level serializable;`<br>`select count(*) from northwind.random_data where valor like '1234%';` <br/> _`Result: '46'`_ | |
 |_t2_| |`start transaction;`<br/>`insert into northwind.random_data(valor, fecha) select '1234abcd' as valor, current_timestamp - (((random() * 365) \|\| ' days')::interval) as fecha;`<br/>_`Result: 1 row inserted`_|
 |_t3_| |`commit;`|
-|_t4_| `select count(*) from northwind.random_data where valor like '1234%';` <br/> _**`Result: '21'`**_ | |
-|_t5_| `21 == 21` ✔️ | |
+|_t4_| `select count(*) from northwind.random_data where valor like '1234%';` <br/> _**`Result: '46'`**_ | |
+|_t5_| `46 == 46` ✔️ | |
 
 #### Serialización para bloqueo de transacciones
 
