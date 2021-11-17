@@ -370,15 +370,20 @@ Afortunadamente, PostgreSQL implementa un tipo de aislamiento de transacciones q
 
 **Qué tipos de isolation levels tenemos?**
 
-1. `READ COMMITTED`: los `select` en la TX1 solo pueden ver registros _commiteados_ por la TX2 antes de que la TX1 comenzara a ejecutarse. Este es el comportamiento de PostgreSQL por default.
-2. `REPEATABLE READ`: los `select` en la TX1 que accedan datos que están siendo alterados en una TX2 no verán las alteraciones hasta que TX1 termine y se vuelvan a acceder en una TX3.
-3. `SERIALIZABLE`: es el mayor nivel de bloqueo. Si una TX1 ejecuta cualquier operación en un registro, una TX2 no va a poder hacer uso de ese registro hasta que TX1 termine.
+1. `READ UNCOMMITTED`: los `select` en TX1 pueden ver los registros _no commiteados_ por la TX2. Es el nivel **más bajo** de aislamiento y el que más problemas puede dar. ⚠️ **PostgreSQL NO LO SOPORTA**.
+2. `READ COMMITTED`: los `select` en la TX1 solo pueden ver registros _commiteados_ por la TX2 antes de que la TX1 comenzara a ejecutarse. Este es el comportamiento de PostgreSQL por default.
+3. `REPEATABLE READ`: los `select` en la TX1 que accedan datos que están siendo alterados en una TX2 no verán las alteraciones hasta que TX1 termine y se vuelvan a acceder en una TX3.
+4. `SERIALIZABLE`: es el mayor nivel de bloqueo. Si una TX1 ejecuta cualquier operación en un registro, una TX2 no va a poder hacer uso de ese registro hasta que TX1 termine.
 
-![](https://miro.medium.com/max/2416/1*NppBgUymDiDLwBJjAvqbEQ.png)
+Cada uno de estos niveles de aislamiento previene los siguientes conflictos de concurrencia:
 
-Dado que, como vimos arriba, `READ UNCOMMITTED` (el nivel más débil de aislamiento) en PostgreSQL no está soportado, por nuestra propia seguridad, entonces la 1a columna y el 1er renglón no aplican.
+![image](https://user-images.githubusercontent.com/1316464/142129612-78ab18e8-fe11-4032-83f8-e7f97d427147.png)
 
-Vamos a ver ahora cada anomalía de asilamiento que queda:
+Dado que, como vimos arriba, `READ UNCOMMITTED` y `DEFAULT` (los 2 niveles más débiles de aislamiento) en PostgreSQL no está soportado, por nuestra propia seguridad, entonces no aplicarían.
+
+Del mismo modo, la anomalía de concurrencia `Dirty Read` no pasa **EN NINGUN NIVEL DE AISLAMIENTO** de PostgreSQL, por lo que toda la columna no aplica.
+
+Vamos a ver ahora cada anomalía de asilamiento que quedan:
 
 #### Non-repeatable Reads
 
@@ -430,9 +435,11 @@ Es similar al **Repeatable Read** de arriba, pero en lugar de que nos suceda con
 
 Esto es un error sobre todo al tomar decisiones de negocio como por ejemplo ejecutar `select count(*) from estados_mx`  y siempre esperar 32 y de repente tener 33.
 
+De acuerdo a nuestra tabla, parece que la anomalía de concurrencua **Phantom Read** solo puede suceder en PostgreSQL con el nivel de aislamiento `READ COMMITTED`, así que ese es el que vamos a usar para esta simulación:
+
 |t| **TX1** | **TX2** |
 |-|-----|-----|
-|_t1_| `start transaction isolation level repeatable read;`<br>`select count(*) from northwind.random_data where valor like '1234%';` <br/> _`Result: '21'`_ | |
+|_t1_| `start transaction isolation level read committed;`<br>`select count(*) from northwind.random_data where valor like '1234%';` <br/> _`Result: '21'`_ | |
 |_t2_| |`start transaction;`<br/>`insert into northwind.random_data(valor, fecha) select '1234abcd' as valor, current_timestamp - (((random() * 365) \|\| ' days')::interval) as fecha;`<br/>_`Result: 1 row inserted`_|
 |_t3_| |`commit;`|
 |_t4_| `select count(*) from northwind.random_data where valor like '1234%';` <br/> _**`Result: '21'`**_ | |
