@@ -366,7 +366,7 @@ Afortunadamente, PostgreSQL implementa un tipo de aislamiento de transacciones q
 |_t1_| `start transaction isolation level read uncommitted`<br/>`select valor from northwind.random_data where id = 2000096;` <br/> _`Result: '087ea30915'`_ | |
 |_t2_| |`start transaction;`<br/>`update northwind.random_data set valor = '0000000000' where id = 2000096;`<br/>_`Result: 1 row updated`_|
 |_t3_| `select valor from northwind.random_data where id = 2000096;` <br/> _`Result: '087ea30915'`_ | |
-|_t4_| A pesar de que haber usado `read uncommitted`, estamos leyendo solo lo que está _commiteado_||
+|_t4_| `'087ea30915'`==`'087ea30915'` ❌ <br/>Esperen, **TX1** no debió leer el valor _uncomiteado_ de `'0000000000'`? Si, pero recordemos que PostgreSQL **NUNCA** nos va a permitir, en ningun nivel de aislamiento, que tengamos anomalías _Dirty Read_.||
 
 **Qué tipos de isolation levels tenemos?**
 
