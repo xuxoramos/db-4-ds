@@ -398,7 +398,7 @@ Este escenario si lo podemos simular. Lo haremos con la tabla `random_data` que 
 |_t2_| |`start transaction;`<br/>`update northwind.random_data set valor = '0000000000' where id = 2000096;`<br/>_`Result: 1 row updated`_|
 |_t3_| |`commit;`|
 |_t4_| `select valor from northwind.random_data where id = 2000096;` <br/> _**`Result: '0000000000'`**_ | |
-|_t5_| `087ea30915 != 0000000000` 😞| |
+|_t5_| `087ea30915 != 0000000000` ❌ | |
 
 Como podemos ver, tenemos 2 valores diferentes para 1 misma lectura **DENTRO DE LA MISMA TRANSACCIÓN**.
 
@@ -412,7 +412,7 @@ Con nivel de aislamiento **`REPEATABLE READ`**:
 |_t2_| |`start transaction;`<br/>`update northwind.random_data set valor = '0000000000' where id = 2000096;`<br/>_`Result: 1 row updated`_|
 |_t3_| |`commit;`|
 |_t4_| `select valor from northwind.random_data where id = 2000096;` <br/> _**`Result: '087ea30915'`**_ | |
-|_t5_| `087ea30915 == 087ea30915` 👍| |
+|_t5_| `087ea30915 == 087ea30915` ✔️ | |
 
 Con esto logramos CONSISTENCIA, aún cuando otras transacciones escriban en la misma tabla o modifiquen el mismo registro.
 
@@ -430,6 +430,14 @@ Es similar al **Repeatable Read** de arriba, pero en lugar de que nos suceda con
 
 Esto es un error sobre todo al tomar decisiones de negocio como por ejemplo ejecutar `select count(*) from estados_mx`  y siempre esperar 32 y de repente tener 33.
 
+|t| **TX1** | **TX2** |
+|-|-----|-----|
+|_t1_| `start transaction isolation level repeatable read;`<br>`select count(*) from northwind.random_data where valor like '1234%';` <br/> _`Result: '21'`_ | |
+|_t2_| |`start transaction;`<br/>`insert into northwind.random_data(valor, fecha) select '1234abcd' as valor, current_timestamp - (((random() * 365) \|\| ' days')::interval) as fecha;`<br/>_`Result: 1 row inserted`_|
+|_t3_| |`commit;`|
+|_t4_| `select count(*) from northwind.random_data where valor like '1234%';` <br/> _**`Result: '21'`**_ | |
+|_t5_| `21 == 21` ❌ | |
+
 Cómo lo arreglamos?
 
 Con nivel de aislamiento `isolation level serializable`:
@@ -440,7 +448,7 @@ Con nivel de aislamiento `isolation level serializable`:
 |_t2_| |`start transaction;`<br/>`insert into northwind.random_data(valor, fecha) select '1234abcd' as valor, current_timestamp - (((random() * 365) \|\| ' days')::interval) as fecha;`<br/>_`Result: 1 row inserted`_|
 |_t3_| |`commit;`|
 |_t4_| `select count(*) from northwind.random_data where valor like '1234%';` <br/> _**`Result: '21'`**_ | |
-|_t5_| `21 == 21` 👍| |
+|_t5_| `21 == 21` ✔️ | |
 
 #### Serialización para bloqueo de transacciones
 
