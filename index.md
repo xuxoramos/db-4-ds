@@ -101,7 +101,6 @@ A continuación el temario, fecha por fecha:
 | 11             | 2021/09/14      | **Sesión repuesta en video num 25**
 | 12             | 2021/09/16      | **Sesión repuesta en video num 26**
 | 13             | 2021/09/21      | [Joins (inner, outer, left, right y el "anti-join"](https://xuxoramos.github.io/db-4-ds/7_joins) / [Sesión en video](https://drive.google.com/file/d/1rmRE9Aic3_05YzBW_VSGkoeMAGRaBVDs/view?usp=sharing)
-| 13             | 2021/09/21      | [Joins (inner, outer, left, right y el "anti-join"](https://xuxoramos.github.io/db-4-ds/7_joins) / [Sesión en video](https://drive.google.com/file/d/1rmRE9Aic3_05YzBW_VSGkoeMAGRaBVDs/view?usp=sharing)
 | 14             | 2021/09/23      | [Ejercicios](https://xuxoramos.github.io/db-4-ds/8_ejercicios) / [Sesión en video](https://drive.google.com/file/d/1rnSl_MNVyXZ-JXTE9xILRbMzISNOgGbc/view?usp=sharing)
 | 15             | 2021/09/28      | [Filtrado de registros con cláusula `WHERE`](https://xuxoramos.github.io/db-4-ds/10_filtering) / [Sesión en video](https://drive.google.com/file/d/1I0HS6PYIUUi33kGe0Z5G10ZhjrGASvfk/view?usp=sharing)
 | 16             | 2021/09/30      | **1ER PARCIAL**
@@ -115,7 +114,9 @@ A continuación el temario, fecha por fecha:
 | 24             | 2021/10/28      | [Revisión de proyecto final. Apuntes finales de Common Table Expressions. Intro a funciones](https://github.com/xuxoramos/db-4-ds/blob/gh-pages/17_proyecto_final.md) / [Sesión en video](https://drive.google.com/file/d/1BlAE9uQuLTz6IzNoP-pzrUxzqCfsxLGT/view?usp=sharing)
 | 25             |  **Sesión de reposición del 2021/09/14**      | [Funciones numéricas y trigonométricas. Generación de números aleatorios. Funciones con strings](https://github.com/xuxoramos/db-4-ds/blob/gh-pages/16_funciones.md) / [Sesión en video](https://drive.google.com/file/d/1NEsNy5MR5kAOimX5ltIefxP82cZEO2JI/view?usp=sharing)
 | 26             | **Sesión de reposición del 2021/09/16**      | [Funciones con `date`, `time`, `interval` y `timestamp`. Ejercicio integrador. Ley de Benford y Detección de Fraudes](https://github.com/xuxoramos/db-4-ds/blob/gh-pages/16_funciones.md) / [Sesión en video](https://drive.google.com/file/d/1GctXfgREEX6Ia2Bg3JjfJfGiNBbZdmcU/view?usp=sharing)
-| 27             | 2021/11/09   | [Acelerando queries con índices. Índices simples. Índices compuestos. Significado de _sequential scan_, _index scal_ y _parallel scan_.]() / [Sesión en video](https://drive.google.com/file/d/1PzPxpvu_kwagvOjfYuULIBZyUSZJrI4N/view?usp=sharing)
-
-
-
+| 27             | 2021/11/09       | [Índices para aceleración de `select`. árboles B para índices numéricos, índices compuestos, índices simples.](https://github.com/xuxoramos/db-4-ds/blob/gh-pages/19_indices.md) / [video](https://zoom.us/rec/play/bjElRbVy1dgN_blL0qmit_i-dmd2uFpcy611CmIaiH60VQ-gIEDhK45TwYt5ATZ-o5n6pUH8NJQm72_P.Y9XojmIiWOnYVlsE?autoplay=true&startTime=1636488478000)
+| 28             | 2021/11/11       | **1a Entrega de Proyecto final**
+| 29             | 2021/11/16       | [Transacciones. Propiedades ACID. Atomicidad e Aislamiento. Niveles de aislamiento y efectos.](https://github.com/xuxoramos/db-4-ds/blob/gh-pages/20_transacciones.md) / [video](https://zoom.us/rec/play/R_WSuUnTYAjrd6-5UIDBz3_Ci6JXysrBRGOiNky34vI_zFZOEK0eCs4riBLFBmru4wZPju6NmUteYmeB.rQd5ESuA8-Wx0UUF?autoplay=true&startTime=1636694791000)
+| 30             | 2021/11/18       | [Isolation level a fondo. Bloqueo de renglones. Transacciones concurrentes](https://github.com/xuxoramos/db-4-ds/blob/gh-pages/20_transacciones.md) / [video](https://zoom.us/rec/play/R-ywm4wDSKKmQze-YaUiVw-nkJvRRrj-NoVnGxcBxghmjwB6Q4AkOI_B5cydXFEZ7wDP3ePeWxP5hIOp.UmmnV4SnpCdLwhvr?autoplay=true&startTime=1637266186000)
+| 31             | 2021/11/23       | [ORMs](https://github.com/xuxoramos/db-4-ds/blob/gh-pages/21_ORMs.md)
+| 32             | 2021/11/25       | **2a Entrega de Proyecto final**
