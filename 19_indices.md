@@ -4,6 +4,8 @@ Un índice en una BD es como un índice en un libro: nos ayuda a encontrar regis
 
 ## Qué forma tienen los índices?
 
+### Índices B-tree para columnas numéricas
+
 Supongamos una tabla como esta:
 
 order_id|freight|
@@ -65,6 +67,57 @@ El método para crear índices en la mayoría de las bases de datos es el métod
 
 ![](https://i.imgur.com/EQTtFm7.png)
 
+### Índices bitmap para datos categóricos
+
+Supongamos la siguiente tabla llamada `Employees`:
+
+![image](https://user-images.githubusercontent.com/1316464/144183209-4c82797b-405c-440b-b4e9-c63f18a3df2f.png)
+
+Tomemos la columna `New_Emp` con valores `Yes` y `No` y vamos a codificarla en un bitmap. Cómo lo hacemos?
+
+1. Definir una columna `New_Emp` donde vamos a poner 2 renglones: `Yes` y `No`.
+2. Vamos a definir otra columna `Bitmap`.
+3. Para el valor de `Bitmap` en el renglón que corresponde a `Yes`, vamos a recorrer la tabla original, y vamos a generar un string de 1s y 0s, escribiendo un **`1`** cuando el renglón de la tabla original tenga el valor `Yes` en la columna `New_Emp`, y **`0`** cuando el renglon de la tabla original tenga cualquier otro valor.
+   - El resultado: **`1001`**.
+5. Del mismo modo, para el renglón que corresponde a `No`, vamos a hacer algo similar, escribiendo un **`1`** cuando el renglón de la tabla original tenga el valor `No` en la columna `New_Emp`, y **`0`** cuando el renglon de la tabla original tenga cualquier otro valor.
+   - El resultado: **`0110`**
+
+Lo que tenemos como resultado es esto:
+
+![image](https://user-images.githubusercontent.com/1316464/144184572-e1577212-5e3e-4bf1-8080-fd0c911174cc.png)
+
+Qué pasa cuando la columna categórica tiene más de 2 valores posibles?
+
+Mismo procedimiento, solo que la tabla que representa el bitmap index va a tener más renglones.
+
+Intentémoslo con la columna `Job`:
+
+1. Definimos la columna `Job` con los renglones `Analyst`, `Salesperson`, `Clerk`, `Manager`, que son los valores posibles de toda la columna en todos sus registros.
+2. Recorremos la tabla original para el valor `Analyst` y vemos que solo el 1er registro lo tiene, por lo que el _bit sequence_ para ese valor es `1000`.
+3. Volvemos a recorrer la tabla original para el valor `Salesperson` y vemos que solo el 2o registro lo tiene, por lo que el _bit sequence_ es `0100`.
+4. Volvemos a recorrer la tabla original para `Clerk` y generamos el _bit sequence_ `0010`
+5. Para `Manager`, el _bit sequence_ será `0001`.
+
+El resultado es el siguiente índice:
+
+![image](https://user-images.githubusercontent.com/1316464/144185625-c74fba74-a0bd-4a45-bda7-d27cad2b6910.png)
+
+Cómo funcionan en un `SELECT`?
+
+Supongamos que ejecutamos el siguiente query:
+
+```sql
+select *
+from Employees
+where New_Emp = 'No' and Job = 'Salesperson'
+```
+
+1. Vamos a nuestros bitmap indices por el registro correspondientes a `New_Emp = 'No'` y obtenemos el _bit sequence_ `0110`.
+2. Luego vamos por el registro correspondiente a `Job = 'Salesperson'` y obtenemos `0100`.
+3. Y aplicamos la operación `and` como lo indica el query original: `0110 AND 0100 = 0100`
+4. El resultado es que solo el 2o registro, como lo indica el resultado del `and`, es el que cumple con ambos criterios.
+
+Realizar estas operaciones con bits es muchísimo más barato y eficiente que, nuevamente, buscar registro por registro y haciendo N comparaciones entre datos `varchar`.
 
 ## Cómo mejora el performance el índice sobre `orders.freight`?
 
@@ -83,8 +136,6 @@ Podemos ver que el query planner nos dice que para ejecutar este query está hac
 ![](https://i.imgur.com/Rb3OCYx.png)
 
 Vemos que el tipo de ejecución ha cambiado a `Index-Only Scan`, lo que significa que está precisamente recorriendo el árbol del índice. Dicha búsqueda resulta en mucho menos comparaciones que hacer 1 por cada registro en la tabla. No solamente eso, sino que el tiempo de ejecución ha disminuído dramáticamente, a `0.019ms`.
-
-## Averiguar tipo e índice para datos categóricos, campos `TEXT` y campos `CLOB`
 
 
 ## Índices creados por default
