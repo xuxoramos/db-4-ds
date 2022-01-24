@@ -55,9 +55,7 @@ Para poder crear, diseñar, levantar, consultar, administrar bases de datos, nec
 
 Debido a que las bases de datos actúan como servidor (es decir, un programa con una conexión abierta, esperando conexiones y escuchando los comandos que caen por esa conexión después de que establecemos una), obviamente necesitamos un programa cliente que establezca esa conexión. Los 2 paquetes que necesitamos son un cliente, y un servidor.
 
-Como servidor [descargaremos e instalaremos PostgreSQL](https://www.enterprisedb.com/downloads/postgres-postgresql-downloads), la mejor base de datos del mundo :P. 
-
-Si tienes Linux, [descarga el PostgreSQL desde aquí](https://www.postgresql.org/download/linux/ubuntu/).
+Como servidor [descargaremos e instalaremos PostgreSQL](https://github.com/xuxoramos/db-4-ds/blob/gh-pages/2.5_intro_cloud_computing.md) en un ambiente cloud. Vamos a crear una máquina virtual en la nube de Amazon y va a ser nuestro PostgreSQL de cajón. Esto no lo veremos sino hasta dentro de 3 sesiones.
 
 Ahora, para el cliente, descargaremos e instalaremos la edición [Community de DBeaver](https://dbeaver.io/download/), uno de los 3 paquetes de software libre para conexión a bases de datos.
 
