@@ -38,7 +38,7 @@ Por [Slack](https://slack.com), que es un chat orientado a equipos y trabajo. Co
 Una vez que descarguen Slack, hagan click [en esta liga](https://join.slack.com/t/db4ds-spring-2022/shared_invite/zt-126e57b91-K9QDt5yMJlC1Ay_GJ~rS~g) para que sean automágicamente agregados a nuestro workspace.
 
 ### Por dónde serán las sesiones?
-La sesión 1 y 2 seran por [Zoom](https://zoom.us/download), en [este link](https://itam.zoom.us/my/xuxoramos), debido a que me encuentro en Querétaro con el pie fracturado y apenas hasta el 29 me dejarán manejar a CDMX.
+La sesión 1 y 2 seran por [Zoom](https://zoom.us/download), en [este link](https://itam.zoom.us/my/xuxoramos), debido a que me encuentro en Querétaro con el pie fracturado y apenas hasta el 29 me dejarán manejar a CDMX. A partir de la sesión 3 estaremos presenciales.
 
 ### Dónde estará el material?
 Aquí en Github. Github es una plataforma de colaboración y control de versiones para no andar como este meme:
