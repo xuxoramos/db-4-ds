@@ -148,3 +148,13 @@ Del mismo modo, "normalización" se dió cuando el storage era caro, pero ahora 
 ![EjercicioDiseñoBDOperaciones (2)](https://user-images.githubusercontent.com/1316464/131611846-651bd1f5-c6fc-4623-9ada-51540ea5756c.jpg)
 
 Esto es, reemplazar la llave primaria de la tabla de soporte con un entero secuencial y sin relación a la entidad, mantener las llaves foráneas, y entonces sí establecer las relaciones subsecuentes **CON LA NUEVA LLAVE PRIMARIA** en lugar de hacerlo con las llaves compuestas.
+
+## Ejercicio de Normalización
+
+### 1.
+
+![image](https://user-images.githubusercontent.com/1316464/153924830-f01dae94-e487-4adc-bf1c-ff069cb01685.png)
+
+### 2. 
+
+![image](https://user-images.githubusercontent.com/1316464/153925076-95d35443-3b50-45a0-9ff3-c1ea929171d5.png)
