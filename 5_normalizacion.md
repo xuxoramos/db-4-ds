@@ -155,6 +155,9 @@ Esto es, reemplazar la llave primaria de la tabla de soporte con un entero secue
 
 ![image](https://user-images.githubusercontent.com/1316464/153924830-f01dae94-e487-4adc-bf1c-ff069cb01685.png)
 
+![image](https://user-images.githubusercontent.com/1316464/153941028-ada7322d-4ea7-4b9a-86bf-42a89589b380.png)
+
+
 ### 2. 
 
 ![image](https://user-images.githubusercontent.com/1316464/153925076-95d35443-3b50-45a0-9ff3-c1ea929171d5.png)
