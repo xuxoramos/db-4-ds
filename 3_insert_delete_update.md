@@ -61,6 +61,17 @@ Finalmente, como seguramente recordarán, la tabla `doctor` tiene un **constrain
 | Ocultismo               |
 | Santería                |
 
+La sintaxis para un insert de varios valores es la sig:
+
+```sql
+INSERT INTO table_name (column_list)
+VALUES
+    (value_list_1),
+    (value_list_2),
+    ...
+    (value_list_n);
+```
+
 Listo, a darle al DBeaver...
 
 #### Multiple insert
