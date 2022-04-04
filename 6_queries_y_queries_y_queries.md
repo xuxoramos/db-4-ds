@@ -134,12 +134,3 @@ No todos son obligatorios, pero esta es la base para un query útil que puede re
 
 11. Cuantos clientes tenemos de cada país?
 
-## Tarea
-
-1. Estos ejercicios se dejan al alumno como tarea.
-2. Esta tarea vale .25 del 10% sobre el total.
-3. Se debe entregar en un repo de Github, como archivo SQL o formato MD.
-4. Se debe enviar por mensaje de Slack directo la liga al repo.
-5. Deadline: Martres 7 a las 23:59:59
-
-Suerte 🤣
