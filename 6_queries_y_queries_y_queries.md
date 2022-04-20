@@ -102,7 +102,7 @@ Un select tiene los siguientes elementos:
 
 No todos son obligatorios, pero esta es la base para un query útil que puede responder preguntas.
 
-## Ejercicios
+## Ejercicios - Tarea 1
 
 1. Qué contactos de proveedores tienen la posición de sales representative?
 
