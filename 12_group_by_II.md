@@ -47,7 +47,7 @@ Esta forma del `distinct` primero desduplica una columna, y luego **selecciona e
 
 El resultado es el siguiente:
 
-![](https://sp.postgresqltutorial.com/wp-content/uploads/2020/07/PostgreSQL-Distinct-select-distinct-on.png)
+![](https://www.postgresqltutorial.com/wp-content/uploads/2020/07/PostgreSQL-Distinct-select-distinct-on.png)
 
 Como podemos ver, en lugar de desduplicar ambas columnas `bcolor` y `fcolor` al mismo tiempo, haciendo **cada par único**, `distinct on` primero desduplica la columna `bcolor` como si hubiera sido obtenida con `distinct` normal, pero para la 2a columna `fcolor`, en lugar de desduplicar, **selecciona el 1er registro que se encuentre** que corresponda a la columna previamente desduplicada.
 
