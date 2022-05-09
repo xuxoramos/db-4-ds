@@ -250,3 +250,9 @@ En cualquier esquema de su instalación de PostgreSQL, creen la siguiente tabla:
 | Rocket               | shhhhhhhh@darknet.ru                                               |
 
 Construyan un query que regrese emails inválidos.
+
+Respuesta:
+
+```sql
+select * from emails_superheroes where email not like '%_@__%.__%'
+```
