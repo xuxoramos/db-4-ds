@@ -4,7 +4,7 @@
 
 Ya ustedes han usado la cláusula `distinct` en el `select` para eliminar repetidos. Su resultado es **parecido** al que obtenemos con `group by` (obviamente sin hacer grupos). Vamos a verla más a detalle, para lo cual crearemos la siguiente tabla:
 
-```
+```sql
 CREATE TABLE distinct_demo (
 	id serial NOT NULL PRIMARY KEY,
 	bcolor VARCHAR,
@@ -47,13 +47,13 @@ Esta forma del `distinct` primero desduplica una columna, y luego **selecciona e
 
 El resultado es el siguiente:
 
-![](https://sp.postgresqltutorial.com/wp-content/uploads/2020/07/PostgreSQL-Distinct-select-distinct-on.png)
+![](https://www.postgresqltutorial.com/wp-content/uploads/2020/07/PostgreSQL-Distinct-select-distinct-on.png)
 
 Como podemos ver, en lugar de desduplicar ambas columnas `bcolor` y `fcolor` al mismo tiempo, haciendo **cada par único**, `distinct on` primero desduplica la columna `bcolor` como si hubiera sido obtenida con `distinct` normal, pero para la 2a columna `fcolor`, en lugar de desduplicar, **selecciona el 1er registro que se encuentre** que corresponda a la columna previamente desduplicada.
 
 Recuerdan el siguiente ejercicio que solicitaba **cuál es la orden más reciente por cliente?** Recuerdan que la respuesta implicaba un subselect?
 
-```
+```sql
 select o.order_id , o.order_date, c.company_name
 from orders o join customers c on o.customer_id = c.customer_id 
 join (
@@ -65,7 +65,7 @@ join (
 
 Pues resulta que con `distinct on` podemos simplificar muchísimo el query:
 
-```
+```sql
 -- contributed by @jchicatti
 select distinct on (c.customer_id) c.customer_id, c.company_name, o.order_date, o.order_id 
 from orders o join customers c using (customer_id)
@@ -104,7 +104,7 @@ Ejemplo:
 
 Cómo podemos agrupar por quarter las órdenes en `orders` de la BD Northwind?
 
-```
+```sql
 select c.company_name  , extract(quarter from o.order_date) as q_year, avg(o.freight)
 from orders o join customers c using (customer_id)
 group by c.company_name , q_year
@@ -153,7 +153,7 @@ Qué sucede si queremos generar subtotales de los años de servico agrupados pri
 
 Vamos a crear la siguiente tabla para ver este ejemplo:
 
-```
+```sql
 create table sales (
   brand varchar not null,
   segment varchar not null,
@@ -171,7 +171,7 @@ values
 
 Vamos a correr un query que agrupe los registros de este ejemplo por `brand`, por `segment`, por `brand` y `segment` y sin grupo, en un solo comando:
 
-```
+```sql
 select brand, segment, sum(quantity) from sales group by brand, segment
 union all
 select brand, null, sum(quantity) from sales group by brand
@@ -189,7 +189,7 @@ Por qué esta es una mala alternativa? Recuerden que los subqueries agregan cost
 
 Cómo podemos hacerlo más eficiente y sin tener que escribir tanto query?
 
-```
+```sql
 select brand, segment, sum(quantity)
 from sales
 group by grouping sets (
@@ -216,7 +216,7 @@ Cómo leemos estos resultados?
 
 Cómo sabemos qué estamos agrupando? Usando la cláusula `grouping` dentro del `select` en conjunto con `grouping sets`:
 
-```
+```sql
 select
 	grouping(brand) grouping_brand,
 	grouping(segment) grouping_segment,
@@ -247,7 +247,7 @@ Si **grouping_brand = 0** entonces el registro **si pertenece**
 
 Confuso. Qué clase de monstruo hizo esta función? Cómo mejoramos legibilidad?
 
-```
+```sql
 select
 	not cast(grouping(brand) as boolean) agrupando_con_brand,
 	not cast(grouping(segment) as boolean) agrupando_con_segment,
@@ -272,7 +272,7 @@ Verboso, pero mejor, no?
 
 En lugar de 
 
-```
+```sql
 ...
 group by
 	grouping sets (
@@ -284,7 +284,7 @@ group by
 
 Podemos usar
 
-```
+```sql
 select brand, segment, sum(quantity)
 from sales
 group by rollup (brand, segment);
@@ -302,13 +302,14 @@ Esto es útil cuando tenemos grupos categóricos jerárquicos. Consideremos la s
 
 Tendría muchísimo sentido si lanzáramos un query de la siguiente forma para acumular **jerárquicamente**, los montos por diferentes niveles de agrupación geográfica.
 
-```
+```sql
 select sum(monto) from ventas
 group by rollup(region, estado, municipio, localidad);
 ```
 
 Porque lo que hará PostgreSQL va a hacer lo siguiente:
-```
+
+```sql
 ...
 group by grouping sets (
 	(region, estado, municipio, localidad),
@@ -339,7 +340,7 @@ De la BD Sakila, cómo podemos obtener el conteo del num de películas por ratin
 
 Igual que `rollup`, pero en lugar de recursivamente reducir la lista de columnas hasta llegar a una columna individual y luego a nulo, lo hace para todas las combinaciones posibles, de modo que una cláusula como esta:
 
-```
+```sql
 ...
 ...
 group by cube (a,b,c)
@@ -347,7 +348,7 @@ group by cube (a,b,c)
 
 Es igual a esta:
 
-```
+```sql
 ...
 ...
 group by grouping sets (

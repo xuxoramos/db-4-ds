@@ -131,6 +131,5 @@ Usando la BD de Sakila, y en un script de SQL separado, y **en su propio repo de
 3. Qué películas son las más rentadas en todas nuestras stores?
 4. Cuál es nuestro revenue por store?
 
-**Timestamp límite de entrega:** Jueves 21 de Oct, a las 13:59:59
+**Timestamp límite de entrega:** Lunes 16 de Mayo, a las 12:59:59 del medio día.
 
-**Valor:** 0.5 puntos sobre el final
