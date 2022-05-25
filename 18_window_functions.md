@@ -275,8 +275,8 @@ Una de las métricas para saber si un cliente es bueno, aparte de la suma y el p
 
 Debemos calcular para cada cliente su promedio mensual de _deltas_ en los pagos de sus órdenes en la tabla `order_details` en la BD de Northwind, es decir, la diferencia entre el monto total de una orden en tiempo _t_ y el anterior en _t-1_, para tener la foto completa sobre el customer lifetime value de cada miembro de nuestra cartera.
 
-- Valor: 1 punto sobre el final
-- Deadline: Viernes 18 de Nov a las 23:59:59
+- Valor: 10% sobre el final
+- Deadline: Viernes 3 de Jun a las 23:59:59
 - Medio de entrega: repositorio en Github
 
 
