@@ -342,8 +342,8 @@ Una aplicación frecuente de Ciencia de Datos aplicada a la industria del microl
 2. Sigue una distribución normal?
 3. Qué tanto difiere ese promedio del tiempo entre rentas por cliente?
 
-Fecha de entrega: Martes 16 de Noviembre antes de las 23:59:59
-Valor: 1/100 punto EXTRA sobre el final
+Fecha de entrega: Lunes 30 de Mayo antes de las 23:59:59
+Valor: 10% sobre el final
 Medio de entrega: su propio repositorio de Github
 
 ### Tarea 2
@@ -360,6 +360,6 @@ Esto no se resuelve con 1 solo query. El problema se debe partir en varios cacho
 
 La información que no esté dada por el enunciado del problema o el contenido de la BD, podrá ser establecida como supuestos o assumptions, pero deben ser razonables para el problem domain que estamos tratando.
 
-Fecha de entrega: Martes 16 de Noviembre, antes de las 23:59:59
-Valor: 2/100 punto sobre el final
+Fecha de entrega: Miércoles 1o de Junio, antes de las 23:59:59
+Valor: 10% sobre el final
 Medio de entrega: su propio repositorio de Github
